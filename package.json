@@ -1,0 +1,11 @@
+{
+    "name": "freetime-finder",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "UNLICENSED"
+}
