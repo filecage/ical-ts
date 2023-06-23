@@ -1,0 +1,5 @@
+{
+    "execMap": {
+    "ts": "node --loader=./loader.js"
+}
+}
