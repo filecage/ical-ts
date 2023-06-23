@@ -30,3 +30,19 @@ describe('Parse ICS to JSON file', () => {
         const sampleData = await readSample(sample);
     });
 });
+
+describe('Unfold long ICS lines', () => {
+    const parser = new ICSParser();
+    const lines = [
+        'This is a very long line that is',
+        '  wrapped according to RFC5545.',
+        'This is a new line because it does not start with a space'
+    ];
+
+    it('should unfold to two lines according to RFC5545', () => {
+        expect(parser.unfold(lines)).toEqual([
+            'This is a very long line that is wrapped according to RFC5545.',
+            'This is a new line because it does not start with a space'
+        ]);
+    })
+})
