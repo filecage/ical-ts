@@ -28,6 +28,9 @@ describe('Parse ICS to JSON file', () => {
     const parser = new ICSParser();
     it.each(samples)('Parses ICS and matches JSON snapshot `%s`', async sample => {
         const sampleData = await readSample(sample);
+        const ics = parser.parseFromStringToJSON(sampleData);
+        const json = JSON.stringify(ics, sortedJSONKeysReplacer);
+        expect(json).toMatchSnapshot();
     });
 });
 
