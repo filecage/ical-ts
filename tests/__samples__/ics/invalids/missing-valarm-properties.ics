@@ -1,0 +1,9 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:blank_line_mid
+COMMENT:This blank line is invalid
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:This is an event reminder
+END:VALARM
+END:VCALENDAR

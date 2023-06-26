@@ -16,7 +16,6 @@ describe('Parse ICS to JSON file', () => {
         'forced_types.ics',
         'google_birthday.ics',
         'minimal.ics',
-        'multiple_rrules.ics',
         'only_dtstart_date.ics',
         'only_dtstart_time.ics',
         'parserv2.ics',
@@ -35,7 +34,9 @@ describe('Parse ICS to JSON file', () => {
 
     const invalidSamples: [string, string][] = [
         ['missing-vcalendar-properties.ics', "Missing mandatory key 'VERSION'"],
+        ['missing-valarm-properties.ics', "Missing mandatory key 'TRIGGER'"],
         ['invalid-version.ics', "Parser only supports version 2.0"],
+        ['multiple-rrules.ics', "Non-list component 'RRULE' appeared twice"],
     ]
 
     it.each(invalidSamples)(`Correctly throws for invalid sample '%s'`, async (sample, expectedErrorMessage) => {
