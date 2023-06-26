@@ -1,5 +1,5 @@
 // import {ICSData} from "./ICSData";
-import {BEGIN, COLON, Components, END, EQUAL, NEW_LINE, SEMICOLON, SPACE} from "./ParserConstants";
+import {BEGIN, COLON, Components, END, EQUAL, LIST_COMPONENTS, NEW_LINE, SEMICOLON, SPACE} from "./ParserConstants";
 import {ICS} from "./ICS";
 import {XOR} from "ts-xor";
 import Value = ICS.Value;
@@ -55,14 +55,27 @@ export default class ICSParser {
             }
         } else if (key !== END) {
             // Keys might contain additional properties
-            const keys = key.split(SEMICOLON);
-            const container = new Value(keys[0], value);
-            for (const property of keys.splice(1)) {
+            const fragments = key.split(SEMICOLON);
+            const component = fragments.shift()?.toUpperCase() || '';
+            const container = new Value(component, value);
+            for (const property of fragments) {
                 const [propertyKey, propertyValue] = property.split(EQUAL);
                 container.set(propertyKey, propertyValue);
             }
 
-            context[keys[0]] = container;
+            if (LIST_COMPONENTS.includes(component as Components)) {
+                if (context[component] === undefined) {
+                    context[component] = [];
+                }
+
+                (context[component] as Value[]).push(container);
+            } else {
+                if (context[component] !== undefined) {
+                    throw new Error(`Non-list component '${component}' appeared twice`);
+                }
+
+                context[component] = container;
+            }
         } else {
             // If the block ends we return our context
             return context;
