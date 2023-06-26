@@ -62,8 +62,8 @@ export namespace ICS {
         PRODID: Value,
         VERSION: Value<'2.0'>,         // This is he only value accepted by RFC5546 and RFC5545
         CALSCALE?: Value<'GREGORIAN'>, // This is the only value accepted by RFC5546 and RFC5545,
-        VTIMEZONE: VTIMEZONE[],
-        VEVENT: VEVENT.Published[],
+        VEVENT?: VEVENT.Published[],
+        VTIMEZONE?: VTIMEZONE[],
     };
 
     export type VTIMEZONE = NonStandardPropertyAware & IANAPropertyAware & {

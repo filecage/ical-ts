@@ -99,8 +99,8 @@ export default class ICSParser {
             VERSION,
             CALSCALE: this.pick<Value<'GREGORIAN'>>(data, 'CALSCALE'),
             ...this.pickNonStandardProperties(data),
-            VTIMEZONE: this.pickOrThrow<ICS.VTIMEZONE[]>(data, Components.VTIMEZONE),
-            VEVENT: this.pickOrThrow<ICS.VEVENT.Published[]>(data, Components.VEVENT),
+            VTIMEZONE: this.pick<ICS.VTIMEZONE[]>(data, Components.VTIMEZONE),
+            VEVENT: this.pick<ICS.VEVENT.Published[]>(data, Components.VEVENT),
         }];
     }
 
