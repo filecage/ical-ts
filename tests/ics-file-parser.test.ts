@@ -6,6 +6,7 @@ import {sortedJSONKeysReplacer} from "./util/sortedJSONKeysReplacer";
 
 
 describe('Parse ICS to JSON file', () => {
+    const parser = new ICSParser();
     const samples = [
         'blank_description.ics',
         'blank_line_end.ics',
@@ -24,7 +25,6 @@ describe('Parse ICS to JSON file', () => {
         'utc_negative_zero.ics'
     ];
 
-    const parser = new ICSParser();
     it.each(samples)('Parses ICS and matches JSON snapshot `%s`', async sample => {
         const sampleData = await readSample(sample);
         const ics = parser.parseFromStringToJSON(sampleData);
