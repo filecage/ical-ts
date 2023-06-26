@@ -32,6 +32,17 @@ describe('Parse ICS to JSON file', () => {
         const json = JSON.stringify(ics, sortedJSONKeysReplacer);
         expect(json).toMatchSnapshot();
     });
+
+    const invalidSamples: [string, string][] = [
+        ['missing-vcalendar-properties.ics', "Missing mandatory key 'VERSION'"],
+        ['invalid-version.ics', "Parser only supports version 2.0"],
+    ]
+
+    it.each(invalidSamples)(`Correctly throws for invalid sample '%s'`, async (sample, expectedErrorMessage) => {
+        const sampleData = await readSample(`invalids/${sample}`);
+
+        expect(() => parser.parseFromStringToJSON(sampleData)).toThrowError(expectedErrorMessage);
+    });
 });
 
 describe('Unfold long ICS lines', () => {
