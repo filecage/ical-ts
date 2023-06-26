@@ -2,7 +2,7 @@
 import preset from 'ts-jest/presets/index.js';
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
-const jestConfig = {
+export default {
     ...preset.defaultsESM,
     transform: {
         '^.+\\.tsx?$': [
@@ -14,5 +14,3 @@ const jestConfig = {
         ],
     },
 }
-
-export default jestConfig
