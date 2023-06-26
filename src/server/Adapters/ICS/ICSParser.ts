@@ -123,7 +123,12 @@ export default class ICSParser {
             SUMMARY: this.pickOrThrow(data, 'SUMMARY'),
             TRANSP: this.pick(data, 'TRANSP'),
             VALARM: this.pick(data, 'VALARM'),
+            CLASS: this.pick(data, 'CLASS'),
             COMMENT: this.pick(data, 'COMMENT'),
+            ORGANIZER: this.pick(data, 'ORGANIZER'),
+            RRULE: this.pick(data, 'RRULE'),
+            RDATE: this.pick(data, 'RDATE'),
+            ATTENDEE: this.pick(data, 'ATTENDEE'),
             ...this.pickNonStandardProperties(data),
         };
 
