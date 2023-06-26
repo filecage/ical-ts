@@ -91,6 +91,8 @@ export namespace ICS {
     }
 
     export namespace VEVENT {
+        import RRule = ICS.Types.RRule;
+        import DateTime = ICS.Types.DateTime;
         export type Published = {DTSTART: Types.DateTime} & Event;
 
         type Event = NonStandardPropertyAware & IANAPropertyAware & {
@@ -114,6 +116,9 @@ export namespace ICS {
             SEQUENCE?: Value,
             URL?: Types.URI,
             RECURID?: Value,
+            RRULE?: RRule,
+            RDATE?: DateTime[],
+            EXDATE?: DateTime[],
             COMMENT?: Value,
             CATEGORIES?: Value,
             VALARM?: VALARM[],
