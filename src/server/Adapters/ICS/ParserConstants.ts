@@ -17,6 +17,7 @@ export enum Components {
     ATTENDEE = 'ATTENDEE',
     RRULE = 'RRULE',
     RRDATE = 'RDATE',
+    COMMENT = 'COMMENT',
 }
 
 // This defines components that will always be treated as a list (and put into an array when parsing)
@@ -24,4 +25,5 @@ export enum Components {
 export const LIST_COMPONENTS: Components[] = [
     Components.ATTENDEE,
     Components.RRDATE,
+    Components.COMMENT,
 ];

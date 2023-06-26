@@ -98,6 +98,7 @@ export default class ICSParser {
             PRODID: this.pickOrThrow<Value>(data, 'PRODID'),
             VERSION,
             CALSCALE: this.pick<Value<'GREGORIAN'>>(data, 'CALSCALE'),
+            COMMENT: this.pick(data, 'COMMENT'),
             ...this.pickNonStandardProperties(data),
             VTIMEZONE: this.pick<ICS.VTIMEZONE[]>(data, Components.VTIMEZONE),
             VEVENT: this.pick<ICS.VEVENT.Published[]>(data, Components.VEVENT),
@@ -122,6 +123,7 @@ export default class ICSParser {
             SUMMARY: this.pickOrThrow(data, 'SUMMARY'),
             TRANSP: this.pick(data, 'TRANSP'),
             VALARM: this.pick(data, 'VALARM'),
+            COMMENT: this.pick(data, 'COMMENT'),
             ...this.pickNonStandardProperties(data),
         };
 
