@@ -1,8 +1,8 @@
 // import {ICSData} from "./ICSData";
-import {BEGIN, COLON, Property, END, EQUAL, LIST_PROPERTIES, NEW_LINE, SEMICOLON, SPACE, Component} from "./ParserConstants";
+import {BEGIN, COLON, Property as EProperty, END, EQUAL, LIST_PROPERTIES, NEW_LINE, SEMICOLON, SPACE, Component} from "./ParserConstants";
 import {ICS} from "./ICS";
 import {XOR} from "ts-xor";
-import Value = ICS.Property;
+import Property = ICS.Property;
 
 export default class ICSParser {
 
@@ -56,25 +56,25 @@ export default class ICSParser {
         } else if (key !== END) {
             // Keys might contain additional properties
             const fragments = key.split(SEMICOLON);
-            const component = fragments.shift()?.toUpperCase() || '';
-            const container = new Value(component, value);
-            for (const property of fragments) {
-                const [propertyKey, propertyValue] = property.split(EQUAL);
-                container.set(propertyKey, propertyValue);
+            const propertyKey = fragments.shift()?.toUpperCase() || '';
+            const property = new Property(propertyKey, value);
+            for (const parameter of fragments) {
+                const [parameterKey, parameterValue] = parameter.split(EQUAL);
+                property.set(parameterKey, parameterValue);
             }
 
-            if (LIST_PROPERTIES.includes(component as Property)) {
-                if (context[component] === undefined) {
-                    context[component] = [];
+            if (LIST_PROPERTIES.includes(propertyKey as EProperty)) {
+                if (context[propertyKey] === undefined) {
+                    context[propertyKey] = [];
                 }
 
-                (context[component] as Value[]).push(container);
+                (context[propertyKey] as Property[]).push(property);
             } else {
-                if (context[component] !== undefined) {
-                    throw new Error(`Non-list component '${component}' appeared twice`);
+                if (context[propertyKey] !== undefined) {
+                    throw new Error(`Non-list component '${propertyKey}' appeared twice`);
                 }
 
-                context[component] = container;
+                context[propertyKey] = property;
             }
         } else {
             // If the block ends we return our context
@@ -89,15 +89,15 @@ export default class ICSParser {
         const calendars: ICS.VCALENDAR[] = (context[Component.VCALENDAR] as ICS.VCALENDAR[]) || [];
         const data = this.parse(lines, {});
 
-        const VERSION = this.pickOrThrow<Value<'2.0'>>(data, 'VERSION');
+        const VERSION = this.pickOrThrow<Property<'2.0'>>(data, 'VERSION');
         if (VERSION.value !== '2.0') {
             throw new Error("Parser only supports version 2.0");
         }
 
         return [...calendars, {
-            PRODID: this.pickOrThrow<Value>(data, 'PRODID'),
+            PRODID: this.pickOrThrow<Property>(data, 'PRODID'),
             VERSION,
-            CALSCALE: this.pick<Value<'GREGORIAN'>>(data, 'CALSCALE'),
+            CALSCALE: this.pick<Property<'GREGORIAN'>>(data, 'CALSCALE'),
             COMMENT: this.pick(data, 'COMMENT'),
             ...this.pickNonStandardProperties(data),
             VTIMEZONE: this.pick<ICS.VTIMEZONE[]>(data, Component.VTIMEZONE),
@@ -168,7 +168,7 @@ export default class ICSParser {
         const timezones: ICS.VTIMEZONE[] = (context[Component.VTIMEZONE] as ICS.VTIMEZONE[]) || [];
         const data = this.parse(lines, {});
         const timezone: ICS.VTIMEZONE = {
-            TZID: this.pickOrThrow<Value>(data, 'TZID'),
+            TZID: this.pickOrThrow<Property>(data, 'TZID'),
             ...this.pickNonStandardProperties(data),
             DAYLIGHT: this.pick<ICS.TimezoneDefinition[]>(data, 'DAYLIGHT'),
             STANDARD: this.pick<ICS.TimezoneDefinition[]>(data, 'STANDARD'),
@@ -182,9 +182,9 @@ export default class ICSParser {
         const data = this.parse(lines, {});
 
         return [...timezoneDefinitions, {
-            TZOFFSETFROM: this.pickOrThrow<Value>(data, 'TZOFFSETFROM'),
-            TZOFFSETTO: this.pickOrThrow<Value>(data, 'TZOFFSETTO'),
-            TZNAME: this.pick<Value>(data, 'TZNAME'),
+            TZOFFSETFROM: this.pickOrThrow<Property>(data, 'TZOFFSETFROM'),
+            TZOFFSETTO: this.pickOrThrow<Property>(data, 'TZOFFSETTO'),
+            TZNAME: this.pick<Property>(data, 'TZNAME'),
             DTSTART: this.pickOrThrow<ICS.Types.DateTime>(data, 'DTSTART'),
             ...this.pickNonStandardProperties(data),
             ...this.pickRRuleOrRdate(data),
@@ -218,7 +218,7 @@ export default class ICSParser {
         }, []);
     }
 
-    private pickOrThrow<T = Value> (data: {[key: string]: unknown}, key: string) : T {
+    private pickOrThrow<T = Property> (data: {[key: string]: unknown}, key: string) : T {
         if (data[key] === undefined) {
             throw new Error(`Missing mandatory key '${key}'`);
         }
@@ -226,7 +226,7 @@ export default class ICSParser {
         return data[key] as T;
     }
 
-    private pick<T = Value> (data: {[key: string]: unknown}, key: string) : T|undefined {
+    private pick<T = Property> (data: {[key: string]: unknown}, key: string) : T|undefined {
         if (data[key] === undefined) {
             return undefined;
         }
@@ -235,9 +235,9 @@ export default class ICSParser {
     }
 
     private pickNonStandardProperties (data: {[key: string]: unknown}) : ICS.NonStandardPropertyAware {
-        const nonStandardPropertyData: {[key: string]: Value} = {};
+        const nonStandardPropertyData: {[key: string]: Property} = {};
         for (const [key, value] of Object.entries(data)) {
-            if (key.startsWith('X-') && value instanceof Value) {
+            if (key.startsWith('X-') && value instanceof Property) {
                 nonStandardPropertyData[key] = value;
             }
         }
