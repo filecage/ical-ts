@@ -117,6 +117,7 @@ export default class ICSParser {
             CREATED: this.pick(data, 'CREATED'),
             DESCRIPTION: this.pick(data, 'DESCRIPTION'),
             'LAST-MODIFIED': this.pick(data, 'LAST-MODIFIED'),
+            'RECURRENCE-ID': this.pick(data, 'RECURRENCE-ID'),
             LOCATION: this.pick(data, 'LOCATION'),
             SEQUENCE: this.pick(data, 'SEQUENCE'),
             STATUS: this.pick(data, 'STATUS'),
@@ -128,6 +129,7 @@ export default class ICSParser {
             ORGANIZER: this.pick(data, 'ORGANIZER'),
             RRULE: this.pick(data, 'RRULE'),
             RDATE: this.pick(data, 'RDATE'),
+            EXDATE: this.pick(data, 'EXDATE'),
             ATTENDEE: this.pick(data, 'ATTENDEE'),
             ...this.pickNonStandardProperties(data),
         };

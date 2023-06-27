@@ -110,6 +110,7 @@ export namespace ICS {
             DTSTART?: Types.DateTime,
             GEO?: Types.GEO,
             'LAST-MODIFIED'?: Types.DateTime,
+            'RECURRENCE-ID'?: Types.DateTime,
             LOCATION?: Value,
             ORGANIZER?: Types.CALAddress,
             ATTENDEE?: Types.CALAddress[],
