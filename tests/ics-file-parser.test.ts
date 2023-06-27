@@ -4,8 +4,7 @@ import ICSParser from "../src/server/Adapters/ICS/ICSParser";
 import {readSample} from "./util/readSample";
 import {sortedJSONKeysReplacer} from "./util/sortedJSONKeysReplacer";
 
-
-describe('Parse ICS to JSON file', () => {
+describe('Parse ICS to JSON', () => {
     const parser = new ICSParser();
     const samples = [
         'blank_description.ics',
