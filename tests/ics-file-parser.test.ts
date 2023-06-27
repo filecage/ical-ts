@@ -30,7 +30,10 @@ describe('Parse ICS to JSON', () => {
         const json = JSON.stringify(ics, sortedJSONKeysReplacer);
         expect(json).toMatchSnapshot();
     });
+});
 
+describe('Throw errors for invalid ICS files', () => {
+    const parser = new ICSParser();
     const invalidSamples: [string, string][] = [
         ['missing-vcalendar-properties.ics', "Missing mandatory key 'VERSION'"],
         ['missing-valarm-properties.ics', "Missing mandatory key 'TRIGGER'"],
