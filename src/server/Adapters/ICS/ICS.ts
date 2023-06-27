@@ -123,7 +123,7 @@ export namespace ICS {
             COMMENT?: Value[],
             CATEGORIES?: Value,
             VALARM?: VALARM[],
-        } & XOR<{DTEND: Types.DateTime}, {DURATION: Types.Interval}>
+        } & XOR<{DTEND?: Types.DateTime}, {DURATION?: Types.Interval}>
     }
 
 }

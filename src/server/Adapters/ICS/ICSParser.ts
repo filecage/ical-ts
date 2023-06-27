@@ -110,9 +110,9 @@ export default class ICSParser {
         const data = this.parse(lines, {});
 
         const event: ICS.VEVENT.Published = {
-            DTSTART: this.pickOrThrow<ICS.Types.DateTime>(data, 'DTSTART'),
-            ...this.pickDurationOrDtendOrThrow(data),
             DTSTAMP: this.pickOrThrow<ICS.Types.DateTime>(data, 'DTSTAMP'),
+            DTSTART: this.pickOrThrow<ICS.Types.DateTime>(data, 'DTSTART'),
+            ...this.pickDurationOrDateTimeEnd(data),
             UID: this.pickOrThrow(data, 'UID'),
             CREATED: this.pick(data, 'CREATED'),
             DESCRIPTION: this.pick(data, 'DESCRIPTION'),
@@ -135,7 +135,7 @@ export default class ICSParser {
         return [...events, event];
     }
 
-    private pickDurationOrDtendOrThrow (data: {[key: string]: unknown}) : XOR<{DURATION: ICS.Types.Interval}, {DTEND: ICS.Types.DateTime}> {
+    private pickDurationOrDateTimeEnd (data: {[key: string]: unknown}) : undefined|XOR<{DURATION: ICS.Types.Interval}, {DTEND: ICS.Types.DateTime}> {
         const DTEND = this.pick<ICS.Types.DateTime>(data, 'DTEND');
         if (DTEND !== undefined) {
             return {DTEND};
@@ -146,7 +146,7 @@ export default class ICSParser {
             return {DURATION};
         }
 
-        throw new Error("Either 'DURATION' or 'DTEND' has to be present for 'VEVENT'");
+        return undefined;
     }
 
     private parseAlarm (lines: string[], context: {[key: string]: unknown}) : ICS.VALARM[] {
