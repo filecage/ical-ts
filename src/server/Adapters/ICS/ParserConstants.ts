@@ -7,11 +7,14 @@ export const EQUAL = '='
 export const BEGIN = 'BEGIN'
 export const END = 'END';
 
-export enum Components {
+export enum Component {
     VCALENDAR = 'VCALENDAR',
     VTIMEZONE = 'VTIMEZONE',
     VEVENT = 'VEVENT',
     VALARM = 'VALARM',
+}
+
+export enum Property {
     TZONE_STANDARD = 'STANDARD',
     TZONE_DAYLIGHT = 'DAYLIGHT',
     ATTENDEE = 'ATTENDEE',
@@ -23,9 +26,9 @@ export enum Components {
 
 // This defines components that will always be treated as a list (and put into an array when parsing)
 // It does not include root components like VCALENDAR, VTTIMEZONE etc. pp.
-export const LIST_COMPONENTS: Components[] = [
-    Components.ATTENDEE,
-    Components.RRDATE,
-    Components.COMMENT,
-    Components.EXDATE,
+export const LIST_PROPERTIES: Property[] = [
+    Property.ATTENDEE,
+    Property.RRDATE,
+    Property.COMMENT,
+    Property.EXDATE,
 ];

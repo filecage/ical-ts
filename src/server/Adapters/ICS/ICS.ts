@@ -3,20 +3,20 @@ import {XOR} from "ts-xor";
 export namespace ICS {
     import CALAddress = ICS.Types.CALAddress;
     import Duration = ICS.Types.Interval;
-    export type NonStandardPropertyAware = { [key: `X-${string}`]: Value }
-    export type IANAPropertyAware = { [key: `IANA-${string}`]: Value }
+    export type NonStandardPropertyAware = { [key: `X-${string}`]: Property }
+    export type IANAPropertyAware = { [key: `IANA-${string}`]: Property }
 
-    export class Value<T = string> {
+    export class Property<T = string> {
         private readonly key: string;
         public readonly value: T;
-        private properties: {[key: string]: string} = {};
+        private parameters: {[key: string]: string} = {};
         constructor (key: string, value: T) {
             this.key = key;
             this.value = value;
         }
 
         set (key: string, value: string) : this {
-            this.properties[key] = value;
+            this.parameters[key] = value;
 
             return this;
         }
@@ -30,28 +30,28 @@ export namespace ICS {
         }
 
         toJSON () : object|string {
-            // If we have no properties we also don't export them to JSON
-            if (Object.keys(this.properties).length === 0) {
+            // If we have no parameters we also don't export them to JSON
+            if (Object.keys(this.parameters).length === 0) {
                 return this.toString();
             }
 
             return {
                 key: this.key,
                 __value__: this.value,
-                ...this.properties
+                ...this.parameters
             };
         }
     }
 
     export namespace Types {
-        export type Date = Value;
-        export type Time = Value;
-        export type DateTime = Value; // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5
-        export type Interval = Value; // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5
-        export type URI = Value;
-        export type RRule = Value;
-        export type GEO = Value<`${number};${number}`>;
-        export type CALAddress = Value;
+        export type Date = Property;
+        export type Time = Property;
+        export type DateTime = Property; // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5
+        export type Interval = Property; // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5
+        export type URI = Property;
+        export type RRule = Property;
+        export type GEO = Property<`${number};${number}`>;
+        export type CALAddress = Property;
     }
 
     export type JSON = {
@@ -59,16 +59,16 @@ export namespace ICS {
     }
 
     export type VCALENDAR = NonStandardPropertyAware & IANAPropertyAware & {
-        PRODID: Value,
-        VERSION: Value<'2.0'>,         // This is he only value accepted by RFC5546 and RFC5545
-        CALSCALE?: Value<'GREGORIAN'>, // This is the only value accepted by RFC5546 and RFC5545,
-        COMMENT?: Value[],
+        PRODID: Property,
+        VERSION: Property<'2.0'>,         // This is he only value accepted by RFC5546 and RFC5545
+        CALSCALE?: Property<'GREGORIAN'>, // This is the only value accepted by RFC5546 and RFC5545,
+        COMMENT?: Property[],
         VEVENT?: VEVENT.Published[],
         VTIMEZONE?: VTIMEZONE[],
     };
 
     export type VTIMEZONE = NonStandardPropertyAware & IANAPropertyAware & {
-        TZID: Value,
+        TZID: Property,
         TZURL?: Types.URI,
         'LAST-MODIFIED'?: Types.DateTime,
         DAYLIGHT?: TimezoneDefinition[],
@@ -76,18 +76,18 @@ export namespace ICS {
     }
 
     export type TimezoneDefinition = NonStandardPropertyAware & IANAPropertyAware & {
-        COMMENT?: Value[],
-        TZOFFSETFROM: Value, // Example: -0800
-        TZOFFSETTO: Value,   // Example: -0700
+        COMMENT?: Property[],
+        TZOFFSETFROM: Property, // Example: -0800
+        TZOFFSETTO: Property,   // Example: -0700
         DTSTART: Types.DateTime,    // In local format
-        TZNAME?: Value
+        TZNAME?: Property
     } & XOR<{ RRULE?: Types.RRule }, {RDATE?: (Types.Date|Types.DateTime)[]}>
 
     export type VALARM = NonStandardPropertyAware & IANAPropertyAware & {
-        ACTION: Value,
+        ACTION: Property,
         TRIGGER: Duration,
-        DESCRIPTION?: Value,
-        SUMMARY?: Value,
+        DESCRIPTION?: Property,
+        SUMMARY?: Property,
         ATTENDEE?: CALAddress[],
     }
 
@@ -97,32 +97,32 @@ export namespace ICS {
         export type Published = {DTSTART: Types.DateTime} & Event;
 
         type Event = NonStandardPropertyAware & IANAPropertyAware & {
-            UID: Value,
+            UID: Property,
             DTSTAMP: Types.DateTime,
-            SUMMARY: Value,
+            SUMMARY: Property,
 
             STATUS?: 'TENTATIVE' | 'CONFIRMED' | 'CANCELLED',
             TRANSP?: 'OPAQUE' | 'TRANSPARENT',
 
-            CLASS?: Value,
+            CLASS?: Property,
             CREATED?: Types.DateTime,
-            DESCRIPTION?: Value,
+            DESCRIPTION?: Property,
             DTSTART?: Types.DateTime,
             GEO?: Types.GEO,
             'LAST-MODIFIED'?: Types.DateTime,
             'RECURRENCE-ID'?: Types.DateTime,
-            LOCATION?: Value,
+            LOCATION?: Property,
             ORGANIZER?: Types.CALAddress,
             ATTENDEE?: Types.CALAddress[],
             PRIORITY?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9,
-            SEQUENCE?: Value,
+            SEQUENCE?: Property,
             URL?: Types.URI,
-            RECURID?: Value,
+            RECURID?: Property,
             RRULE?: RRule,
             RDATE?: DateTime[],
             EXDATE?: DateTime[],
-            COMMENT?: Value[],
-            CATEGORIES?: Value,
+            COMMENT?: Property[],
+            CATEGORIES?: Property,
             VALARM?: VALARM[],
         } & XOR<{DTEND?: Types.DateTime}, {DURATION?: Types.Interval}>
     }

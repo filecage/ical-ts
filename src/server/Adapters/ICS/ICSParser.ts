@@ -1,8 +1,8 @@
 // import {ICSData} from "./ICSData";
-import {BEGIN, COLON, Components, END, EQUAL, LIST_COMPONENTS, NEW_LINE, SEMICOLON, SPACE} from "./ParserConstants";
+import {BEGIN, COLON, Property, END, EQUAL, LIST_PROPERTIES, NEW_LINE, SEMICOLON, SPACE, Component} from "./ParserConstants";
 import {ICS} from "./ICS";
 import {XOR} from "ts-xor";
-import Value = ICS.Value;
+import Value = ICS.Property;
 
 export default class ICSParser {
 
@@ -29,25 +29,25 @@ export default class ICSParser {
 
         if (key === BEGIN) {
             switch (value) {
-                case Components.VTIMEZONE:
-                    context[Components.VTIMEZONE] = this.parseTimezone(lines, context);
+                case Component.VTIMEZONE:
+                    context[Component.VTIMEZONE] = this.parseTimezone(lines, context);
                     break;
 
-                case Components.TZONE_DAYLIGHT:
-                case Components.TZONE_STANDARD:
+                case Property.TZONE_DAYLIGHT:
+                case Property.TZONE_STANDARD:
                     context[value] = this.parseTimezoneDefinition(lines, context, value);
                     break;
 
-                case Components.VEVENT:
-                    context[Components.VEVENT] = this.parseEvent(lines, context);
+                case Component.VEVENT:
+                    context[Component.VEVENT] = this.parseEvent(lines, context);
                     break;
 
-                case Components.VCALENDAR:
-                    context[Components.VCALENDAR] = this.parseCalendar(lines, context);
+                case Component.VCALENDAR:
+                    context[Component.VCALENDAR] = this.parseCalendar(lines, context);
                     break;
 
-                case Components.VALARM:
-                    context[Components.VALARM] = this.parseAlarm(lines, context);
+                case Component.VALARM:
+                    context[Component.VALARM] = this.parseAlarm(lines, context);
                     break;
 
                 default:
@@ -63,7 +63,7 @@ export default class ICSParser {
                 container.set(propertyKey, propertyValue);
             }
 
-            if (LIST_COMPONENTS.includes(component as Components)) {
+            if (LIST_PROPERTIES.includes(component as Property)) {
                 if (context[component] === undefined) {
                     context[component] = [];
                 }
@@ -86,7 +86,7 @@ export default class ICSParser {
     }
 
     private parseCalendar (lines: string[], context: {[key: string]: unknown}) : ICS.VCALENDAR[] {
-        const calendars: ICS.VCALENDAR[] = (context[Components.VCALENDAR] as ICS.VCALENDAR[]) || [];
+        const calendars: ICS.VCALENDAR[] = (context[Component.VCALENDAR] as ICS.VCALENDAR[]) || [];
         const data = this.parse(lines, {});
 
         const VERSION = this.pickOrThrow<Value<'2.0'>>(data, 'VERSION');
@@ -100,13 +100,13 @@ export default class ICSParser {
             CALSCALE: this.pick<Value<'GREGORIAN'>>(data, 'CALSCALE'),
             COMMENT: this.pick(data, 'COMMENT'),
             ...this.pickNonStandardProperties(data),
-            VTIMEZONE: this.pick<ICS.VTIMEZONE[]>(data, Components.VTIMEZONE),
-            VEVENT: this.pick<ICS.VEVENT.Published[]>(data, Components.VEVENT),
+            VTIMEZONE: this.pick<ICS.VTIMEZONE[]>(data, Component.VTIMEZONE),
+            VEVENT: this.pick<ICS.VEVENT.Published[]>(data, Component.VEVENT),
         }];
     }
 
     private parseEvent (lines: string[], context: {[key: string]: unknown}) : ICS.VEVENT.Published[] {
-        const events: ICS.VEVENT.Published[] = (context[Components.VEVENT] as ICS.VEVENT.Published[]) || [];
+        const events: ICS.VEVENT.Published[] = (context[Component.VEVENT] as ICS.VEVENT.Published[]) || [];
         const data = this.parse(lines, {});
 
         const event: ICS.VEVENT.Published = {
@@ -152,7 +152,7 @@ export default class ICSParser {
     }
 
     private parseAlarm (lines: string[], context: {[key: string]: unknown}) : ICS.VALARM[] {
-        const alarms: ICS.VALARM[] = (context[Components.VALARM] as ICS.VALARM[]) || [];
+        const alarms: ICS.VALARM[] = (context[Component.VALARM] as ICS.VALARM[]) || [];
         const data = this.parse(lines, {});
 
         return [...alarms, {
@@ -165,7 +165,7 @@ export default class ICSParser {
     }
 
     private parseTimezone (lines: string[], context: {[key: string]: unknown}) : ICS.VTIMEZONE[] {
-        const timezones: ICS.VTIMEZONE[] = (context[Components.VTIMEZONE] as ICS.VTIMEZONE[]) || [];
+        const timezones: ICS.VTIMEZONE[] = (context[Component.VTIMEZONE] as ICS.VTIMEZONE[]) || [];
         const data = this.parse(lines, {});
         const timezone: ICS.VTIMEZONE = {
             TZID: this.pickOrThrow<Value>(data, 'TZID'),
@@ -177,7 +177,7 @@ export default class ICSParser {
         return [...timezones, timezone];
     }
 
-    private parseTimezoneDefinition (lines: string[], context: {[key: string]: unknown}, type: Components.TZONE_STANDARD | Components.TZONE_DAYLIGHT) : ICS.TimezoneDefinition[] {
+    private parseTimezoneDefinition (lines: string[], context: {[key: string]: unknown}, type: Property.TZONE_STANDARD | Property.TZONE_DAYLIGHT) : ICS.TimezoneDefinition[] {
         const timezoneDefinitions: ICS.TimezoneDefinition[] = (context[type] as ICS.TimezoneDefinition[]) || [];
         const data = this.parse(lines, {});
 
