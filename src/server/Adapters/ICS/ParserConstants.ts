@@ -12,11 +12,11 @@ export enum Component {
     VTIMEZONE = 'VTIMEZONE',
     VEVENT = 'VEVENT',
     VALARM = 'VALARM',
+    TZONE_STANDARD = 'STANDARD',
+    TZONE_DAYLIGHT = 'DAYLIGHT',
 }
 
 export enum Property {
-    TZONE_STANDARD = 'STANDARD',
-    TZONE_DAYLIGHT = 'DAYLIGHT',
     ATTENDEE = 'ATTENDEE',
     RRULE = 'RRULE',
     RRDATE = 'RDATE',

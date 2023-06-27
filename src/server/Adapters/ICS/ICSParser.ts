@@ -33,8 +33,8 @@ export default class ICSParser {
                     context[Component.VTIMEZONE] = this.parseTimezone(lines, context);
                     break;
 
-                case Property.TZONE_DAYLIGHT:
-                case Property.TZONE_STANDARD:
+                case Component.TZONE_DAYLIGHT:
+                case Component.TZONE_STANDARD:
                     context[value] = this.parseTimezoneDefinition(lines, context, value);
                     break;
 
@@ -177,7 +177,7 @@ export default class ICSParser {
         return [...timezones, timezone];
     }
 
-    private parseTimezoneDefinition (lines: string[], context: {[key: string]: unknown}, type: Property.TZONE_STANDARD | Property.TZONE_DAYLIGHT) : ICS.TimezoneDefinition[] {
+    private parseTimezoneDefinition (lines: string[], context: {[key: string]: unknown}, type: Component.TZONE_STANDARD | Component.TZONE_DAYLIGHT) : ICS.TimezoneDefinition[] {
         const timezoneDefinitions: ICS.TimezoneDefinition[] = (context[type] as ICS.TimezoneDefinition[]) || [];
         const data = this.parse(lines, {});
 
