@@ -39,6 +39,8 @@ describe('Throw errors for invalid ICS files', () => {
         ['missing-valarm-properties.ics', "Missing mandatory key 'TRIGGER'"],
         ['invalid-version.ics', "Parser only supports version 2.0"],
         ['multiple-rrules.ics', "Non-list component 'RRULE' appeared twice"],
+        ['missing-vtimezone-properties.ics', "Missing mandatory key 'TZID'"],
+        ['invalid-component.ics', "Unknown component type 'X-UNKNOWN'"],
     ]
 
     it.each(invalidSamples)(`Correctly throws for invalid sample '%s'`, async (sample, expectedErrorMessage) => {
