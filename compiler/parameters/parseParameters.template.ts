@@ -3,6 +3,8 @@ import {EQUAL, SEMICOLON} from "../../src/server/Adapters/ICS/ParserConstants";
 import {Parameters} from "../../src/server/Adapters/ICS/Parameters";
 /**${TEMPLATE_ONLY_END}**/
 /**${COMPILED_ONLY_BEGIN}**
+// THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
+// @see compiler/parameters/parameters.ts
 import {EQUAL, SEMICOLON} from "../ParserConstants";
 import {Parameters} from "../Parameters";
 /**${COMPILED_ONLY_END}**/
