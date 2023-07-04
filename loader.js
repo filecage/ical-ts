@@ -86,5 +86,10 @@ export const resolve = async (specifier, context, defaultResolve) => {
             '.tsx'
         ]) ?? specifier
 
+    // Fix missing file extensions when importing local files
+    if (specifier.startsWith('.')) {
+        specifier = `${specifier}.js`;
+    }
+
     return hooks.resolve(specifier, context, defaultResolve)
 }
