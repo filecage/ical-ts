@@ -13,6 +13,7 @@ export interface ParameterValueParserFn {
 
 export const parseUriValue: ParameterValueParserFn = (value: string) : string => value;
 export const parseCalAddressValue: ParameterValueParserFn = (value: string) : string => value;
+export const parseLanguageTag: ParameterValueParserFn = (value: string) : string => value;
 export const parseValue: ParameterValueParserFn = (value: string) : string => value;
 
 
