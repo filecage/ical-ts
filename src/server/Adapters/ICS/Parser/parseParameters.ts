@@ -12,7 +12,7 @@ export const parseCalAddressValue: ParameterValueParserFn = (value: string): str
 export const parseLanguageTag: ParameterValueParserFn = (value: string): string => value;
 export const parseValue: ParameterValueParserFn = (value: string): string => value;
 
-export function parseParameters(fragments: string[]) {
+export function parseParameters(fragments: string[]): Parameters.AlternateTextRepresentation & Parameters.CommonName & Parameters.CalendarUserType & Parameters.Delegators & Parameters.Delegatees & Parameters.DirectoryEntryReference & Parameters.InlineEncoding & Parameters.FormatType & Parameters.FreeBusyTimeType & Parameters.Language & Parameters.GroupOrListMembership & Parameters.ParticipationStatusTodo & Parameters.Range & Parameters.AlarmTriggerRelationship & Parameters.RelationshipType & Parameters.ParticipationRole & Parameters.RSVPExpectation & Parameters.SentBy & Parameters.TimeZoneIdentifier & Parameters.ValueDataTypes {
     return fragments.reduce((parameters, fragment) => {
         const [parameterKey, parameterValue] = fragment.split(EQUAL);
 

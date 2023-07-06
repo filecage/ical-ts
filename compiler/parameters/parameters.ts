@@ -91,6 +91,7 @@ Object.entries(exports).map(([parameterKey, parameterType]) => {
 let code = await readSourceFileRaw('compiler/parameters/parseParameters.template.ts');
 code = code.replace('/**${PARAMETERS_BLOCK_KEYMATCHER}**/', switchBlocks.join("\n"));
 code = code.replace('/**${PARAMETERS_PARSER_FUNCTIONS}**/', format(parserFunctions.join("\n\n"), 4));
+code = code.replace('/**${PARAMETERS_INTERSECTION_RETURN_TYPE}**/', ` : ${compileIntersectionType(Object.values(exports))}`);
 code = code.replace(/\/\**\${TEMPLATE_ONLY_BEGIN}\**\/.*\/\**\${TEMPLATE_ONLY_END}\**\//s, '');
 code = code.replace(/\/\**\${COMPILED_ONLY_BEGIN}\**(.*)\/\**\${COMPILED_ONLY_END}\**\//s, '$1');
 
@@ -155,6 +156,10 @@ function compileKeyMatcherBlock(key: string) : string {
     return `case '${key}':
                 return {...parameters, ...parser.${fnName(key)}(parameterValue)};
            `
+}
+
+function compileIntersectionType (types: Type[]) : string {
+    return types.map(type => `Parameters.${type.name}`).join('&');
 }
 
 function fnName (key: string) : string {

@@ -18,7 +18,7 @@ export const parseCalAddressValue: ParameterValueParserFn = (value: string) : st
 export const parseLanguageTag: ParameterValueParserFn = (value: string) : string => value;
 export const parseValue: ParameterValueParserFn = (value: string) : string => value;
 
-export function parseParameters (fragments: string[]) {
+export function parseParameters (fragments: string[]) /**${PARAMETERS_INTERSECTION_RETURN_TYPE}**/ {
     return fragments.reduce((parameters, fragment) => {
         const [parameterKey, parameterValue] = fragment.split(EQUAL);
 
