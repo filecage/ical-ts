@@ -25,3 +25,13 @@ export async function readSourceFile (fileName: string) : Promise<ts.SourceFile>
         /*setParentNodes */ true
     );
 }
+
+export async function *iterateSourceFiles (directoryName: string) {
+    for (const file of await fs.readdir(buildPathRelativeToApplication(directoryName))) {
+        if (file.startsWith('.')) {
+            continue;
+        }
+
+        yield readSourceFile((join(directoryName, file)));
+    }
+}
