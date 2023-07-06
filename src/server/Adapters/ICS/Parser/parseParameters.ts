@@ -12,75 +12,75 @@ export const parseCalAddressValue: ParameterValueParserFn = (value: string): str
 export const parseLanguageTag: ParameterValueParserFn = (value: string): string => value;
 export const parseValue: ParameterValueParserFn = (value: string): string => value;
 
-function parseParameters(fragments: string[]) {
-    return fragments.map(fragment => {
+export function parseParameters(fragments: string[]) {
+    return fragments.reduce((parameters, fragment) => {
         const [parameterKey, parameterValue] = fragment.split(EQUAL);
 
         switch (parameterKey) {
             case 'ALTREP':
-                return parser.parseALTREP(parameterValue);
+                return {...parameters, ...parser.parseALTREP(parameterValue)};
 
             case 'CN':
-                return parser.parseCN(parameterValue);
+                return {...parameters, ...parser.parseCN(parameterValue)};
 
             case 'CUTYPE':
-                return parser.parseCUTYPE(parameterValue);
+                return {...parameters, ...parser.parseCUTYPE(parameterValue)};
 
             case 'DELEGATED-FROM':
-                return parser.parseDELEGATED_FROM(parameterValue);
+                return {...parameters, ...parser.parseDELEGATED_FROM(parameterValue)};
 
             case 'DELEGATED-TO':
-                return parser.parseDELEGATED_TO(parameterValue);
+                return {...parameters, ...parser.parseDELEGATED_TO(parameterValue)};
 
             case 'DIR':
-                return parser.parseDIR(parameterValue);
+                return {...parameters, ...parser.parseDIR(parameterValue)};
 
             case 'ENCODING':
-                return parser.parseENCODING(parameterValue);
+                return {...parameters, ...parser.parseENCODING(parameterValue)};
 
             case 'FMTTYPE':
-                return parser.parseFMTTYPE(parameterValue);
+                return {...parameters, ...parser.parseFMTTYPE(parameterValue)};
 
             case 'FBTYPE':
-                return parser.parseFBTYPE(parameterValue);
+                return {...parameters, ...parser.parseFBTYPE(parameterValue)};
 
             case 'LANGUAGE':
-                return parser.parseLANGUAGE(parameterValue);
+                return {...parameters, ...parser.parseLANGUAGE(parameterValue)};
 
             case 'MEMBER':
-                return parser.parseMEMBER(parameterValue);
+                return {...parameters, ...parser.parseMEMBER(parameterValue)};
 
             case 'PARTSTAT':
-                return parser.parsePARTSTAT(parameterValue);
+                return {...parameters, ...parser.parsePARTSTAT(parameterValue)};
 
             case 'RANGE':
-                return parser.parseRANGE(parameterValue);
+                return {...parameters, ...parser.parseRANGE(parameterValue)};
 
             case 'RELATED':
-                return parser.parseRELATED(parameterValue);
+                return {...parameters, ...parser.parseRELATED(parameterValue)};
 
             case 'RELTYPE':
-                return parser.parseRELTYPE(parameterValue);
+                return {...parameters, ...parser.parseRELTYPE(parameterValue)};
 
             case 'ROLE':
-                return parser.parseROLE(parameterValue);
+                return {...parameters, ...parser.parseROLE(parameterValue)};
 
             case 'RSVP':
-                return parser.parseRSVP(parameterValue);
+                return {...parameters, ...parser.parseRSVP(parameterValue)};
 
             case 'SENT-BY':
-                return parser.parseSENT_BY(parameterValue);
+                return {...parameters, ...parser.parseSENT_BY(parameterValue)};
 
             case 'TZID':
-                return parser.parseTZID(parameterValue);
+                return {...parameters, ...parser.parseTZID(parameterValue)};
 
             case 'VALUE':
-                return parser.parseVALUE(parameterValue);
+                return {...parameters, ...parser.parseVALUE(parameterValue)};
 
             default:
                 throw new Error(`Invalid parameter '${parameterKey}'`);
         }
-    })
+    }, {});
 }
 
 namespace parser {

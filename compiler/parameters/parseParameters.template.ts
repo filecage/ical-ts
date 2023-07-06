@@ -18,9 +18,8 @@ export const parseCalAddressValue: ParameterValueParserFn = (value: string) : st
 export const parseLanguageTag: ParameterValueParserFn = (value: string) : string => value;
 export const parseValue: ParameterValueParserFn = (value: string) : string => value;
 
-
-function parseParameters (fragments: string[]) {
-    return fragments.map(fragment => {
+export function parseParameters (fragments: string[]) {
+    return fragments.reduce((parameters, fragment) => {
         const [parameterKey, parameterValue] = fragment.split(EQUAL);
 
         switch (parameterKey) {
@@ -29,7 +28,7 @@ function parseParameters (fragments: string[]) {
             default:
                 throw new Error(`Invalid parameter '${parameterKey}'`);
         }
-    })
+    }, {});
 }
 
 namespace parser {

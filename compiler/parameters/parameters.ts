@@ -153,7 +153,7 @@ function compileValueParserFnCall (type: Type) : string {
 
 function compileKeyMatcherBlock(key: string) : string {
     return `case '${key}':
-                return parser.${fnName(key)}(parameterValue);
+                return {...parameters, ...parser.${fnName(key)}(parameterValue)};
            `
 }
 
