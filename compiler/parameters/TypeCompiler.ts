@@ -25,6 +25,11 @@ export default class TypeCompiler {
                 allowsAnyString = true;
                 break;
 
+            case ts.SyntaxKind.NumberKeyword:
+                allowsAnyString = true;
+                parserFn = this.valueParserMap['__number']?.name || this.defaultParserFn.name;
+                break;
+
             case ts.SyntaxKind.LiteralType:
                 const literal = (type as ts.LiteralTypeNode).literal;
                 enums.push((literal as ts.LiteralExpression).text);
