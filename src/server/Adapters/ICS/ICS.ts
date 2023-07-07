@@ -1,58 +1,42 @@
 import {XOR} from "ts-xor";
+import Property from "./Parser/Property";
+import Version from "./Parser/Properties/Version";
+import CalendarScale from "./Parser/Properties/CalendarScale";
+import Comment from "./Parser/Properties/Comment";
+import TimeZoneIdentifier from "./Parser/Properties/TimeZoneIdentifier";
+import TimeZoneUrl from "./Parser/Properties/TimeZoneUrl";
+import LastModified from "./Parser/Properties/LastModified";
+import TimeZoneOffsetFrom from "./Parser/Properties/TimeZoneOffsetFrom";
+import TimeZoneOffsetTo from "./Parser/Properties/TimeZoneOffsetTo";
+import DateTimeStart from "./Parser/Properties/DateTimeStart";
+import TimeZoneName from "./Parser/Properties/TimeZoneName";
+import RecurrenceRule from "./Parser/Properties/RecurrenceRule";
+import RecurrenceDateTimes from "./Parser/Properties/RecurrenceDateTimes";
+import Action from "./Parser/Properties/Action";
+import Duration from "./Parser/Properties/Duration";
+import Description from "./Parser/Properties/Description";
+import Summary from "./Parser/Properties/Summary";
+import Attendee from "./Parser/Properties/Attendee";
+import UniqueIdentifier from "./Parser/Properties/UniqueIdentifier";
+import DateTimeStamp from "./Parser/Properties/DateTimeStamp";
+import Status from "./Parser/Properties/Status";
+import TimeTransparency from "./Parser/Properties/TimeTransparency";
+import Classification from "./Parser/Properties/Classification";
+import DateTimeCreated from "./Parser/Properties/DateTimeCreated";
+import GeographicPosition from "./Parser/Properties/GeographicPosition";
+import RecurrenceID from "./Parser/Properties/RecurrenceID";
+import Location from "./Parser/Properties/Location";
+import Organizer from "./Parser/Properties/Organizer";
+import Priority from "./Parser/Properties/Priority";
+import Sequence from "./Parser/Properties/Sequence";
+import UniformResourceLocator from "./Parser/Properties/UniformResourceLocator";
+import ExceptionDateTimes from "./Parser/Properties/ExceptionDateTimes";
+import Categories from "./Parser/Properties/Categories";
+import DateTimeEnd from "./Parser/Properties/DateTimeEnd";
 
 export namespace ICS {
-    import CALAddress = ICS.Types.CALAddress;
-    import Duration = ICS.Types.Interval;
     export type NonStandardPropertyAware = { [key: `X-${string}`]: Property }
     export type IANAPropertyAware = { [key: `IANA-${string}`]: Property }
-
-    export class Property<T = string> {
-        private readonly key: string;
-        public readonly value: T;
-        private parameters: {[key: string]: string} = {};
-        constructor (key: string, value: T) {
-            this.key = key;
-            this.value = value;
-        }
-
-        set (key: string, value: string) : this {
-            this.parameters[key] = value;
-
-            return this;
-        }
-
-        toString () : string {
-            if (typeof this.value !== 'string') {
-                throw new Error("Can not convert non-string ICSData.Value to string");
-            }
-
-            return this.value;
-        }
-
-        toJSON () : object|string {
-            // If we have no parameters we also don't export them to JSON
-            if (Object.keys(this.parameters).length === 0) {
-                return this.toString();
-            }
-
-            return {
-                key: this.key,
-                __value__: this.value,
-                ...this.parameters
-            };
-        }
-    }
-
-    export namespace Types {
-        export type Date = Property;
-        export type Time = Property;
-        export type DateTime = Property; // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5
-        export type Interval = Property; // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.2.5
-        export type URI = Property;
-        export type RRule = Property;
-        export type GEO = Property<`${number};${number}`>;
-        export type CALAddress = Property;
-    }
 
     export type JSON = {
         VCALENDAR: VCALENDAR
@@ -60,71 +44,68 @@ export namespace ICS {
 
     export type VCALENDAR = NonStandardPropertyAware & IANAPropertyAware & {
         PRODID: Property,
-        VERSION: Property<'2.0'>,         // This is he only value accepted by RFC5546 and RFC5545
-        CALSCALE?: Property<'GREGORIAN'>, // This is the only value accepted by RFC5546 and RFC5545,
-        COMMENT?: Property[],
+        VERSION: Version,         // This is he only value accepted by RFC5546 and RFC5545
+        CALSCALE?: CalendarScale, // This is the only value accepted by RFC5546 and RFC5545,
+        COMMENT?: Comment[],
         VEVENT?: VEVENT.Published[],
         VTIMEZONE?: VTIMEZONE[],
     };
 
     export type VTIMEZONE = NonStandardPropertyAware & IANAPropertyAware & {
-        TZID: Property,
-        TZURL?: Types.URI,
-        'LAST-MODIFIED'?: Types.DateTime,
+        TZID: TimeZoneIdentifier,
+        TZURL?: TimeZoneUrl,
+        'LAST-MODIFIED'?: LastModified,
         DAYLIGHT?: TimezoneDefinition[],
         STANDARD?: TimezoneDefinition[]
     }
 
     export type TimezoneDefinition = NonStandardPropertyAware & IANAPropertyAware & {
         COMMENT?: Property[],
-        TZOFFSETFROM: Property, // Example: -0800
-        TZOFFSETTO: Property,   // Example: -0700
-        DTSTART: Types.DateTime,    // In local format
-        TZNAME?: Property
-    } & XOR<{ RRULE?: Types.RRule }, {RDATE?: (Types.Date|Types.DateTime)[]}>
+        TZOFFSETFROM: TimeZoneOffsetFrom, // Example: -0800
+        TZOFFSETTO: TimeZoneOffsetTo,   // Example: -0700
+        DTSTART: DateTimeStart,    // In local format
+        TZNAME?: TimeZoneName,
+    } & XOR<{ RRULE?: RecurrenceRule }, {RDATE?: RecurrenceDateTimes[]}>
 
     export type VALARM = NonStandardPropertyAware & IANAPropertyAware & {
-        ACTION: Property,
+        ACTION: Action,
         TRIGGER: Duration,
-        DESCRIPTION?: Property,
-        SUMMARY?: Property,
-        ATTENDEE?: CALAddress[],
+        DESCRIPTION?: Description,
+        SUMMARY?: Summary,
+        ATTENDEE?: Attendee[],
     }
 
     export namespace VEVENT {
-        import RRule = ICS.Types.RRule;
-        import DateTime = ICS.Types.DateTime;
-        export type Published = {DTSTART: Types.DateTime} & Event;
+        export type Published = {DTSTART: DateTimeStart} & Event;
 
         type Event = NonStandardPropertyAware & IANAPropertyAware & {
-            UID: Property,
-            DTSTAMP: Types.DateTime,
-            SUMMARY: Property,
+            UID: UniqueIdentifier,
+            DTSTAMP: DateTimeStamp,
+            SUMMARY: Summary,
 
-            STATUS?: 'TENTATIVE' | 'CONFIRMED' | 'CANCELLED',
-            TRANSP?: 'OPAQUE' | 'TRANSPARENT',
+            STATUS?: Status,
+            TRANSP?: TimeTransparency,
 
-            CLASS?: Property,
-            CREATED?: Types.DateTime,
-            DESCRIPTION?: Property,
-            DTSTART?: Types.DateTime,
-            GEO?: Types.GEO,
-            'LAST-MODIFIED'?: Types.DateTime,
-            'RECURRENCE-ID'?: Types.DateTime,
-            LOCATION?: Property,
-            ORGANIZER?: Types.CALAddress,
-            ATTENDEE?: Types.CALAddress[],
-            PRIORITY?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9,
-            SEQUENCE?: Property,
-            URL?: Types.URI,
-            RECURID?: Property,
-            RRULE?: RRule,
-            RDATE?: DateTime[],
-            EXDATE?: DateTime[],
-            COMMENT?: Property[],
-            CATEGORIES?: Property,
+            CLASS?: Classification,
+            CREATED?: DateTimeCreated,
+            DESCRIPTION?: Description,
+            DTSTART?: DateTimeStart,
+            GEO?: GeographicPosition,
+            'LAST-MODIFIED'?: LastModified,
+            'RECURRENCE-ID'?: RecurrenceID,
+            LOCATION?: Location,
+            ORGANIZER?: Organizer,
+            ATTENDEE?: Attendee[],
+            PRIORITY?: Priority,
+            SEQUENCE?: Sequence,
+            URL?: UniformResourceLocator,
+            RRULE?: RecurrenceRule,
+            RDATE?: RecurrenceDateTimes[],
+            EXDATE?: ExceptionDateTimes[],
+            COMMENT?: Comment[],
+            CATEGORIES?: Categories,
             VALARM?: VALARM[],
-        } & XOR<{DTEND?: Types.DateTime}, {DURATION?: Types.Interval}>
+        } & XOR<{DTEND?: DateTimeEnd}, {DURATION?: Duration}>
     }
 
 }

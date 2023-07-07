@@ -1,8 +1,13 @@
 // import {ICSData} from "./ICSData";
-import {BEGIN, COLON, Property as EProperty, END, EQUAL, LIST_PROPERTIES, NEW_LINE, SEMICOLON, SPACE, Component} from "./ParserConstants";
+import {BEGIN, COLON, Property as EProperty, END, LIST_PROPERTIES, NEW_LINE, SPACE, Component} from "./ParserConstants";
 import {ICS} from "./ICS";
 import {XOR} from "ts-xor";
-import Property = ICS.Property;
+import {parseProperty} from "./Parser/parseProperties";
+import Property from "./Parser/Property";
+import RecurrenceRule from "./Parser/Properties/RecurrenceRule";
+import RecurrenceDateTimes from "./Parser/Properties/RecurrenceDateTimes";
+import Duration from "./Parser/Properties/Duration";
+import DateTimeEnd from "./Parser/Properties/DateTimeEnd";
 
 export default class ICSParser {
 
@@ -55,26 +60,20 @@ export default class ICSParser {
             }
         } else if (key !== END) {
             // Keys might contain additional properties
-            const fragments = key.split(SEMICOLON);
-            const propertyKey = fragments.shift()?.toUpperCase() || '';
-            const property = new Property(propertyKey, value);
-            for (const parameter of fragments) {
-                const [parameterKey, parameterValue] = parameter.split(EQUAL);
-                property.set(parameterKey, parameterValue);
-            }
+            const property= parseProperty(key, value);
 
-            if (LIST_PROPERTIES.includes(propertyKey as EProperty)) {
-                if (context[propertyKey] === undefined) {
-                    context[propertyKey] = [];
+            if (LIST_PROPERTIES.includes(property.key as EProperty)) {
+                if (context[property.key] === undefined) {
+                    context[property.key] = [];
                 }
 
-                (context[propertyKey] as Property[]).push(property);
+                (context[property.key] as Property<unknown>[]).push(property);
             } else {
-                if (context[propertyKey] !== undefined) {
-                    throw new Error(`Non-list component '${propertyKey}' appeared twice`);
+                if (context[property.key] !== undefined) {
+                    throw new Error(`Non-list component '${property.key}' appeared twice`);
                 }
 
-                context[propertyKey] = property;
+                context[property.key] = property;
             }
         } else {
             // If the block ends we return our context
@@ -89,15 +88,10 @@ export default class ICSParser {
         const calendars: ICS.VCALENDAR[] = (context[Component.VCALENDAR] as ICS.VCALENDAR[]) || [];
         const data = this.parse(lines, {});
 
-        const VERSION = this.pickOrThrow<Property<'2.0'>>(data, 'VERSION');
-        if (VERSION.value !== '2.0') {
-            throw new Error("Parser only supports version 2.0");
-        }
-
         return [...calendars, {
-            PRODID: this.pickOrThrow<Property>(data, 'PRODID'),
-            VERSION,
-            CALSCALE: this.pick<Property<'GREGORIAN'>>(data, 'CALSCALE'),
+            PRODID: this.pickOrThrow(data, 'PRODID'),
+            VERSION: this.pickOrThrow(data, 'VERSION'),
+            CALSCALE: this.pick(data, 'CALSCALE'),
             COMMENT: this.pick(data, 'COMMENT'),
             ...this.pickNonStandardProperties(data),
             VTIMEZONE: this.pick<ICS.VTIMEZONE[]>(data, Component.VTIMEZONE),
@@ -110,8 +104,8 @@ export default class ICSParser {
         const data = this.parse(lines, {});
 
         const event: ICS.VEVENT.Published = {
-            DTSTAMP: this.pickOrThrow<ICS.Types.DateTime>(data, 'DTSTAMP'),
-            DTSTART: this.pickOrThrow<ICS.Types.DateTime>(data, 'DTSTART'),
+            DTSTAMP: this.pickOrThrow(data, 'DTSTAMP'),
+            DTSTART: this.pickOrThrow(data, 'DTSTART'),
             ...this.pickDurationOrDateTimeEnd(data),
             UID: this.pickOrThrow(data, 'UID'),
             CREATED: this.pick(data, 'CREATED'),
@@ -137,13 +131,13 @@ export default class ICSParser {
         return [...events, event];
     }
 
-    private pickDurationOrDateTimeEnd (data: {[key: string]: unknown}) : undefined|XOR<{DURATION: ICS.Types.Interval}, {DTEND: ICS.Types.DateTime}> {
-        const DTEND = this.pick<ICS.Types.DateTime>(data, 'DTEND');
+    private pickDurationOrDateTimeEnd (data: {[key: string]: unknown}) : undefined|XOR<{DURATION: Duration}, {DTEND: DateTimeEnd}> {
+        const DTEND = this.pick<DateTimeEnd>(data, 'DTEND');
         if (DTEND !== undefined) {
             return {DTEND};
         }
 
-        const DURATION = this.pick<ICS.Types.Interval>(data, 'DURATION');
+        const DURATION = this.pick<Duration>(data, 'DURATION');
         if (DURATION !== undefined) {
             return {DURATION};
         }
@@ -168,10 +162,10 @@ export default class ICSParser {
         const timezones: ICS.VTIMEZONE[] = (context[Component.VTIMEZONE] as ICS.VTIMEZONE[]) || [];
         const data = this.parse(lines, {});
         const timezone: ICS.VTIMEZONE = {
-            TZID: this.pickOrThrow<Property>(data, 'TZID'),
+            TZID: this.pickOrThrow(data, 'TZID'),
             ...this.pickNonStandardProperties(data),
-            DAYLIGHT: this.pick<ICS.TimezoneDefinition[]>(data, 'DAYLIGHT'),
-            STANDARD: this.pick<ICS.TimezoneDefinition[]>(data, 'STANDARD'),
+            DAYLIGHT: this.pick(data, 'DAYLIGHT'),
+            STANDARD: this.pick(data, 'STANDARD'),
         };
 
         return [...timezones, timezone];
@@ -182,22 +176,22 @@ export default class ICSParser {
         const data = this.parse(lines, {});
 
         return [...timezoneDefinitions, {
-            TZOFFSETFROM: this.pickOrThrow<Property>(data, 'TZOFFSETFROM'),
-            TZOFFSETTO: this.pickOrThrow<Property>(data, 'TZOFFSETTO'),
-            TZNAME: this.pick<Property>(data, 'TZNAME'),
-            DTSTART: this.pickOrThrow<ICS.Types.DateTime>(data, 'DTSTART'),
+            TZOFFSETFROM: this.pickOrThrow(data, 'TZOFFSETFROM'),
+            TZOFFSETTO: this.pickOrThrow(data, 'TZOFFSETTO'),
+            TZNAME: this.pick(data, 'TZNAME'),
+            DTSTART: this.pickOrThrow(data, 'DTSTART'),
             ...this.pickNonStandardProperties(data),
             ...this.pickRRuleOrRdate(data),
         }];
     }
 
-    private pickRRuleOrRdate (data: {[key: string]: unknown}) : undefined | {RRULE: ICS.Types.RRule} | {RDATE: (ICS.Types.DateTime|ICS.Types.Date)[]} {
-        const RRULE = this.pick<ICS.Types.RRule>(data, 'RRULE');
+    private pickRRuleOrRdate (data: {[key: string]: unknown}) : undefined | {RRULE: RecurrenceRule} | {RDATE: RecurrenceDateTimes[]} {
+        const RRULE = this.pick<RecurrenceRule>(data, 'RRULE');
         if (RRULE !== undefined) {
             return {RRULE};
         }
 
-        const RDATE = this.pick<(ICS.Types.Date|ICS.Types.DateTime)[]>(data, 'RDATE');
+        const RDATE = this.pick<RecurrenceDateTimes[]>(data, 'RDATE');
         if (RDATE !== undefined) {
             return {RDATE};
         }
