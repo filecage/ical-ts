@@ -35,9 +35,9 @@ describe('Parse ICS to JSON', () => {
 describe('Throw errors for invalid ICS files', () => {
     const parser = new ICSParser();
     const invalidSamples: [string, string][] = [
-        ['missing-vcalendar-properties.ics', "Missing mandatory key 'VERSION'"],
+        ['missing-vcalendar-properties.ics', "Missing mandatory key 'PRODID'"],
         ['missing-valarm-properties.ics', "Missing mandatory key 'TRIGGER'"],
-        ['invalid-version.ics', "Parser only supports version 2.0"],
+        ['invalid-version.ics', "Property 'Version' value '1.0' is invalid, must be one of: 2.0"],
         ['multiple-rrules.ics', "Non-list component 'RRULE' appeared twice"],
         ['missing-vtimezone-properties.ics', "Missing mandatory key 'TZID'"],
         ['invalid-component.ics', "Unknown component type 'X-UNKNOWN'"],
