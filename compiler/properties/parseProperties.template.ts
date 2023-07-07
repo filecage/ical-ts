@@ -21,7 +21,7 @@ export function parseProperty (key: string, value: string) {
         /**${PROPERTIES_BLOCK_KEYMATCHER}**/
 
         default:
-            if (key.startsWith('X-') || key.startsWith('IANA-')) {
+            if (propertyKey.startsWith('X-') || propertyKey.startsWith('IANA-')) {
                 return new class extends Property<string> {
                     readonly key;
                     constructor(key: string, value: string) {
@@ -31,7 +31,7 @@ export function parseProperty (key: string, value: string) {
                 } (key, value);
             }
 
-            throw new Error(`Unexpected property '${key}'`);
+            throw new Error(`Unexpected property '${propertyKey}'`);
     }
 
 }

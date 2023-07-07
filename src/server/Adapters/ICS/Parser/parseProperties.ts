@@ -85,7 +85,7 @@ export function parseProperty (key: string, value: string) {
         case 'PRIORITY': return new Priority(parseValueRaw(value), parameters);
         case 'PRODID': return new ProductIdentifier(parseValueRaw(value), parameters);
         case 'RDATE': return new RecurrenceDateTimes(parseList(value).map(value => parseValueRaw(value)), parameters);
-        case 'RECCURENCE-ID': return new RecurrenceID(parseDateTime(value), parameters);
+        case 'RECURRENCE-ID': return new RecurrenceID(parseDateTime(value), parameters);
         case 'RRULE': return new RecurrenceRule(parseValueRaw(value), parameters);
         case 'RELATED-TO': return new RelatedTo(parseValueRaw(value), parameters);
         case 'REPEAT': return new Repeat(parseValueRaw(value), parameters);
@@ -105,7 +105,7 @@ export function parseProperty (key: string, value: string) {
         case 'VERSION': return new Version(assertEnum('Version', parseValueRaw(value), ['2.0'] as const), parameters);
 
         default:
-            if (key.startsWith('X-') || key.startsWith('IANA-')) {
+            if (propertyKey.startsWith('X-') || propertyKey.startsWith('IANA-')) {
                 return new class extends Property<string> {
                     readonly key;
                     constructor(key: string, value: string) {
@@ -115,7 +115,7 @@ export function parseProperty (key: string, value: string) {
                 } (key, value);
             }
 
-            throw new Error(`Unexpected property '${key}'`);
+            throw new Error(`Unexpected property '${propertyKey}'`);
     }
 
 }
