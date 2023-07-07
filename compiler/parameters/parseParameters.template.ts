@@ -34,6 +34,10 @@ export function parseParameters (fragments: string[]) /**${PARAMETERS_INTERSECTI
             /**${PARAMETERS_BLOCK_KEYMATCHER}**/
 
             default:
+                if (parameterKey.startsWith('X-') || parameterKey.startsWith('IANA-')) {
+                    return {[parameterKey]: parseValue(parameterValue)};
+                }
+
                 throw new Error(`Invalid parameter '${parameterKey}'`);
         }
     }, {});
