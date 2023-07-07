@@ -6,6 +6,7 @@
  import Property from "./Property";
 
 import {parseNumber, parseValueRaw, parseDateTime, parsePeriod, parseList} from "./parseValues"
+import Acknowledged from "./Properties/Acknowledged";
 import Action from "./Properties/Action";
 import Attachment from "./Properties/Attachment";
 import Attendee from "./Properties/Attendee";
@@ -32,6 +33,7 @@ import Organizer from "./Properties/Organizer";
 import PercentComplete from "./Properties/PercentComplete";
 import Priority from "./Properties/Priority";
 import ProductIdentifier from "./Properties/ProductIdentifier";
+import Proximity from "./Properties/Proximity";
 import RecurrenceDateTimes from "./Properties/RecurrenceDateTimes";
 import RecurrenceID from "./Properties/RecurrenceID";
 import RecurrenceRule from "./Properties/RecurrenceRule";
@@ -58,6 +60,7 @@ export function parseProperty (key: string, value: string) {
     const parameters = parseParameters(fragments);
 
     switch (propertyKey) {
+        case 'ACKNOWLEDGED': return new Acknowledged(parseDateTime(value), parameters);
         case 'ACTION': return new Action(parseValueRaw(value), parameters);
         case 'ATTACH': return new Attachment(parseValueRaw(value), parameters);
         case 'ATTENDEE': return new Attendee(parseValueRaw(value), parameters);
@@ -84,6 +87,7 @@ export function parseProperty (key: string, value: string) {
         case 'PERCENT-COMPLETE': return new PercentComplete(parseNumber(value), parameters);
         case 'PRIORITY': return new Priority(parseValueRaw(value), parameters);
         case 'PRODID': return new ProductIdentifier(parseValueRaw(value), parameters);
+        case 'PROXIMITY': return new Proximity(parseValueRaw(value), parameters);
         case 'RDATE': return new RecurrenceDateTimes(parseList(value).map(value => parseValueRaw(value)), parameters);
         case 'RECURRENCE-ID': return new RecurrenceID(parseDateTime(value), parameters);
         case 'RRULE': return new RecurrenceRule(parseValueRaw(value), parameters);

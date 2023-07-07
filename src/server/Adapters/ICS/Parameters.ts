@@ -24,7 +24,7 @@ export namespace Parameters {
     export type AlarmTriggerRelationship = { RELATED?: 'START' | 'END' };
 
     // /** @default PARENT */
-    export type RelationshipType = { RELTYPE?: string | 'PARENT' | 'CHILD' | 'SIBLING' };
+    export type RelationshipType = { RELTYPE?: string | 'PARENT' | 'CHILD' | 'SIBLING' | 'SNOOZE' };
     export type ParticipationRole = { ROLE?: string | 'CHAIR' | 'REQ-PARTICIPANT' | 'OPT-PARTICIPANT' | 'NON-PARTICIPANT'};
     export type RSVPExpectation = {RSVP?: 'TRUE' | 'FALSE'};
     export type SentBy = {'SENT-BY'?: CalAddress};
