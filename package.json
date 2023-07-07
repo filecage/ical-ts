@@ -4,6 +4,8 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "compile:parameters": "node --loader=./loader.js compiler/parameters/parameters.ts",
+        "compile:properties": "node --loader=./loader.js compiler/properties/properties.ts",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests",
         "dev-server": "nodemon src/server/test.ts"
     },
