@@ -44,8 +44,8 @@ export namespace ICS {
 
     export type VCALENDAR = NonStandardPropertyAware & IANAPropertyAware & {
         PRODID: Property,
-        VERSION: Version,         // This is he only value accepted by RFC5546 and RFC5545
-        CALSCALE?: CalendarScale, // This is the only value accepted by RFC5546 and RFC5545,
+        VERSION: Version,
+        CALSCALE?: CalendarScale,
         COMMENT?: Comment[],
         VEVENT?: VEVENT.Published[],
         VTIMEZONE?: VTIMEZONE[],
