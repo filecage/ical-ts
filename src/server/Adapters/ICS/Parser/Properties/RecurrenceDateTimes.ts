@@ -8,4 +8,8 @@ export default class RecurrenceDateTimes extends Property<(DateTime|Period)[],
     Parameters.TimeZoneIdentifier
 > {
     public readonly key = 'RDATE';
+
+    toString(): string {
+        return this.value.toString();
+    }
 }
