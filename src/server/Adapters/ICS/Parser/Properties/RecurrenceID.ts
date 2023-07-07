@@ -7,5 +7,5 @@ export default class RecurrenceID extends Property<DateTime,
     Parameters.TimeZoneIdentifier &
     Parameters.Range
 > {
-    public readonly key = 'RECCURENCE-ID';
+    public readonly key = 'RECURRENCE-ID';
 }
