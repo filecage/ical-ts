@@ -39,7 +39,7 @@ export namespace ICS {
     export type IANAPropertyAware = { [key: `IANA-${string}`]: Property }
 
     export type JSON = {
-        VCALENDAR: VCALENDAR
+        VCALENDAR: VCALENDAR[]
     }
 
     export type VCALENDAR = NonStandardPropertyAware & IANAPropertyAware & {
