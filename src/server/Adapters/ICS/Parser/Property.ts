@@ -10,7 +10,7 @@ export default abstract class Property<T = string, P extends {[key: string]: str
 
     toString () : string {
         if (typeof this.value !== 'string') {
-            throw new Error("Can not convert non-string ICSData.Value to string");
+            throw new Error(`Can not convert non-string ICSData.Value to string for property '${this.constructor.name}' (key '${this.key}')`);
         }
 
         return this.value;
