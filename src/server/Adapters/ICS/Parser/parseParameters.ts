@@ -49,7 +49,7 @@ export function parseParameters (fragments: string[])  : Parameters.AlternateTex
 
             default:
                 if (parameterKey.startsWith('X-') || parameterKey.startsWith('IANA-')) {
-                    return {[parameterKey]: parseValue(parameterValue)};
+                    return {...parameters, [parameterKey]: parseValue(parameterValue)};
                 }
 
                 throw new Error(`Invalid parameter '${parameterKey}'`);
