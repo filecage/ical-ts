@@ -1,6 +1,6 @@
 import ts from 'typescript';
-import {ParameterValueParserFn} from "./parseParameters.template";
 import {Type, TypeEnums} from "./Type";
+import {ValueParserFn} from "../../src/server/Adapters/ICS/Parser/parseValues";
 
 export default class TypeCompiler {
     public readonly defaultParserFn;
@@ -9,7 +9,7 @@ export default class TypeCompiler {
     // We store all handled types in here in case we need to reference them again
     private typeMap: {[key: string]: Type} = {};
 
-    constructor(defaultParserFn: ParameterValueParserFn, valueParserMap: {[key: string]: ParameterValueParserFn}) {
+    constructor(defaultParserFn: ValueParserFn, valueParserMap: {[key: string]: ValueParserFn}) {
         this.defaultParserFn = defaultParserFn;
         this.valueParserMap = valueParserMap;
     }

@@ -1,6 +1,5 @@
 /**${TEMPLATE_ONLY_BEGIN}**/
-import {EQUAL, SEMICOLON} from "../../src/server/Adapters/ICS/ParserConstants";
-import {Parameters} from "../../src/server/Adapters/ICS/Parameters";
+import {EQUAL} from "../../src/server/Adapters/ICS/ParserConstants";
 /**${TEMPLATE_ONLY_END}**/
 /**${COMPILED_ONLY_BEGIN}**
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
@@ -9,14 +8,23 @@ import {EQUAL, SEMICOLON} from "../ParserConstants";
 import {Parameters} from "../Parameters";
 /**${COMPILED_ONLY_END}**/
 
-export interface ParameterValueParserFn {
-    (value: string): string
+
+// TODO: Replace these with the shared value parsers
+export function parseUriValue (value: string): string {
+    return value;
 }
 
-export const parseUriValue: ParameterValueParserFn = (value: string) : string => value;
-export const parseCalAddressValue: ParameterValueParserFn = (value: string) : string => value;
-export const parseLanguageTag: ParameterValueParserFn = (value: string) : string => value;
-export const parseValue: ParameterValueParserFn = (value: string) : string => value;
+export function parseCalAddressValue (value: string) : string {
+    return value;
+}
+
+export function parseLanguageTag (value: string) : string {
+    return value;
+}
+
+export function parseValue (value: string): string {
+    return value;
+}
 
 export function parseParameters (fragments: string[]) /**${PARAMETERS_INTERSECTION_RETURN_TYPE}**/ {
     return fragments.reduce((parameters, fragment) => {

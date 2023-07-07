@@ -3,14 +3,22 @@
 import {EQUAL, SEMICOLON} from "../ParserConstants";
 import {Parameters} from "../Parameters";
 
-export interface ParameterValueParserFn {
-    (value: string): string
+// TODO: Replace these with the shared value parsers
+export function parseUriValue(value: string): string {
+    return value;
 }
 
-export const parseUriValue: ParameterValueParserFn = (value: string): string => value;
-export const parseCalAddressValue: ParameterValueParserFn = (value: string): string => value;
-export const parseLanguageTag: ParameterValueParserFn = (value: string): string => value;
-export const parseValue: ParameterValueParserFn = (value: string): string => value;
+export function parseCalAddressValue(value: string): string {
+    return value;
+}
+
+export function parseLanguageTag(value: string): string {
+    return value;
+}
+
+export function parseValue(value: string): string {
+    return value;
+}
 
 export function parseParameters(fragments: string[]): Parameters.AlternateTextRepresentation & Parameters.CommonName & Parameters.CalendarUserType & Parameters.Delegators & Parameters.Delegatees & Parameters.DirectoryEntryReference & Parameters.InlineEncoding & Parameters.FormatType & Parameters.FreeBusyTimeType & Parameters.Language & Parameters.GroupOrListMembership & Parameters.ParticipationStatusTodo & Parameters.Range & Parameters.AlarmTriggerRelationship & Parameters.RelationshipType & Parameters.ParticipationRole & Parameters.RSVPExpectation & Parameters.SentBy & Parameters.TimeZoneIdentifier & Parameters.ValueDataTypes {
     return fragments.reduce((parameters, fragment) => {
