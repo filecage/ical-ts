@@ -43,6 +43,12 @@ for await (const propertySource of iterateSourceFiles('src/server/Adapters/ICS/P
         throw new Error(`Invalid property definition: exported default class declaration is anonymous in file '${propertySource.fileName}'`);
     }
 
+    // Skip abstracts
+    if (propertyClass.modifiers?.find(modifier => modifier.kind === ts.SyntaxKind.AbstractKeyword)) {
+        console.log(`INFO: Skipping abstract class '${propertyName}'`);
+        continue;
+    }
+
     // Property class must inherit from Property base class
     const inherits = propertyClass.heritageClauses
         ?.find(heritageClause => heritageClause.token === ts.SyntaxKind.ExtendsKeyword)
