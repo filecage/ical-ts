@@ -1,10 +1,10 @@
 import ts from "typescript";
-import {exportSourceFileRaw, readSourceFile, readSourceFileRaw} from "../util/readSourceFile";
-import {parseCalAddressValue, parseLanguageTag, parseUriValue, parseValue} from "./parseParameters.template";
-import TypeCompiler from "./TypeCompiler";
-import {Type} from "./Type";
-import {Parameters} from "../../src/server/Adapters/ICS/Parameters";
-import { format } from "../util/format";
+import {exportSourceFileRaw, readSourceFile, readSourceFileRaw} from "./lib/readSourceFile";
+import TypeCompiler from "./lib/TypeCompiler";
+import {Type} from "./lib/Type";
+import { format } from "./lib/format";
+import {parseCalAddressValue, parseLanguageTag, parseUriValue, parseValue} from "./templates/parseParameters.template";
+import {Parameters} from "../src/server/Adapters/ICS/Parameters";
 
 const source = await readSourceFile('src/server/Adapters/ICS/Parameters.ts');
 const declarationStatement = source.statements[0] as ts.ModuleDeclaration;
@@ -88,7 +88,7 @@ Object.entries(exports).map(([parameterKey, parameterType]) => {
 });
 
 // Read file, replace tokens and write to application path
-let code = await readSourceFileRaw('compiler/parameters/parseParameters.template.ts');
+let code = await readSourceFileRaw('compiler/templates/parseParameters.template.ts');
 code = code.replace('/**${PARAMETERS_BLOCK_KEYMATCHER}**/', format(switchBlocks.join("\n"), 12));
 code = code.replace('/**${PARAMETERS_PARSER_FUNCTIONS}**/', format(parserFunctions.join("\n\n"), 4));
 code = code.replace('/**${PARAMETERS_INTERSECTION_RETURN_TYPE}**/', ` : ${compileIntersectionType(Object.values(exports))}`);

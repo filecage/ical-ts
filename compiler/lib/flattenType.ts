@@ -1,4 +1,4 @@
-import {Type} from "../parameters/Type";
+import {Type} from "./Type";
 
 export function flattenType (type: Type) : {enums: string[], allowsAnyString: boolean} {
     return type.enums.reduce((flatType, enumValue) => {

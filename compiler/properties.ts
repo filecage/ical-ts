@@ -1,10 +1,10 @@
 import ts from "typescript";
-import {exportSourceFileRaw, iterateSourceFiles, readSourceFileRaw} from "../util/readSourceFile";
-import TypeCompiler from "../parameters/TypeCompiler";
-import {format} from "../util/format";
-import {Type} from "../parameters/Type";
-import {parseDateTime, parseList, parseNumber, parsePeriod, parseValueRaw, ValueParserFn} from "../../src/server/Adapters/ICS/Parser/parseValues";
-import {flattenType} from "../util/flattenType";
+import {exportSourceFileRaw, iterateSourceFiles, readSourceFileRaw} from "./lib/readSourceFile";
+import {format} from "./lib/format";
+import TypeCompiler from "./lib/TypeCompiler";
+import {Type} from "./lib/Type";
+import {parseDateTime, parseList, parseNumber, parsePeriod, parseValueRaw, ValueParserFn} from "../src/server/Adapters/ICS/Parser/parseValues";
+import {flattenType} from "./lib/flattenType";
 
 const valueTypeParserMap = {
     __number: parseNumber,
@@ -89,7 +89,7 @@ properties.forEach(({key, valueType}) => {
 });
 
 // Read file, replace tokens and write to application path
-let code = await readSourceFileRaw('compiler/properties/parseProperties.template.ts');
+let code = await readSourceFileRaw('compiler/templates/parseProperties.template.ts');
 code = code.replace('/**${PROPERTIES_BLOCK_KEYMATCHER}**/', format(switchBlocks.join("\n"), 8));
 code = code.replace('/**${PROPERTIES_IMPORTS}**/', imports.join("\n"));
 code = code.replace('/**${PROPERTIES_PARSER_FUNCTIONS}**/', customParserFunctions.join("\n"));

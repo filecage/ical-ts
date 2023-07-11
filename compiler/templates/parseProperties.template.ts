@@ -1,6 +1,6 @@
 /**${TEMPLATE_ONLY_BEGIN}**/
 import {SEMICOLON} from "../../src/server/Adapters/ICS/ParserConstants";
-import {parseParameters} from "../parameters/parseParameters.template";
+import {parseParameters} from "./parseParameters.template";
 import Property from "../../src/server/Adapters/ICS/Parser/Property";
 /**${TEMPLATE_ONLY_END}**/
 /**${COMPILED_ONLY_BEGIN}**
