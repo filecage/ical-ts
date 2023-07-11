@@ -1,4 +1,4 @@
-import ICSParser from "../src/server/Adapters/ICS/ICSParser";
+import ICSParser from "../src/ICSParser";
 import {readSample} from "./util/readSample";
 import {sortedJSONKeysReplacer} from "./util/sortedJSONKeysReplacer";
 

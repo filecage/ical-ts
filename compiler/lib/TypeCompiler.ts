@@ -1,6 +1,6 @@
 import ts from 'typescript';
 import {Type, TypeEnums} from "./Type";
-import {ValueParserFn} from "../../src/server/Adapters/ICS/Parser/parseValues";
+import {ValueParserFn} from "../../src/Parser/parseValues";
 
 export default class TypeCompiler {
     public readonly defaultParserFn;

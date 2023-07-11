@@ -1,5 +1,5 @@
 /**${TEMPLATE_ONLY_BEGIN}**/
-import {EQUAL} from "../../src/server/Adapters/ICS/Parser/Constants";
+import {EQUAL} from "../../src/Parser/Constants";
 /**${TEMPLATE_ONLY_END}**/
 /**${COMPILED_ONLY_BEGIN}**
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!

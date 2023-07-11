@@ -4,9 +4,9 @@ import TypeCompiler from "./lib/TypeCompiler";
 import {Type} from "./lib/Type";
 import { format } from "./lib/format";
 import {parseCalAddressValue, parseLanguageTag, parseUriValue, parseValue} from "./templates/parseParameters.template";
-import {Parameters} from "../src/server/Adapters/ICS/Parser/Parameters/Parameters";
+import {Parameters} from "../src/Parser/Parameters/Parameters";
 
-const source = await readSourceFile('src/server/Adapters/ICS/Parser/Parameters/Parameters.ts');
+const source = await readSourceFile('src/Parser/Parameters/Parameters.ts');
 const declarationStatement = source.statements[0] as ts.ModuleDeclaration;
 if (declarationStatement.kind !== ts.SyntaxKind.ModuleDeclaration || declarationStatement.name?.text !== 'Parameters') {
     console.log('ERROR: Cannot compile parameters, type definition file has unexpected format');
@@ -95,9 +95,9 @@ code = code.replace('/**${PARAMETERS_INTERSECTION_RETURN_TYPE}**/', ` : ${compil
 code = code.replace(/\/\**\${TEMPLATE_ONLY_BEGIN}\**\/.*\/\**\${TEMPLATE_ONLY_END}\**\//s, '');
 code = code.replace(/\/\**\${COMPILED_ONLY_BEGIN}\**(.*)\/\**\${COMPILED_ONLY_END}\**\//s, '$1');
 
-await exportSourceFileRaw('src/server/Adapters/ICS/Parser/parseParameters.ts', format(code));
+await exportSourceFileRaw('src/Parser/parseParameters.ts', format(code));
 
-console.log("OK: 'src/server/Adapters/ICS/Parser/parseParameters.ts' written");
+console.log("OK: 'src/Parser/parseParameters.ts' written");
 
 function compileParserFunction (key: string, type: Type) : string {
     const blocks = sortBlocks(key, type);

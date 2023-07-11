@@ -3,8 +3,8 @@ import {exportSourceFileRaw, iterateSourceFiles, readSourceFileRaw} from "./lib/
 import {format} from "./lib/format";
 import TypeCompiler from "./lib/TypeCompiler";
 import {Type} from "./lib/Type";
-import {parseDateTime, parseList, parseNumber, parsePeriod, parseValueRaw, ValueParserFn} from "../src/server/Adapters/ICS/Parser/parseValues";
 import {flattenType} from "./lib/flattenType";
+import {parseDateTime, parseList, parseNumber, parsePeriod, parseValueRaw, ValueParserFn} from "../src/Parser/parseValues";
 
 const valueTypeParserMap: {[k:string]: ValueParserFn} = {
     __number: parseNumber,
@@ -22,7 +22,7 @@ const valueTypeParserMap: {[k:string]: ValueParserFn} = {
 }
 
 const properties: {key: string, valueType: Type}[] = [];
-for await (const propertySource of iterateSourceFiles('src/server/Adapters/ICS/Parser/Properties')) {
+for await (const propertySource of iterateSourceFiles('src/Parser/Properties')) {
     const propertyClass = propertySource.statements.find(statement => {
         if (statement.kind !== ts.SyntaxKind.ClassDeclaration) {
             return false;
@@ -102,9 +102,9 @@ code = code.replace('/**${PROPERTIES_PARSER_FUNCTIONS}**/', customParserFunction
 code = code.replace(/\/\**\${TEMPLATE_ONLY_BEGIN}\**\/.*\/\**\${TEMPLATE_ONLY_END}\**\//s, '');
 code = code.replace(/\/\**\${COMPILED_ONLY_BEGIN}\**(.*)\/\**\${COMPILED_ONLY_END}\**\//s, '$1');
 
-await exportSourceFileRaw('src/server/Adapters/ICS/Parser/parseProperties.ts', format(code));
+await exportSourceFileRaw('src/Parser/parseProperties.ts', format(code));
 
-console.log("OK: 'src/server/Adapters/ICS/Parser/parseProperties.ts' written");
+console.log("OK: 'src/Parser/parseProperties.ts' written");
 
 function compileKeyMatcherBlock (key: string, type: Type) : string {
     return format(`case '${key}': return new ${type.name}(${compileParserFnCall(type)}, parameters);`);
