@@ -1,5 +1,3 @@
-
-import {lines2tree} from "icalts";
 import ICSParser from "../src/server/Adapters/ICS/ICSParser";
 import {readSample} from "./util/readSample";
 import {sortedJSONKeysReplacer} from "./util/sortedJSONKeysReplacer";
