@@ -6,7 +6,7 @@ import {Type} from "./lib/Type";
 import {parseDateTime, parseList, parseNumber, parsePeriod, parseValueRaw, ValueParserFn} from "../src/server/Adapters/ICS/Parser/parseValues";
 import {flattenType} from "./lib/flattenType";
 
-const valueTypeParserMap = {
+const valueTypeParserMap: {[k:string]: ValueParserFn} = {
     __number: parseNumber,
     CalAddress: parseValueRaw,
     DateTime: parseDateTime,
@@ -21,7 +21,7 @@ const valueTypeParserMap = {
     ParticipationStatusTodo: parseValueRaw,
 }
 
-const properties = [];
+const properties: {key: string, valueType: Type}[] = [];
 for await (const propertySource of iterateSourceFiles('src/server/Adapters/ICS/Parser/Properties')) {
     const propertyClass = propertySource.statements.find(statement => {
         if (statement.kind !== ts.SyntaxKind.ClassDeclaration) {
