@@ -1,5 +1,5 @@
 import Property from "./Property";
-import {Parameters} from "../../Parameters";
+import {Parameters} from "../Parameters/Parameters";
 import {DateTime} from "../ValueTypes/DateTime";
 
 export default class RecurrenceID extends Property<DateTime,

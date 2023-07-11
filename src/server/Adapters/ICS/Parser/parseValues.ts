@@ -1,4 +1,4 @@
-import {COMMA} from "../ParserConstants";
+import {COMMA} from "./Constants";
 import {DateTime} from "./ValueTypes/DateTime";
 import {Period} from "./ValueTypes/Period";
 

@@ -1,5 +1,5 @@
 import Property from "./Property";
-import {Parameters} from "../../Parameters";
+import {Parameters} from "../Parameters/Parameters";
 
 export default class Description extends Property<string,
     Parameters.Language &

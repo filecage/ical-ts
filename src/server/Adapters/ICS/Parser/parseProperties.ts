@@ -1,7 +1,7 @@
 
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
 // @see compiler/parameters/parameters.ts
- import {SEMICOLON} from "../ParserConstants";
+ import {SEMICOLON} from "./Constants";
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 

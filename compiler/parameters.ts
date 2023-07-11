@@ -4,9 +4,9 @@ import TypeCompiler from "./lib/TypeCompiler";
 import {Type} from "./lib/Type";
 import { format } from "./lib/format";
 import {parseCalAddressValue, parseLanguageTag, parseUriValue, parseValue} from "./templates/parseParameters.template";
-import {Parameters} from "../src/server/Adapters/ICS/Parameters";
+import {Parameters} from "../src/server/Adapters/ICS/Parser/Parameters/Parameters";
 
-const source = await readSourceFile('src/server/Adapters/ICS/Parameters.ts');
+const source = await readSourceFile('src/server/Adapters/ICS/Parser/Parameters/Parameters.ts');
 const declarationStatement = source.statements[0] as ts.ModuleDeclaration;
 if (declarationStatement.kind !== ts.SyntaxKind.ModuleDeclaration || declarationStatement.name?.text !== 'Parameters') {
     console.log('ERROR: Cannot compile parameters, type definition file has unexpected format');

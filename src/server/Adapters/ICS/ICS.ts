@@ -1,5 +1,5 @@
 import {XOR} from "ts-xor";
-import Property from "./Parser/Property";
+import Property from "./Parser/Properties/Property";
 import Version from "./Parser/Properties/Version";
 import CalendarScale from "./Parser/Properties/CalendarScale";
 import Comment from "./Parser/Properties/Comment";

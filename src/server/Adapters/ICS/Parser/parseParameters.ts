@@ -1,8 +1,8 @@
 
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
 // @see compiler/parameters/parameters.ts
-import {EQUAL, SEMICOLON} from "../ParserConstants";
-import {Parameters} from "../Parameters";
+import {EQUAL, SEMICOLON} from "./Constants";
+import {Parameters} from "./Parameters/Parameters";
 
 // TODO: Replace these with the shared value parsers
 export function parseUriValue (value: string): string {

@@ -1,5 +1,5 @@
 import Property from "./Property";
-import {Parameters} from "../../Parameters";
+import {Parameters} from "../Parameters/Parameters";
 import {CalAddress} from "../ValueTypes/CalAddress";
 
 export default class Attendee extends Property<CalAddress,

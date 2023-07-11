@@ -1,11 +1,11 @@
 /**${TEMPLATE_ONLY_BEGIN}**/
-import {EQUAL} from "../../src/server/Adapters/ICS/ParserConstants";
+import {EQUAL} from "../../src/server/Adapters/ICS/Parser/Constants";
 /**${TEMPLATE_ONLY_END}**/
 /**${COMPILED_ONLY_BEGIN}**
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
 // @see compiler/parameters/parameters.ts
-import {EQUAL, SEMICOLON} from "../ParserConstants";
-import {Parameters} from "../Parameters";
+import {EQUAL, SEMICOLON} from "./Constants";
+import {Parameters} from "./Parameters/Parameters";
 /**${COMPILED_ONLY_END}**/
 
 

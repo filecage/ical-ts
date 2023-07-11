@@ -1,5 +1,4 @@
-// import {ICSData} from "./ICSData";
-import {BEGIN, COLON, Property as EProperty, END, LIST_PROPERTIES, NEW_LINE, SPACE, Component} from "./ParserConstants";
+import {BEGIN, COLON, Property as EProperty, END, LIST_PROPERTIES, NEW_LINE, SPACE, Component} from "./Parser/Constants";
 import {ICS} from "./ICS";
 import {XOR} from "ts-xor";
 import {parseProperty} from "./Parser/parseProperties";
