@@ -3,7 +3,7 @@ import {BEGIN, COLON, Property as EProperty, END, LIST_PROPERTIES, NEW_LINE, SPA
 import {ICS} from "./ICS";
 import {XOR} from "ts-xor";
 import {parseProperty} from "./Parser/parseProperties";
-import Property from "./Parser/Property";
+import Property from "./Parser/Properties/Property";
 import RecurrenceRule from "./Parser/Properties/RecurrenceRule";
 import RecurrenceDateTimes from "./Parser/Properties/RecurrenceDateTimes";
 import Duration from "./Parser/Properties/Duration";

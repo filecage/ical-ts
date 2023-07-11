@@ -3,7 +3,7 @@
 // @see compiler/parameters/parameters.ts
  import {SEMICOLON} from "../ParserConstants";
  import {parseParameters} from "./parseParameters";
- import Property from "./Property";
+ import Property from "./Properties/Property";
 
 import {parseNumber, parseValueRaw, parseDateTime, parsePeriod, parseList} from "./parseValues"
 import Acknowledged from "./Properties/Acknowledged";

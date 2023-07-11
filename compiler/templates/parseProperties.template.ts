@@ -1,14 +1,14 @@
 /**${TEMPLATE_ONLY_BEGIN}**/
 import {SEMICOLON} from "../../src/server/Adapters/ICS/ParserConstants";
 import {parseParameters} from "./parseParameters.template";
-import Property from "../../src/server/Adapters/ICS/Parser/Property";
+import Property from "../../src/server/Adapters/ICS/Parser/Properties/Property";
 /**${TEMPLATE_ONLY_END}**/
 /**${COMPILED_ONLY_BEGIN}**
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
 // @see compiler/parameters/parameters.ts
  import {SEMICOLON} from "../ParserConstants";
  import {parseParameters} from "./parseParameters";
- import Property from "./Property";
+ import Property from "./Properties/Property";
 /**${COMPILED_ONLY_END}**/
 /**${PROPERTIES_IMPORTS}**/
 

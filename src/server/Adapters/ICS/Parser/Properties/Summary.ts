@@ -1,4 +1,4 @@
-import Property from "../Property";
+import Property from "./Property";
 import {Parameters} from "../../Parameters";
 
 export default class Summary extends Property<string,

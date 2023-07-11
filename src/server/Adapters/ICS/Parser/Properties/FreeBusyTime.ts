@@ -1,4 +1,4 @@
-import Property from "../Property";
+import Property from "./Property";
 import {Parameters} from "../../Parameters";
 import {Duration} from "../ValueTypes/Duration";
 import {Period} from "../ValueTypes/Period";
