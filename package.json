@@ -3,6 +3,14 @@
     "description": "A fully typed, RFC compliant iCalendar / ICS parser",
     "main": "index.js",
     "type": "module",
+    "exports": {
+        "./parser": "./dist/parser.js"
+    },
+    "typesVersions": {
+        "*": {
+            "parser": ["dist/parser.d.ts"]
+        }
+    },
     "scripts": {
         "build": "tsup",
         "compile:parameters": "node --loader=./loader.js compiler/parameters.ts",
