@@ -41,7 +41,18 @@ export default class TypeCompiler {
                 break;
 
             case ts.SyntaxKind.TypeReference:
-                const reference = (type as ts.TypeReferenceNode).typeName;
+                let reference: ts.Node = (type as ts.TypeReferenceNode).typeName;
+                // Qualified names need to be resolved first
+                if (reference.kind === ts.SyntaxKind.QualifiedName) {
+                    const {left, right} = reference as ts.QualifiedName;
+                    if ((left as ts.Identifier).text !== 'Parameters') {
+                        console.log(`ERROR: Unexpected qualified name type reference for parameter '${name}': Can only handle identifiers from 'Parameter' entity`);
+                        process.exit(1);
+                    }
+
+                    reference = right;
+                }
+
                 if (reference.kind !== ts.SyntaxKind.Identifier) {
                     console.log(`ERROR: Unexpected type reference '${reference.kind}' for parameter '${name}'`);
                     process.exit(1);
