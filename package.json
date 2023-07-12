@@ -4,6 +4,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "build": "tsup",
         "compile:parameters": "node --loader=./loader.js compiler/parameters.ts",
         "compile:properties": "node --loader=./loader.js compiler/properties.ts",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests",
@@ -18,6 +19,7 @@
         "ts-jest": "^29.1.0",
         "ts-node": "^10.9.1",
         "ts-xor": "^1.1.0",
-        "tsconfig-paths": "^4.2.0"
+        "tsconfig-paths": "^4.2.0",
+        "tsup": "^7.1.0"
     }
 }

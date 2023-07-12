@@ -1,8 +1,7 @@
 import Property from "./Property";
 import {Parameters} from "../Parameters/Parameters";
-import ParticipationStatusTodo = Parameters.ParticipationStatusTodo;
 
 // We're taking the values from the ParticipationStatus property, they seem to be identical
-export default class Status extends Property<ParticipationStatusTodo['PARTSTAT']> {
+export default class Status extends Property<Parameters.ParticipationStatusTodo['PARTSTAT']> {
     public readonly key = 'STATUS';
 }
