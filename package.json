@@ -1,6 +1,6 @@
 {
     "name": "freetime-finder",
-    "description": "",
+    "description": "A fully typed, RFC compliant iCalendar / ICS parser",
     "main": "index.js",
     "type": "module",
     "scripts": {
@@ -9,7 +9,7 @@
         "compile:properties": "node --loader=./loader.js compiler/properties.ts",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests"
     },
-    "author": "",
+    "author": "David Beuchert",
     "license": "UNLICENSED",
     "devDependencies": {
         "@types/jest": "^29.5.2",
