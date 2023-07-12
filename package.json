@@ -1,5 +1,5 @@
 {
-    "name": "freetime-finder",
+    "name": "@filecage/ical",
     "description": "A fully typed, RFC compliant iCalendar / ICS parser",
     "main": "index.js",
     "type": "module",
