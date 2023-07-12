@@ -7,8 +7,7 @@
         "build": "tsup",
         "compile:parameters": "node --loader=./loader.js compiler/parameters.ts",
         "compile:properties": "node --loader=./loader.js compiler/properties.ts",
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests",
-        "dev-server": "nodemon src/server/test.ts"
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests"
     },
     "author": "",
     "license": "UNLICENSED",
