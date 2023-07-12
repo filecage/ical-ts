@@ -1,0 +1,4 @@
+BEGIN:VCALENDAR
+PRODID:This is a very long prodid string that will be
+  put into the next line and should still be valid
+END:VCALENDAR

@@ -1,0 +1,10 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:This test assures that the iterator stops once a component ENDs
+BEGIN:VTIMEZONE
+X-TEST:Hello yes
+END:VTIMEZONE
+BEGIN:VTIMEZONE
+X-TEST:I am a mess
+END:VTIMEZONE
+END:VCALENDAR
