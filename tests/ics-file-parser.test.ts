@@ -1,6 +1,7 @@
 import ICSParser from "../src/ICSParser";
 import {readSample} from "./util/readSample";
 import {sortedJSONKeysReplacer} from "./util/sortedJSONKeysReplacer";
+import {unfold} from "../src/Parser/unfold";
 
 describe('Parse ICS to JSON', () => {
     const parser = new ICSParser();
@@ -49,7 +50,6 @@ describe('Throw errors for invalid ICS files', () => {
 });
 
 describe('Unfold long ICS lines', () => {
-    const parser = new ICSParser();
     const lines = [
         'This is a very long line that is',
         '  wrapped according to RFC5545.',
@@ -57,7 +57,7 @@ describe('Unfold long ICS lines', () => {
     ];
 
     it('should unfold to two lines according to RFC5545', () => {
-        expect(parser.unfold(lines)).toEqual([
+        expect(unfold(lines)).toEqual([
             'This is a very long line that is wrapped according to RFC5545.',
             'This is a new line because it does not start with a space'
         ]);
