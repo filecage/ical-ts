@@ -40,6 +40,8 @@ describe('Throw errors for invalid ICS files', () => {
         ['multiple-rrules.ics', "Non-list component 'RRULE' appeared twice"],
         ['missing-vtimezone-properties.ics', "Missing mandatory key 'TZID'"],
         ['invalid-component.ics', "Unknown component type 'X-UNKNOWN'"],
+        ['invalid-end.ics', "Unexpected 'END:VCALENDAR' in component 'VEVENT'"],
+        ['missing-end.ics', "Unexpected EOF: missing END declaration for component 'VCALENDAR'"],
     ]
 
     it.each(invalidSamples)(`Correctly throws for invalid sample '%s'`, async (sample, expectedErrorMessage) => {
