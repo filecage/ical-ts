@@ -159,7 +159,8 @@ function compileParserFnCall (type: Type) : string {
 }
 
 function compileParserFnCallSingleValue (type: Type) : string {
-    const parserFnCall = `${type.parserFn}(value)`;
+    const parserFn = valueParserFns[type.parserFn];
+    const parserFnCall = parserFn.length === 1 ? `${type.parserFn}(value)` : `${type.parserFn}(value, parameters)` ;
     const flatType = flattenTypeEnums(type);
     if (!flatType.allowsAnyString && flatType.enums.length > 0) {
         return `assertEnum('${type.name}', ${parserFnCall}, [${flatType.enums.map(enumValue => `'${enumValue}'`).join(', ')}] as const)`;
