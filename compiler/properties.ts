@@ -24,7 +24,7 @@ const valueTypeParserMap: {[k:string]: ValueParserFn} = {
 const properties: {key: string, valueType: Type}[] = [];
 for await (const propertySource of iterateSourceFiles('src/Parser/Properties')) {
     const propertyClass = propertySource.statements.find(statement => {
-        if (statement.kind !== ts.SyntaxKind.ClassDeclaration) {
+        if (![ts.SyntaxKind.ClassDeclaration, ts.SyntaxKind.InterfaceDeclaration].includes(statement.kind)) {
             return false;
         }
 
@@ -32,7 +32,7 @@ for await (const propertySource of iterateSourceFiles('src/Parser/Properties')) 
         const hasDefault = (statement as ts.ClassDeclaration).modifiers?.find(member => member.kind === ts.SyntaxKind.DefaultKeyword) !== undefined;
 
         return hasExport && hasDefault;
-    }) as ts.ClassDeclaration|undefined;
+    }) as ts.ClassDeclaration|ts.InterfaceDeclaration|undefined;
 
     if (propertyClass === undefined) {
         throw new Error(`Invalid property definition: missing exported default class declaration in file '${propertySource.fileName}'`);
@@ -43,9 +43,15 @@ for await (const propertySource of iterateSourceFiles('src/Parser/Properties')) 
         throw new Error(`Invalid property definition: exported default class declaration is anonymous in file '${propertySource.fileName}'`);
     }
 
+    // Skip interfaces
+    if (ts.isInterfaceDeclaration(propertyClass)) {
+        console.log(`INFO: Skipping interface declaration '${propertyName}'`);
+        continue;
+    }
+
     // Skip abstracts
     if (propertyClass.modifiers?.find(modifier => modifier.kind === ts.SyntaxKind.AbstractKeyword)) {
-        console.log(`INFO: Skipping abstract class '${propertyName}'`);
+        console.log(`INFO: Skipping abstract class  '${propertyName}'`);
         continue;
     }
 
