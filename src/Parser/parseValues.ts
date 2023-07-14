@@ -1,9 +1,10 @@
 import {COMMA} from "./Constants";
 import {DateTime} from "./ValueTypes/DateTime";
 import {Period} from "./ValueTypes/Period";
+import {Parameters} from "./Parameters/Parameters";
 
-export interface ValueParserFn {
-    (value: string): string|string[]|Period|DateTime|number
+export interface ValueParserFn<T extends {} = {}> {
+    (value: string, parameters: T): string|string[]|Period|DateTime|number
 }
 
 export function parseList (value: string) : string[] {
