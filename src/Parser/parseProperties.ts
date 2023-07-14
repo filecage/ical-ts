@@ -5,7 +5,7 @@
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 
-import {parseNumber, parseValueRaw, parseDateTime, parsePeriod, parseList} from "./parseValues"
+import {parseDateTime, parseList, parseNumber, parsePeriod, parseValueRaw} from "./parseValues"
 import Acknowledged from "./Properties/Acknowledged";
 import Action from "./Properties/Action";
 import Attachment from "./Properties/Attachment";

@@ -144,5 +144,5 @@ function compileImport(type: Type) : string {
 }
 
 function compileValueParserImports (valueParserFns: ValueParserFn[]) : string {
-    return format(`import {${[...new Set(valueParserFns)].map(fn => fn.name).join(', ')}} from "./parseValues"`);
+    return format(`import {${[...new Set(valueParserFns)].sort().map(fn => fn.name).join(', ')}} from "./parseValues"`);
 }
