@@ -3,22 +3,26 @@ import {exportSourceFileRaw, iterateSourceFiles, readSourceFileRaw} from "./lib/
 import {format} from "./lib/format";
 import TypeCompiler from "./lib/TypeCompiler";
 import {Type} from "./lib/Type";
-import {flattenType} from "./lib/flattenType";
-import {parseDateTime, parseList, parseNumber, parsePeriod, parseValueRaw, ValueParserFn} from "../src/Parser/parseValues";
+import {flattenTypeEnums, flattenTypeParserFns} from "./lib/flattenTypeEnums";
+import {ValueParserFn} from "../src/Parser/parseValues";
+
+// Map all exported value parsers to an indexed object
+const valueParserFns = Object.entries(await import('../src/Parser/parseValues'))
+    .reduce((parsers: {[key: string]: ValueParserFn}, [name, fn]) => ({...parsers, [name]: fn}), {});
 
 const valueTypeParserMap: {[k:string]: ValueParserFn} = {
-    __number: parseNumber,
-    CalAddress: parseValueRaw,
-    DateTime: parseDateTime,
-    UTCDateTime: parseDateTime,
-    DurationValue: parseValueRaw, // TODO: The Duration property renames the import, we currently don't understand that correctly so we have to define this twice
-    Duration: parseValueRaw,
-    Offset: parseValueRaw,
-    Period: parsePeriod,
-    Raw: parseValueRaw,
-    Recur: parseValueRaw,
-    Uri: parseValueRaw,
-    ParticipationStatusTodo: parseValueRaw,
+    __number: valueParserFns.parseNumber,
+    CalAddress: valueParserFns.parseValueRaw,
+    DateTime: valueParserFns.parseDateTime,
+    UTCDateTime: valueParserFns.parseDateTime,
+    DurationValue: valueParserFns.parseValueRaw, // TODO: The Duration property renames the import, we currently don't understand that correctly so we have to define this twice
+    Duration: valueParserFns.parseValueRaw,
+    Offset: valueParserFns.parseValueRaw,
+    Period: valueParserFns.parsePeriod,
+    Raw: valueParserFns.parseValueRaw,
+    Recur: valueParserFns.parseValueRaw,
+    Uri: valueParserFns.parseValueRaw,
+    ParticipationStatusTodo: valueParserFns.parseValueRaw,
 }
 
 const properties: {key: string, valueType: Type}[] = [];
@@ -93,7 +97,8 @@ const switchBlocks: string[] = [];
 const customParserFunctions: string[] = [];
 
 // Add value parser function imports
-imports.push(compileValueParserImports([...Object.values(valueTypeParserMap), parseList]));
+const valueParserFnsInUse = properties.reduce((valueParserFnsInUse: ValueParserFn[], {valueType}) => [...valueParserFnsInUse, ...flattenTypeParserFns(valueType, valueParserFns)], []);
+imports.push(compileValueParserImports([...valueParserFnsInUse, valueParserFns.parseList]));
 
 properties.forEach(({key, valueType}) => {
     switchBlocks.push(compileKeyMatcherBlock(key, valueType));
@@ -126,7 +131,7 @@ function compileParserFnCall (type: Type) : string {
 
 function compileParserFnCallSingleValue (type: Type) : string {
     const parserFnCall = `${type.parserFn}(value)`;
-    const flatType = flattenType(type);
+    const flatType = flattenTypeEnums(type);
     if (!flatType.allowsAnyString && flatType.enums.length > 0) {
         return `assertEnum('${type.name}', ${parserFnCall}, [${flatType.enums.map(enumValue => `'${enumValue}'`).join(', ')}] as const)`;
     }
