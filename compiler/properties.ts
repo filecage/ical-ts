@@ -25,7 +25,7 @@ const valueTypeParserMap: {[k:string]: ValueParserFn} = {
     ParticipationStatusTodo: valueParserFns.parseValueRaw,
 }
 
-const properties: {key: string, valueType: Type}[] = [];
+const properties: {key: string, valueType: Type, customValueParserFn?: ValueParserFn}[] = [];
 for await (const propertySource of iterateSourceFiles('src/Parser/Properties')) {
     const propertyClass = propertySource.statements.find(statement => {
         if (![ts.SyntaxKind.ClassDeclaration, ts.SyntaxKind.InterfaceDeclaration].includes(statement.kind)) {
@@ -68,7 +68,9 @@ for await (const propertySource of iterateSourceFiles('src/Parser/Properties')) 
         throw new Error(`Invalid property definition: must inherit from 'Property' class for property '${propertyName}'`);
     }
 
-    const typeCompiler = new TypeCompiler(parseValueRaw, valueTypeParserMap);
+    // Let's look for a custom value type definition
+    const customValueParserFn = findCustomValueParserFnIfAvailable(propertyClass, propertyName);
+    const typeCompiler = new TypeCompiler(valueParserFns.parseValueRaw, valueTypeParserMap);
     const propertyTypeNodes = inherits.typeArguments
     if (propertyTypeNodes === undefined) {
         throw new Error(`Missing types definition for property '${propertyName}'`)
@@ -87,8 +89,35 @@ for await (const propertySource of iterateSourceFiles('src/Parser/Properties')) 
 
     properties.push({
         key: (keyInitializer as ts.StringLiteral).text,
-        valueType,
+        valueType: {
+            ...valueType,
+            parserFn: customValueParserFn?.name || valueType.parserFn
+        },
     });
+}
+
+function findCustomValueParserFnIfAvailable (propertyClass: ts.ClassDeclaration, propertyName: string) : ValueParserFn|undefined {
+    const customValueParserImplementsType = propertyClass.heritageClauses
+        ?.filter(heritageClause => heritageClause.token === ts.SyntaxKind.ImplementsKeyword)
+        ?.map(heritageClause => heritageClause.types)
+        ?.find(types => types.find(type => (type.expression as ts.Identifier).text === 'CustomValueParserFn'))
+        ?.at(0);
+
+    if (customValueParserImplementsType === undefined) {
+        return undefined;
+    }
+
+    const typeDefinition= customValueParserImplementsType.typeArguments?.at(0);
+    if (typeDefinition === undefined || typeDefinition.kind !== ts.SyntaxKind.TypeQuery) {
+        throw new Error(`Invalid CustomValueType definition for property '${propertyName}': Missing or invalid type definition, must be 'typeof' definition`);
+    }
+
+    const valueParserFnName = ((typeDefinition as ts.TypeQueryNode).exprName as ts.Identifier).text;
+    if (valueParserFns[valueParserFnName] === undefined) {
+        throw new Error(`Invalid CustomValueType definition for property '${propertyName}': Unknown value parser function '${valueParserFnName}', must be defined in parseValues.ts`);
+    }
+
+    return valueParserFns[valueParserFnName];
 }
 
 
