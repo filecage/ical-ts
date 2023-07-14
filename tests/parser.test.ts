@@ -34,7 +34,7 @@ describe('Throw errors for invalid ICS files', () => {
     const invalidSamples: [string, string][] = [
         ['missing-vcalendar-properties.ics', "Missing mandatory key 'PRODID'"],
         ['missing-valarm-properties.ics', "Missing mandatory key 'TRIGGER'"],
-        ['invalid-version.ics', "Property 'Version' value '1.0' is invalid, must be one of: 2.0"],
+        ['invalid-version.ics', "Invalid value '1.0' for property 'Version', must be one of: 2.0"],
         ['multiple-rrules.ics', "Non-list property 'RRULE' appeared twice in component 'VEVENT'"],
         ['missing-vtimezone-properties.ics', "Missing mandatory key 'TZID'"],
         ['invalid-component.ics', "Unexpected sub-component 'X-UNKNOWN' not allowed in component 'ROOT'"],

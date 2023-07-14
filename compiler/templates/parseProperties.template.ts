@@ -41,5 +41,5 @@ function assertEnum<T extends readonly string[]> (propertyName: string, value: s
         return value as typeof enums[number];
     }
 
-    throw new Error(`Property '${propertyName}' value '${value}' is invalid, must be one of: ${enums.join(', ')}`);
+    throw new Error(`Invalid value '${value}' for property '${propertyName}', must be one of: ${enums.join(', ')}`);
 }
