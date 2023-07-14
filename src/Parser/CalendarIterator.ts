@@ -1,5 +1,5 @@
 import {readFile} from "fs/promises";
-import {COLON, END, NEW_LINE, SPACE} from "./Constants";
+import {COLON, END, NEW_LINE} from "./Constants";
 import {unfold} from "./unfold";
 
 export default class CalendarIterator {
