@@ -5,7 +5,7 @@
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 
-import {parseDateTime, parseList, parseNumber, parsePeriod, parseValueRaw} from "./parseValues"
+import {parseDateTime, parseDateTimeOrPeriod, parseList, parseNumber, parsePeriod, parseValueRaw} from "./parseValues"
 import Acknowledged from "./Properties/Acknowledged";
 import Action from "./Properties/Action";
 import Attachment from "./Properties/Attachment";
@@ -88,7 +88,7 @@ export function parseProperty (key: string, value: string) {
         case 'PRIORITY': return new Priority(parseValueRaw(value), parameters);
         case 'PRODID': return new ProductIdentifier(parseValueRaw(value), parameters);
         case 'PROXIMITY': return new Proximity(parseValueRaw(value), parameters);
-        case 'RDATE': return new RecurrenceDateTimes(parseList(value).map(value => parseValueRaw(value)), parameters);
+        case 'RDATE': return new RecurrenceDateTimes(parseList(value).map(value => parseDateTimeOrPeriod(value, parameters)), parameters);
         case 'RECURRENCE-ID': return new RecurrenceID(parseDateTime(value), parameters);
         case 'RRULE': return new RecurrenceRule(parseValueRaw(value), parameters);
         case 'RELATED-TO': return new RelatedTo(parseValueRaw(value), parameters);
