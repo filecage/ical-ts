@@ -33,13 +33,10 @@ export function parsePeriod (value: string) : Period {
     }
 }
 
-export function parseTimeTransparency (value: string) {
-    value = value.toUpperCase();
-    if (value === 'OPAQUE') {
-        return value;
-    } else if (value === 'TRANSPARENT') {
-        return value;
+export function parseDateTimeOrPeriod (value: string, parameters: Parameters.ValueDataTypes): DateTime|Period {
+    if (parameters.VALUE === 'PERIOD') {
+        return parsePeriod(value);
     }
 
-    throw new Error(`Invalid value for 'TimeTransparency' property: '${value}'`);
+    return parseDateTime(value);
 }
