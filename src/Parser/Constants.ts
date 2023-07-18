@@ -1,4 +1,5 @@
 export const NEW_LINE = /\r\n|\n|\r/
+export const QUOTES = '"';
 export const SPACE = ' '
 export const COLON = ':'
 export const SEMICOLON = ';'
