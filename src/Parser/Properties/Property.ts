@@ -9,11 +9,15 @@ export default abstract class Property<T = string, P extends {[key: string]: str
     }
 
     toString () : string {
-        if (typeof this.value !== 'string') {
-            throw new Error(`Can not convert non-string ICSData.Value to string for property '${this.constructor.name}' (key '${this.key}')`);
+        if (typeof this.value === 'string') {
+            return this.value;
         }
 
-        return this.value;
+        if (typeof this.value?.toString === 'function' && this.value.toString.length === 0) {
+            return this.value.toString();
+        }
+
+        throw new Error(`Can not convert non-string ICSData.Value to string for property '${this.constructor.name}' (key '${this.key}')`);
     }
 
     toJSON () : object|string {
@@ -28,5 +32,6 @@ export default abstract class Property<T = string, P extends {[key: string]: str
             ...this.parameters
         };
     }
+
 
 }
