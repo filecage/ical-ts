@@ -50,8 +50,12 @@ export function parseDateTime (value: string, parameters: Parameters.TimeZoneIde
 
     const {year, month, day} = dateMatch.groups;
     const {hour, minute, second, UTC} = timeMatch?.groups || {hour: '00', minute: '00', second: '00', UTC: 'Z'};
+    const dateInstance = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}${UTC || ''}`);
+    if (isNaN(dateInstance.getTime())) {
+        throw new Error(`Invalid datetime value '${value}': not a valid date/datetime`);
+    }
 
-    return new DateTimeClass(new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}${UTC || ''}`), time === undefined, isUTC, parameters.TZID) as DateTime;
+    return new DateTimeClass(dateInstance, time === undefined, isUTC, parameters.TZID) as DateTime;
 }
 
 export function parseUTCDateTime (value: string) : UTCDateTime {

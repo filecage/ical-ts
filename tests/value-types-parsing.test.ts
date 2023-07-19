@@ -88,6 +88,14 @@ describe('Value Type Parsers', () => {
             expect(date.isUTC).toBeFalsy();
             expect(date.timezoneIdentifier).toBeUndefined();
         });
+
+        it('Throws for invalid date', () => {
+            expect(() => parseDateTime('20231331', {})).toThrowError(`Invalid datetime value '20231331': not a valid date/datetime`);
+        });
+
+        it('Throws for invalid time', () => {
+            expect(() => parseDateTime('20231224T255931Z', {})).toThrowError(`Invalid datetime value '20231224T255931Z': not a valid date/datetime`);
+        });
     });
 
 });
