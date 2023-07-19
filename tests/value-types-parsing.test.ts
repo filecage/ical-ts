@@ -11,6 +11,20 @@ describe('Property ValueType Parsing and  Encoding', () => {
         });
     });
 
+    describe('RecurrenceDateTime', () => {
+        it ('Should parse multiple RDATE datetime values', () => {
+            const rdate = parseProperty('RDATE', '19970714T123000Z,20230822T223045Z,') as RecurrenceDateTimes;
+
+            expect(rdate).toBeInstanceOf(RecurrenceDateTimes);
+            expect(rdate.value).toHaveLength(2);
+
+            const [first, second] = rdate.value;
+            expect(first.toString()).toEqual('19970714T123000Z');
+            expect(second.toString()).toEqual('20230822T223045Z');
+        });
+    });
+});
+
 describe('Value Type Parsers', () => {
     describe('Lists', () => {
         it('Should parse an unescaped list', () => expect(parseList('foo,bar')).toEqual(['foo', 'bar']));
