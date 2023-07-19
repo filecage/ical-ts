@@ -7,6 +7,8 @@ export const EQUAL = '='
 export const COMMA = ','
 export const BEGIN = 'BEGIN'
 export const END = 'END';
+export const CAPITAL_Z = 'Z';
+export const CAPITAL_T = 'T';
 
 export enum Component {
     VCALENDAR = 'VCALENDAR',
