@@ -1,6 +1,7 @@
 import {parseProperty} from "../src/Parser/parseProperties";
+import {parseDateTime, parseList, parseValueRaw} from "../src/Parser/parseValues";
+import {DateTime} from "../src/Parser/ValueTypes/DateTime";
 import RecurrenceDateTimes from "../src/Parser/Properties/RecurrenceDateTimes";
-import {parseList, parseValueRaw} from "../src/Parser/parseValues";
 
 describe('Property ValueType Parsing and  Encoding', () => {
 
@@ -30,4 +31,49 @@ describe('Value Type Parsers', () => {
         it('Should parse enquoted items with escaped quote in value', () => expect(parseValueRaw('"foo \\"foo\\" bar"')).toEqual('foo "foo" bar'));
         it('Treats comma separated, enquoted list values as as-is value', () => expect(parseValueRaw('"foo","bar"')).toEqual('"foo","bar"'));
     });
+
+    describe('DateTime', () => {
+        it('Should parse date', () => {
+            const date = parseDateTime('20230719', {});
+
+            expect(date.isDateOnly).toBeTruthy();
+            expect(date.toString()).toEqual('20230719');
+            expect(date.date).toEqual((new Date('2023-07-19')));
+
+            // Timezones have no effect on date-only values
+            expect(date.isUTC).toBeFalsy();
+            expect(date.timezoneIdentifier).toBeUndefined();
+        });
+
+        it('Should parse UTC datetime', () => {
+            const date = parseDateTime('20230719T114104Z', {});
+
+            expect(date.toString()).toEqual('20230719T114104Z');
+            expect(date.date).toEqual((new Date('2023-07-19T11:41:04Z')));
+            expect(date.isDateOnly).toBeFalsy();
+            expect(date.isUTC).toBeTruthy();
+            expect(date.timezoneIdentifier).toBeUndefined();
+        });
+
+        it('Should parse local datetime', () => {
+            const date = parseDateTime('20230719T134104', {TZID: 'Europe/Berlin'});
+
+            expect(date.toString()).toEqual('20230719T134104');
+            expect(date.date).toEqual((new Date('2023-07-19T11:41:04Z')));
+            expect(date.isDateOnly).toBeFalsy();
+            expect(date.isUTC).toBeFalsy();
+            expect(date.timezoneIdentifier).toEqual('Europe/Berlin');
+        });
+
+        it('Should parse floating datetime', () => {
+            const date = parseDateTime('20120817T032509', {});
+
+            expect(date.toString()).toEqual('20120817T032509');
+            expect(date.date).toEqual((new Date('2012-08-17T03:25:09')));
+            expect(date.isDateOnly).toBeFalsy();
+            expect(date.isUTC).toBeFalsy();
+            expect(date.timezoneIdentifier).toBeUndefined();
+        })
+    });
+
 });
