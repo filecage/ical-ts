@@ -8,7 +8,7 @@ const escapedDoubleQuotesStringRegex = new RegExp(`^${matchDoubleQuotesString}$`
 const listStringRegex = new RegExp(`((${matchDoubleQuotesString})|([^${COMMA}]+))(${COMMA}|$)`, 'g');
 
 export interface ValueParserFn<T extends {} = {}> {
-    (value: string, parameters: T): string|string[]|Period|DateTime|number
+    (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|number
 }
 
 export function parseList (input: string) : string[] {
