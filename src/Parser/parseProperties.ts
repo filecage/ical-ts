@@ -5,7 +5,7 @@
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 
-import {parseDateTime, parseDateTimeOrPeriod, parseList, parseNumber, parsePeriod, parseValueRaw} from "./parseValues"
+import {parseDateTime, parseDateTimeOrPeriod, parseList, parseNumber, parsePeriod, parseUTCDateTime, parseValueRaw} from "./parseValues"
 import Acknowledged from "./Properties/Acknowledged";
 import Action from "./Properties/Action";
 import Attachment from "./Properties/Attachment";
@@ -60,7 +60,7 @@ export function parseProperty (key: string, value: string) {
     const parameters = parseParameters(fragments);
 
     switch (propertyKey) {
-        case 'ACKNOWLEDGED': return new Acknowledged(parseDateTime(value), parameters);
+        case 'ACKNOWLEDGED': return new Acknowledged(parseUTCDateTime(value), parameters);
         case 'ACTION': return new Action(parseValueRaw(value), parameters);
         case 'ATTACH': return new Attachment(parseValueRaw(value), parameters);
         case 'ATTENDEE': return new Attendee(parseValueRaw(value), parameters);
@@ -69,18 +69,18 @@ export function parseProperty (key: string, value: string) {
         case 'CLASS': return new Classification(parseValueRaw(value), parameters);
         case 'COMMENT': return new Comment(parseValueRaw(value), parameters);
         case 'CONTACT': return new Contact(parseValueRaw(value), parameters);
-        case 'COMPLETED': return new DateTimeCompleted(parseDateTime(value), parameters);
-        case 'CREATED': return new DateTimeCreated(parseDateTime(value), parameters);
-        case 'DUE': return new DateTimeDue(parseDateTime(value), parameters);
-        case 'DTEND': return new DateTimeEnd(parseDateTime(value), parameters);
-        case 'DTSTAMP': return new DateTimeStamp(parseDateTime(value), parameters);
-        case 'DTSTART': return new DateTimeStart(parseDateTime(value), parameters);
+        case 'COMPLETED': return new DateTimeCompleted(parseUTCDateTime(value), parameters);
+        case 'CREATED': return new DateTimeCreated(parseUTCDateTime(value), parameters);
+        case 'DUE': return new DateTimeDue(parseDateTime(value, parameters), parameters);
+        case 'DTEND': return new DateTimeEnd(parseDateTime(value, parameters), parameters);
+        case 'DTSTAMP': return new DateTimeStamp(parseUTCDateTime(value), parameters);
+        case 'DTSTART': return new DateTimeStart(parseDateTime(value, parameters), parameters);
         case 'DESCRIPTION': return new Description(parseValueRaw(value), parameters);
         case 'DURATION': return new Duration(parseValueRaw(value), parameters);
-        case 'EXDATE': return new ExceptionDateTimes(parseList(value).map(value => parseDateTime(value)), parameters);
+        case 'EXDATE': return new ExceptionDateTimes(parseList(value).map(value => parseDateTime(value, parameters)), parameters);
         case 'FREEBUSY': return new FreeBusyTime(parseList(value).map(value => parsePeriod(value)), parameters);
         case 'GEO': return new GeographicPosition(parseValueRaw(value), parameters);
-        case 'LAST-MODIFIED': return new LastModified(parseDateTime(value), parameters);
+        case 'LAST-MODIFIED': return new LastModified(parseUTCDateTime(value), parameters);
         case 'LOCATION': return new Location(parseValueRaw(value), parameters);
         case 'METHOD': return new Method(parseValueRaw(value), parameters);
         case 'ORGANIZER': return new Organizer(parseValueRaw(value), parameters);
@@ -89,7 +89,7 @@ export function parseProperty (key: string, value: string) {
         case 'PRODID': return new ProductIdentifier(parseValueRaw(value), parameters);
         case 'PROXIMITY': return new Proximity(parseValueRaw(value), parameters);
         case 'RDATE': return new RecurrenceDateTimes(parseList(value).map(value => parseDateTimeOrPeriod(value, parameters)), parameters);
-        case 'RECURRENCE-ID': return new RecurrenceID(parseDateTime(value), parameters);
+        case 'RECURRENCE-ID': return new RecurrenceID(parseDateTime(value, parameters), parameters);
         case 'RRULE': return new RecurrenceRule(parseValueRaw(value), parameters);
         case 'RELATED-TO': return new RelatedTo(parseValueRaw(value), parameters);
         case 'REPEAT': return new Repeat(parseValueRaw(value), parameters);
