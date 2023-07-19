@@ -78,7 +78,7 @@ export function parseProperty (key: string, value: string) {
         case 'DESCRIPTION': return new Description(parseValueRaw(value), parameters);
         case 'DURATION': return new Duration(parseValueRaw(value), parameters);
         case 'EXDATE': return new ExceptionDateTimes(parseList(value).map(value => parseDateTime(value, parameters)), parameters);
-        case 'FREEBUSY': return new FreeBusyTime(parseList(value).map(value => parsePeriod(value)), parameters);
+        case 'FREEBUSY': return new FreeBusyTime(parseList(value).map(value => parsePeriod(value, parameters)), parameters);
         case 'GEO': return new GeographicPosition(parseValueRaw(value), parameters);
         case 'LAST-MODIFIED': return new LastModified(parseUTCDateTime(value), parameters);
         case 'LOCATION': return new Location(parseValueRaw(value), parameters);

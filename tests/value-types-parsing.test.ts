@@ -1,5 +1,5 @@
 import {parseProperty} from "../src/Parser/parseProperties";
-import {parseDateTime, parseList, parseValueRaw} from "../src/Parser/parseValues";
+import {parseDateTime, parseList, parsePeriod, parseValueRaw} from "../src/Parser/parseValues";
 import {DateTime} from "../src/Parser/ValueTypes/DateTime";
 import RecurrenceDateTimes from "../src/Parser/Properties/RecurrenceDateTimes";
 
@@ -98,4 +98,38 @@ describe('Value Type Parsers', () => {
         });
     });
 
+    describe('Period', () => {
+        it('Should parse a date-to-date period', () => {
+            const period = parsePeriod('20230405T133000Z/20230408T110000Z', {});
+
+            expect(period.start.toString()).toEqual('20230405T133000Z');
+            expect(period.end?.toString()).toEqual('20230408T110000Z');
+            expect(period.duration).toBeUndefined();
+        });
+
+        it('Should parse a date-duration period', () => {
+            const period= parsePeriod('20230405T133000Z/PT5H30M', {});
+
+            expect(period.start.toString()).toEqual('20230405T133000Z');
+            expect(period.end?.toString()).toBeUndefined()
+            expect(period.duration).toEqual('PT5H30M');
+        });
+
+        it('Should pass TZID when parsing start/end datetimes', () => {
+            const period = parsePeriod('20230405T133000/20230408T110000', {TZID: 'Europe/Berlin'});
+
+            expect(period.start.timezoneIdentifier).toEqual('Europe/Berlin');
+            expect(period.end?.timezoneIdentifier).toEqual('Europe/Berlin');
+        });
+
+        it('Should pass TZID when parsing date-duration datetimes', () => {
+            const period = parsePeriod('20230405T133000/PT5H30M', {TZID: 'Europe/Berlin'});
+
+            expect(period.start.timezoneIdentifier).toEqual('Europe/Berlin');
+        });
+
+        it('Should throw for an invalid period', () => {
+            expect(() => parsePeriod('20230405', {})).toThrowError(`Invalid period value '20230405': missing end/duration`)
+        });
+    });
 });

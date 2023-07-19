@@ -1,10 +1,10 @@
 import {DateTime} from "./DateTime";
 import {Duration} from "./Duration";
+import {XOR} from "ts-xor";
 
 export type Period = {
-    start: DateTime,
-    end: DateTime
-} | {
-    start: DateTime,
-    duration: Duration
-}
+    start: DateTime
+} & XOR<
+    {end: DateTime},
+    {duration: Duration}
+>;

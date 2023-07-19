@@ -1,7 +1,8 @@
-import {CAPITAL_T, CAPITAL_Z, COMMA, QUOTES} from "./Constants";
+import {PERIOD, CAPITAL_T, CAPITAL_Z, COMMA, QUOTES, SOLIDUS} from "./Constants";
 import {DateTime, DateTimeClass, UTCDateTime} from "./ValueTypes/DateTime";
 import {Period} from "./ValueTypes/Period";
 import {Parameters} from "./Parameters/Parameters";
+import {Duration} from "./ValueTypes/Duration";
 
 const matchDoubleQuotesString = `${QUOTES}([^${QUOTES}\\\\]*(\\\\.[^${QUOTES}\\\\]*)*)${QUOTES}`;
 const escapedDoubleQuotesStringRegex = new RegExp(`^${matchDoubleQuotesString}$`);
@@ -67,17 +68,33 @@ export function parseUTCDateTime (value: string) : UTCDateTime {
     return date as UTCDateTime;
 }
 
-export function parsePeriod (value: string) : Period {
-    // TODO: Implement
+export function parseDuration (value: string) : Duration {
+    // TODO: Implement or at least validate?
+    return value;
+}
+
+export function parsePeriod (value: string, parameters: Parameters.TimeZoneIdentifier) : Period {
+    const [start, end] = value.split(SOLIDUS) as [string, string|undefined];
+    if (end === undefined) {
+        throw new Error(`Invalid period value '${value}': missing end/duration`);
+    }
+
+    if (end.startsWith(PERIOD)) {
+        return {
+            start: parseDateTime(start, parameters),
+            duration: parseDuration(end),
+        };
+    }
+
     return {
-        start: parseDateTime("", {}),
-        end: parseDateTime("", {}),
+        start: parseDateTime(start, parameters),
+        end: parseDateTime(end, parameters),
     }
 }
 
-export function parseDateTimeOrPeriod (value: string, parameters: Parameters.ValueDataTypes): DateTime|Period {
+export function parseDateTimeOrPeriod (value: string, parameters: Parameters.ValueDataTypes & Parameters.TimeZoneIdentifier): DateTime|Period {
     if (parameters.VALUE === 'PERIOD') {
-        return parsePeriod(value);
+        return parsePeriod(value, parameters);
     }
 
     return parseDateTime(value, {});
