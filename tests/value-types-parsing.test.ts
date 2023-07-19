@@ -3,7 +3,7 @@ import {parseDateTime, parseList, parseValueRaw} from "../src/Parser/parseValues
 import {DateTime} from "../src/Parser/ValueTypes/DateTime";
 import RecurrenceDateTimes from "../src/Parser/Properties/RecurrenceDateTimes";
 
-describe('Property ValueType Parsing and  Encoding', () => {
+describe('Property ValueType Parsing and Encoding', () => {
 
     describe('TimeTransparency', () => {
         it('Should throw for an invalid time transparency', () => {
@@ -87,7 +87,7 @@ describe('Value Type Parsers', () => {
             expect(date.isDateOnly).toBeFalsy();
             expect(date.isUTC).toBeFalsy();
             expect(date.timezoneIdentifier).toBeUndefined();
-        })
+        });
     });
 
 });
