@@ -3,7 +3,7 @@ import {EQUAL} from "../../src/Parser/Constants";
 /**${TEMPLATE_ONLY_END}**/
 /**${COMPILED_ONLY_BEGIN}**
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
-// @see compiler/parameters/parameters.ts
+// @see compiler/parameters.ts
 import {EQUAL, SEMICOLON} from "./Constants";
 import {Parameters} from "./Parameters/Parameters";
 /**${COMPILED_ONLY_END}**/

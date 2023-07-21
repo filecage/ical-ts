@@ -1,6 +1,6 @@
 
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
-// @see compiler/parameters/parameters.ts
+// @see compiler/properties.ts
  import {SEMICOLON} from "./Constants";
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
