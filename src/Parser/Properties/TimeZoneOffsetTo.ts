@@ -1,5 +1,4 @@
 import Property from "./Property";
-import {Parameters} from "../Parameters/Parameters";
 import {Offset} from "../ValueTypes/Offset";
 
 export default class TimeZoneOffsetTo extends Property<Offset> {

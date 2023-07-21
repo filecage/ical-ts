@@ -2,7 +2,6 @@ import Component, {Context} from "./Component";
 import {ICS} from "../../ICS";
 import {ComponentName} from "./ComponentName";
 import Timezone from "./Timezone";
-import Alarm from "./Alarm";
 import Event from "./Event";
 
 export default class Calendar extends Component<ICS.VCALENDAR> {

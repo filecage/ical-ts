@@ -13,6 +13,7 @@
     },
     "scripts": {
         "build": "tsup",
+        "lint": "eslint src/**",
         "compile:parameters": "node --loader=./loader.js compiler/parameters.ts",
         "compile:properties": "node --loader=./loader.js compiler/properties.ts",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests"
@@ -21,6 +22,9 @@
     "license": "UNLICENSED",
     "devDependencies": {
         "@types/jest": "^29.5.2",
+        "@typescript-eslint/eslint-plugin": "^6.1.0",
+        "@typescript-eslint/parser": "^6.1.0",
+        "eslint": "^8.45.0",
         "jest": "^29.5.0",
         "nodemon": "^2.0.22",
         "ts-jest": "^29.1.0",

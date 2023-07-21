@@ -8,11 +8,11 @@ import {ComponentName} from "./ComponentName";
 export type ContextValue = Property<unknown>|Component|undefined;
 export type Context = {[key: string]: ContextValue|ContextValue[]|Context|Context[]};
 
-export default abstract class Component<S extends {} = Context> {
+export default abstract class Component<S extends object = Context> {
     public abstract readonly key: ComponentName;
-    private readonly childComponents: {[key: string]: Component};
+    private readonly childComponents: { [key: string]: Component };
 
-    constructor (allowedChildComponents: Component[]) {
+    constructor(allowedChildComponents: Component[]) {
         this.childComponents = allowedChildComponents.reduce((childComponents, component) => {
             return {...childComponents, [component.key]: component};
         }, {});
@@ -25,7 +25,7 @@ export default abstract class Component<S extends {} = Context> {
      * @param context
      * @protected
      */
-    protected abstract build (context: Context) : S;
+    protected abstract build(context: Context): S;
 
     parse(calendar: CalendarIterator): S {
         let closed = false;
@@ -43,13 +43,13 @@ export default abstract class Component<S extends {} = Context> {
 
                 (context[component.key] as Context[]).push(component.parse(calendar));
             } else if (name === END) {
-                if (value !== this.key) {
+                if (value as ComponentName !== this.key) {
                     throw new Error(`Unexpected 'END:${value}' in component '${this.key}'`);
                 }
 
                 closed = true;
             } else {
-                const property= parseProperty(name, value);
+                const property = parseProperty(name, value);
                 if (LIST_PROPERTIES.includes(property.key as EProperty)) {
                     if (context[property.key] === undefined) {
                         context[property.key] = [];
@@ -74,7 +74,7 @@ export default abstract class Component<S extends {} = Context> {
         return this.build(context);
     }
 
-    protected pickOrThrow<T = Property|Component> (data: Context, name: string) : T {
+    protected pickOrThrow<T = Property | Component>(data: Context, name: string): T {
         if (data[name] === undefined) {
             throw new Error(`Missing mandatory key '${name}'`);
         }
@@ -82,7 +82,7 @@ export default abstract class Component<S extends {} = Context> {
         return data[name] as T;
     }
 
-    protected pick<T = Property> (data: {[key: string]: unknown}, key: string) : T|undefined {
+    protected pick<T = Property>(data: { [key: string]: unknown }, key: string): T | undefined {
         if (data[key] === undefined) {
             return undefined;
         }
@@ -90,14 +90,15 @@ export default abstract class Component<S extends {} = Context> {
         return data[key] as T;
     }
 
-    protected pickNonStandardProperties (data: {[key: string]: unknown}) : ICS.NonStandardPropertyAware {
-        const nonStandardPropertyData: {[key: string]: Property} = {};
+    protected pickNonStandardProperties(data: { [key: string]: unknown }): ICS.NonStandardPropertyAware {
+        const nonStandardPropertyData: { [key: string]: Property } = {};
         for (const [key, value] of Object.entries(data)) {
             if (key.startsWith('X-') && value instanceof Property) {
-                nonStandardPropertyData[key] = value;
+                nonStandardPropertyData[key] = value as Property;
             }
         }
 
         return nonStandardPropertyData;
     }
+
 }

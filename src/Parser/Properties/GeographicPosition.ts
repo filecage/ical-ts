@@ -1,5 +1,4 @@
 import Property from "./Property";
-import {Parameters} from "../Parameters/Parameters";
 import {Raw} from "../ValueTypes/Raw";
 
 /**
@@ -17,6 +16,6 @@ import {Raw} from "../ValueTypes/Raw";
  *
  *        GEO:37.386013;-122.082932
  */
-export default class GeographicPosition extends Property<Raw, {}> {
+export default class GeographicPosition extends Property<Raw> {
     public readonly key = 'GEO';
 }

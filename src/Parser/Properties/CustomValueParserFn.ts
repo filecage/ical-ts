@@ -9,6 +9,7 @@ import {ValueParserFn} from "../parseValues";
  *
  * @internal
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default interface CustomValueParserFn<C extends ValueParserFn> {
 /**
  * Would be lovely to instead of mapping these functions we could just

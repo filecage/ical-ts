@@ -9,7 +9,7 @@ const escapedDoubleQuotesStringRegex = new RegExp(`^${matchDoubleQuotesString}$`
 const listStringRegex = new RegExp(`((${matchDoubleQuotesString})|([^${COMMA}]+))(${COMMA}|$)`, 'g');
 const durationRegex = new RegExp(/^(?<sign>[-+])?P(?<weeks>\d+[.,]?\d*W)?(?<days>\d+[.,]?\d*D)?(?:T(?<hours>\d+[.,]?\d*H)?(?<minutes>\d+[.,]?\d*M)?(?<seconds>\d+[.,]?\d*S)?)?$/);
 
-export interface ValueParserFn<T extends {} = {}> {
+export interface ValueParserFn<T extends object = Record<string, unknown>> {
     (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|Duration|number
 }
 

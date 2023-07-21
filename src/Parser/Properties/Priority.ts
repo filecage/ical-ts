@@ -1,5 +1,4 @@
 import Property from "./Property";
-import {Parameters} from "../Parameters/Parameters";
 import {Raw} from "../ValueTypes/Raw";
 
 /**
