@@ -11,6 +11,8 @@ export const PERIOD = 'P';
 export const CAPITAL_T = 'T';
 export const CAPITAL_Z = 'Z';
 export const SOLIDUS = '/';
+export const HYPHEN_MINUS = '-';
+export const PLUS = '+';
 
 export enum Component {
     VCALENDAR = 'VCALENDAR',
