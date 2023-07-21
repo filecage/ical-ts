@@ -5,7 +5,7 @@
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 
-import {parseDateTime, parseDateTimeOrPeriod, parseList, parseNumber, parsePeriod, parseUTCDateTime, parseValueRaw} from "./parseValues"
+import {parseDateTime, parseDateTimeOrPeriod, parseList, parseNumber, parsePeriod, parseUTCDateTime, parseUTCDateTimeOrDuration, parseValueRaw} from "./parseValues"
 import Acknowledged from "./Properties/Acknowledged";
 import Action from "./Properties/Action";
 import Attachment from "./Properties/Attachment";
@@ -103,7 +103,7 @@ export function parseProperty (key: string, value: string) {
         case 'TZOFFSETFROM': return new TimeZoneOffsetFrom(parseValueRaw(value), parameters);
         case 'TZOFFSETTO': return new TimeZoneOffsetTo(parseValueRaw(value), parameters);
         case 'TZURL': return new TimeZoneUrl(parseValueRaw(value), parameters);
-        case 'TRIGGER': return new Trigger(parseValueRaw(value), parameters);
+        case 'TRIGGER': return new Trigger(parseUTCDateTimeOrDuration(value, parameters), parameters);
         case 'URL': return new UniformResourceLocator(parseValueRaw(value), parameters);
         case 'UID': return new UniqueIdentifier(parseValueRaw(value), parameters);
         case 'VERSION': return new Version(assertEnum('Version', parseValueRaw(value), ['2.0'] as const), parameters);

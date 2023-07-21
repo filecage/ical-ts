@@ -99,3 +99,11 @@ export function parseDateTimeOrPeriod (value: string, parameters: Parameters.Val
 
     return parseDateTime(value, {});
 }
+
+export function parseUTCDateTimeOrDuration (value: string, parameters: Parameters.ValueDataTypes): UTCDateTime|Duration {
+    if (parameters.VALUE === 'DATE-TIME') {
+        return parseUTCDateTime(value);
+    }
+
+    return parseDuration(value);
+}
