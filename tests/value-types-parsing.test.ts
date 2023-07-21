@@ -1,7 +1,8 @@
 import {parseProperty} from "../src/Parser/parseProperties";
-import {parseDateTime, parseList, parsePeriod, parseValueRaw} from "../src/Parser/parseValues";
+import {parseDateTime, parseDuration, parseList, parsePeriod, parseValueRaw} from "../src/Parser/parseValues";
 import {DateTime} from "../src/Parser/ValueTypes/DateTime";
 import RecurrenceDateTimes from "../src/Parser/Properties/RecurrenceDateTimes";
+import {Duration} from "../src/Parser/ValueTypes/Duration";
 
 describe('Property ValueType Parsing and Encoding', () => {
 
@@ -98,6 +99,79 @@ describe('Value Type Parsers', () => {
         });
     });
 
+    describe('Duration', () => {
+        it('Should parse a duration with all possible designators', () => {
+            const duration = parseDuration('P3W4DT5H6M7S');
+            expect(duration).toMatchObject<Duration>({
+                inverted: false, weeks: 3, days: 4, hours: 5, minutes: 6, seconds: 7
+            });
+
+            expect(duration.toString()).toEqual('P3W4DT5H6M7S');
+        });
+
+        it('Should parse a duration without time designators', () => {
+            const duration = parseDuration('P3W4D');
+            expect(duration).toMatchObject<Duration>({
+                inverted: false, weeks: 3, days: 4, hours: undefined, minutes: undefined, seconds: undefined
+            });
+
+            expect(duration.toString()).toEqual('P3W4D');
+        });
+
+        it('Should parse a duration time designators only', () => {
+            const duration = parseDuration('PT5H6M7S');
+            expect(duration).toMatchObject<Duration>({
+                inverted: false, weeks: undefined, days: undefined, hours: 5, minutes: 6, seconds: 7
+            });
+
+            expect(duration.toString()).toEqual('PT5H6M7S');
+        });
+
+        it('Should parse a duration with large numbers', () => {
+            const duration = parseDuration('P3000W4000DT5000H6000M7000S');
+            expect(duration).toMatchObject<Duration>({
+                inverted: false, weeks: 3000, days: 4000, hours: 5000, minutes: 6000, seconds: 7000
+            });
+
+            expect(duration.toString()).toEqual('P3000W4000DT5000H6000M7000S');
+        });
+
+        it('Should parse a negative duration', () => {
+            const duration = parseDuration('-P1DT5H30M');
+            expect(duration).toMatchObject<Duration>({
+                inverted: true, days: 1, hours: 5, minutes: 30
+            });
+
+            expect(duration.toString()).toEqual('-P1DT5H30M');
+        });
+
+        it('Should parse a fractional duration', () => {
+            const duration = parseDuration('P1.5D');
+            expect(duration).toMatchObject<Duration>({
+                inverted: false, days: 1.5,
+            });
+        });
+
+        it('Should parse a fractional duration with comma fraction', () => {
+            const duration = parseDuration('P1,5D');
+            expect(duration).toMatchObject<Duration>({
+                inverted: false, days: 1.5,
+            });
+        });
+
+        it('Should parse zero duration', () => {
+            const duration = parseDuration('PT0S');
+            expect(duration.toString()).toMatch('PT0S');
+            expect(duration).toMatchObject<Duration>({
+                inverted: false, seconds: 0,
+            });
+        });
+
+        it('Should throw for empty period', () => {
+            expect(() => parseDuration('P')).toThrowError(`Invalid duration value 'P'`);
+        });
+    });
+
     describe('Period', () => {
         it('Should parse a date-to-date period', () => {
             const period = parsePeriod('20230405T133000Z/20230408T110000Z', {});
@@ -112,7 +186,7 @@ describe('Value Type Parsers', () => {
 
             expect(period.start.toString()).toEqual('20230405T133000Z');
             expect(period.end?.toString()).toBeUndefined()
-            expect(period.duration).toEqual('PT5H30M');
+            expect(period.duration?.toString()).toEqual('PT5H30M');
         });
 
         it('Should pass TZID when parsing start/end datetimes', () => {

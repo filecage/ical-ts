@@ -1,15 +1,16 @@
-import {PERIOD, CAPITAL_T, CAPITAL_Z, COMMA, QUOTES, SOLIDUS} from "./Constants";
+import {PERIOD, CAPITAL_T, CAPITAL_Z, COMMA, QUOTES, SOLIDUS, HYPHEN_MINUS} from "./Constants";
 import {DateTime, DateTimeClass, UTCDateTime} from "./ValueTypes/DateTime";
 import {Period} from "./ValueTypes/Period";
 import {Parameters} from "./Parameters/Parameters";
-import {Duration} from "./ValueTypes/Duration";
+import {Duration, formatDuration} from "./ValueTypes/Duration";
 
 const matchDoubleQuotesString = `${QUOTES}([^${QUOTES}\\\\]*(\\\\.[^${QUOTES}\\\\]*)*)${QUOTES}`;
 const escapedDoubleQuotesStringRegex = new RegExp(`^${matchDoubleQuotesString}$`);
 const listStringRegex = new RegExp(`((${matchDoubleQuotesString})|([^${COMMA}]+))(${COMMA}|$)`, 'g');
+const durationRegex = new RegExp(/^(?<sign>[-+])?P(?<weeks>\d+[.,]?\d*W)?(?<days>\d+[.,]?\d*D)?(?:T(?<hours>\d+[.,]?\d*H)?(?<minutes>\d+[.,]?\d*M)?(?<seconds>\d+[.,]?\d*S)?)?$/);
 
 export interface ValueParserFn<T extends {} = {}> {
-    (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|number
+    (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|Duration|number
 }
 
 export function parseList (input: string) : string[] {
@@ -69,8 +70,29 @@ export function parseUTCDateTime (value: string) : UTCDateTime {
 }
 
 export function parseDuration (value: string) : Duration {
-    // TODO: Implement or at least validate?
-    return value;
+    const matches = value.match(durationRegex);
+    if (matches === null || matches.groups === undefined || value === 'P') {
+        throw new Error(`Invalid duration value '${value}'`);
+    }
+
+    const duration = {
+        inverted: matches.groups.sign === HYPHEN_MINUS,
+        weeks: durationToNumber(matches.groups.weeks),
+        days: durationToNumber(matches.groups.days),
+        hours: durationToNumber(matches.groups.hours),
+        minutes: durationToNumber(matches.groups.minutes),
+        seconds: durationToNumber(matches.groups.seconds),
+    };
+
+    return {...duration, toString: () => formatDuration(duration), toJSON: () => formatDuration(duration)} as Duration;
+}
+
+function durationToNumber (input: string|undefined) : number|undefined {
+    if (input === undefined) {
+        return undefined;
+    }
+
+    return parseFloat(input.replace(',', '.'));
 }
 
 export function parsePeriod (value: string, parameters: Parameters.TimeZoneIdentifier) : Period {

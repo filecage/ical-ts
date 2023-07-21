@@ -15,8 +15,8 @@ const valueTypeParserMap: {[k:string]: ValueParserFn} = {
     CalAddress: valueParserFns.parseValueRaw,
     DateTime: valueParserFns.parseDateTime,
     UTCDateTime: valueParserFns.parseUTCDateTime,
-    DurationValue: valueParserFns.parseValueRaw, // TODO: The Duration property renames the import, we currently don't understand that correctly so we have to define this twice
-    Duration: valueParserFns.parseValueRaw,
+    DurationValue: valueParserFns.parseDuration, // TODO: The Duration property renames the import, we currently don't understand that correctly so we have to define this twice
+    Duration: valueParserFns.parseDuration,
     Offset: valueParserFns.parseValueRaw,
     Period: valueParserFns.parsePeriod,
     Raw: valueParserFns.parseValueRaw,

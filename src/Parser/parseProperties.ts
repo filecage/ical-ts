@@ -5,7 +5,7 @@
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 
-import {parseDateTime, parseDateTimeOrPeriod, parseList, parseNumber, parsePeriod, parseUTCDateTime, parseUTCDateTimeOrDuration, parseValueRaw} from "./parseValues"
+import {parseDateTime, parseDateTimeOrPeriod, parseDuration, parseList, parseNumber, parsePeriod, parseUTCDateTime, parseUTCDateTimeOrDuration, parseValueRaw} from "./parseValues"
 import Acknowledged from "./Properties/Acknowledged";
 import Action from "./Properties/Action";
 import Attachment from "./Properties/Attachment";
@@ -76,7 +76,7 @@ export function parseProperty (key: string, value: string) {
         case 'DTSTAMP': return new DateTimeStamp(parseUTCDateTime(value), parameters);
         case 'DTSTART': return new DateTimeStart(parseDateTime(value, parameters), parameters);
         case 'DESCRIPTION': return new Description(parseValueRaw(value), parameters);
-        case 'DURATION': return new Duration(parseValueRaw(value), parameters);
+        case 'DURATION': return new Duration(parseDuration(value), parameters);
         case 'EXDATE': return new ExceptionDateTimes(parseList(value).map(value => parseDateTime(value, parameters)), parameters);
         case 'FREEBUSY': return new FreeBusyTime(parseList(value).map(value => parsePeriod(value, parameters)), parameters);
         case 'GEO': return new GeographicPosition(parseValueRaw(value), parameters);
