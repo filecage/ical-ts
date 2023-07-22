@@ -16,7 +16,7 @@
         "lint": "eslint src/**",
         "compile:parameters": "node --loader=./loader.js compiler/parameters.ts",
         "compile:properties": "node --loader=./loader.js compiler/properties.ts",
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests"
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests --verbose"
     },
     "author": "David Beuchert",
     "license": "UNLICENSED",
