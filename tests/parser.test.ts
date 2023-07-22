@@ -62,4 +62,18 @@ describe('Unfold long ICS lines', () => {
             'This is a new line because it does not start with a space'
         ]);
     })
+});
+
+/**
+ * RFC5545 states that line endings must be CRLF. However, we want to support all possible
+ * line endings because there is no tradeoff. If ICS providers don't adhere to the standard,
+ * we can still support them.
+ */
+describe('Line Endings', () => {
+    it.each(["\r\n", "\n", "\r"])('Should parse %j line endings', EOL => {
+        const calendars = parseString(`BEGIN:VCALENDAR${EOL}PRODID:Test${EOL}VERSION:2.0${EOL}END:VCALENDAR${EOL}`);
+        expect(calendars.VCALENDAR).toHaveLength(1);
+        expect(calendars.VCALENDAR[0].PRODID.value).toEqual('Test');
+        expect(calendars.VCALENDAR[0].VERSION.value).toEqual('2.0');
+    });
 })
