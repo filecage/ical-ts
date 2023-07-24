@@ -1,9 +1,9 @@
+import {CalAddress} from "../ValueTypes/CalAddress";
+import {Uri} from "../ValueTypes/Uri";
+import {LanguageTag} from "../ValueTypes/LanguageTag";
 
 export namespace Parameters {
-    // TODO: These types could be replaced with something that actually helps accessing the data
-    type Uri = string;
-    type CalAddress = string;
-    type LanguageTag = string;
+    // TODO: We could define defaults for all parameters using the @default annotation
 
     // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.2
     export type AlternateTextRepresentation = { ALTREP?: CalAddress };
@@ -22,8 +22,6 @@ export namespace Parameters {
     export type ParticipationStatusTodo = { PARTSTAT?: ParticipationStatusEvent['PARTSTAT'] | 'COMPLETED' | 'IN-PROCESS' };
     export type Range = { RANGE?: 'THISANDFUTURE' };
     export type AlarmTriggerRelationship = { RELATED?: 'START' | 'END' };
-
-    // /** @default PARENT */
     export type RelationshipType = { RELTYPE?: string | 'PARENT' | 'CHILD' | 'SIBLING' | 'SNOOZE' };
     export type ParticipationRole = { ROLE?: string | 'CHAIR' | 'REQ-PARTICIPANT' | 'OPT-PARTICIPANT' | 'NON-PARTICIPANT'};
     export type RSVPExpectation = {RSVP?: 'TRUE' | 'FALSE'};

@@ -2,23 +2,30 @@ import ts from "typescript";
 import {exportSourceFileRaw, readSourceFile, readSourceFileRaw} from "./lib/readSourceFile";
 import TypeCompiler from "./lib/TypeCompiler";
 import {Type} from "./lib/Type";
-import { format } from "./lib/format";
-import {parseCalAddressValue, parseLanguageTag, parseUriValue, parseValue} from "./templates/parseParameters.template";
+import {format} from "./lib/format";
 import {Parameters} from "../src/Parser/Parameters/Parameters";
+import {parseValueRaw, ValueParserFn} from "../src/Parser/parseValues";
+import {flattenTypeParserFns, mapFnList} from "./lib/flattenTypeEnums";
+import {compileValueParserImports} from "./lib/compile";
 
 const source = await readSourceFile('src/Parser/Parameters/Parameters.ts');
-const declarationStatement = source.statements[0] as ts.ModuleDeclaration;
-if (declarationStatement.kind !== ts.SyntaxKind.ModuleDeclaration || declarationStatement.name?.text !== 'Parameters') {
+const declarationStatement = source.statements.find(statement => {
+    return statement.kind === ts.SyntaxKind.ModuleDeclaration && (statement as ts.ModuleDeclaration).name?.text === 'Parameters';
+}) as ts.ModuleDeclaration|undefined;
+
+if (declarationStatement === undefined) {
     console.log('ERROR: Cannot compile parameters, type definition file has unexpected format');
     process.exit(1);
 }
 
+const valueParserMap = {
+    Uri: parseValueRaw,
+    LanguageTag: parseValueRaw,
+    CalAddress: parseValueRaw,
+};
+
 const exports: {[key: string]: Type} = {};
-const typeCompiler = new TypeCompiler(parseValue,{
-    'Uri': parseUriValue,
-    'LanguageTag': parseLanguageTag,
-    'CalAddress': parseCalAddressValue,
-});
+const typeCompiler = new TypeCompiler(parseValueRaw, valueParserMap);
 
 declarationStatement.body?.forEachChild(child => {
     if (child.kind !== ts.SyntaxKind.TypeAliasDeclaration) {
@@ -82,13 +89,21 @@ declarationStatement.body?.forEachChild(child => {
 
 const parserFunctions: string[] = [];
 const switchBlocks: string[] = [];
+const imports: string[] = [];
+
 Object.entries(exports).map(([parameterKey, parameterType]) => {
     parserFunctions.push(compileParserFunction(parameterKey, parameterType));
     switchBlocks.push(compileKeyMatcherBlock(parameterKey));
 });
 
+const valueParserFns = mapFnList(...Object.values(valueParserMap), parseValueRaw); // `parseValueRaw` is used in the template, ensure that its imported
+const valueParserFnsInUse = Object.entries(exports).reduce((valueParserFnsInUse: ValueParserFn[], [,valueType]) => [...valueParserFnsInUse, ...flattenTypeParserFns(valueType, valueParserFns)], []);
+imports.push(compileValueParserImports([...valueParserFnsInUse]));
+
+
 // Read file, replace tokens and write to application path
 let code = await readSourceFileRaw('compiler/templates/parseParameters.template.ts');
+code = code.replace('/**${IMPORTS}**/', imports.join("\n"));
 code = code.replace('/**${PARAMETERS_BLOCK_KEYMATCHER}**/', format(switchBlocks.join("\n"), 12));
 code = code.replace('/**${PARAMETERS_PARSER_FUNCTIONS}**/', format(parserFunctions.join("\n\n"), 4));
 code = code.replace('/**${PARAMETERS_INTERSECTION_RETURN_TYPE}**/', ` : ${compileIntersectionType(Object.values(exports))}`);
@@ -112,7 +127,7 @@ function compileParserFunction (key: string, type: Type) : string {
 }
 
 function compileFinalBlock (key: string, type: Type) {
-    if (type.allowsAnyString || type.parserFn !== typeCompiler.defaultParserFn.name) {
+    if (type.allowsAnyString || type.parserFn !== typeCompiler.defaultParserFn.name || type.enums.length === 0) {
         return compileTypedReturn(key, type);
     }
 
