@@ -8,7 +8,9 @@
     },
     "typesVersions": {
         "*": {
-            "parser": ["dist/parser.d.ts"]
+            "parser": [
+                "dist/parser.d.ts"
+            ]
         }
     },
     "scripts": {
