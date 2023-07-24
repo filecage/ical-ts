@@ -5,6 +5,7 @@ import TypeCompiler from "./lib/TypeCompiler";
 import {Type} from "./lib/Type";
 import {flattenTypeEnums, flattenTypeParserFns} from "./lib/flattenTypeEnums";
 import {ValueParserFn} from "../src/Parser/parseValues";
+import {compileValueParserImports} from "./lib/compile";
 
 // Map all exported value parsers to an indexed object
 const valueParserFns = Object.entries(await import('../src/Parser/parseValues'))
@@ -171,8 +172,4 @@ function compileParserFnCallSingleValue (type: Type) : string {
 
 function compileImport(type: Type) : string {
     return `import ${type.name} from "./Properties/${type.name}";`;
-}
-
-function compileValueParserImports (valueParserFns: ValueParserFn[]) : string {
-    return format(`import {${[...new Set(valueParserFns)].sort().map(fn => fn.name).join(', ')}} from "./parseValues"`);
 }
