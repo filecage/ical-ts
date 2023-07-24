@@ -15,10 +15,10 @@ export function flattenTypeEnums (type: Type) : {enums: string[], allowsAnyStrin
     }, {enums: [] as string[], allowsAnyString: type.allowsAnyString});
 }
 
-export function *flattenTypeParserFns (type: Type, map: {[key: string]: ValueParserFn}) : Generator<ValueParserFn> {
+export function *flattenTypeParserFns (type: Type, map: {[key: string /*FnName*/]: ValueParserFn}) : Generator<ValueParserFn> {
     const parserFn = map[type.parserFn];
     if (parserFn === undefined) {
-        throw new Error("Can not flatten parser functions, type uses parser function that has not been mapped");
+        throw new Error(`Can not flatten parser functions, type uses parser function '${type.parserFn}' that has not been mapped`);
     }
 
     yield parserFn;
