@@ -15,6 +15,9 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "noEmit": true,
+        "paths": {
+            "ts-xor": ["./src/Types/XOR.ts"]
+        }
     },
     "include": [
         "src/**/*.ts",
