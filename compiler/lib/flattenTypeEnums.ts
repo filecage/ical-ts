@@ -32,3 +32,7 @@ export function *flattenTypeParserFns (type: Type, map: {[key: string /*FnName*/
         yield *flattenTypeParserFns(enumValue, map);
     }
 }
+
+export function mapFnList (...fnList: ValueParserFn[]) : {[key: string /*FnName*/]: ValueParserFn} {
+    return fnList.reduce((map, fn) => ({...map, [fn.name]: fn}), {});
+}
