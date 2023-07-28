@@ -12,6 +12,10 @@
             ]
         }
     },
+    "files": [
+        "dist/parser.d.ts",
+        "dist/parser.js"
+    ],
     "scripts": {
         "build": "tsup",
         "lint": "eslint src/**",
