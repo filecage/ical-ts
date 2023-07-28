@@ -2,6 +2,8 @@
     "name": "@filecage/ical",
     "description": "A fully typed, RFC compliant iCalendar / ICS parser",
     "type": "module",
+    "repository": "https://github.com/filecage/ical-ts",
+    "keywords": ["icalendar", "ical", "ics", "icalendar-rfc", "rfc5545", "icalendar-parsing"],
     "exports": {
         "./parser": "./dist/parser.js"
     },
