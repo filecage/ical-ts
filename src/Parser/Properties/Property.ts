@@ -1,4 +1,4 @@
-export default abstract class Property<T = string, P extends {[key: string]: string|string[]} = Record<string, string|string[]>> {
+export default abstract class Property<T = string, P extends {[key: string]: string|string[]|undefined} = Record<string, string|string[]>> {
     public abstract readonly key: string;
     public readonly value: T;
     public readonly parameters: P;

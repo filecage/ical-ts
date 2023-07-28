@@ -35,8 +35,8 @@ import Categories from "./Parser/Properties/Categories";
 import DateTimeEnd from "./Parser/Properties/DateTimeEnd";
 
 export namespace ICS {
-    export type NonStandardPropertyAware = { [key: `X-${string}`]: Property }
-    export type IANAPropertyAware = { [key: `IANA-${string}`]: Property }
+    export type NonStandardPropertyAware = { [key: `X-${string}`]: Property|undefined }
+    export type IANAPropertyAware = { [key: `IANA-${string}`]: Property|undefined }
 
     export type JSON = {
         VCALENDAR: VCALENDAR[]
