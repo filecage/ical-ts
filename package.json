@@ -4,7 +4,10 @@
     "type": "module",
     "repository": "https://github.com/filecage/ical-ts",
     "keywords": ["icalendar", "ical", "ics", "icalendar-rfc", "rfc5545", "icalendar-parsing"],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
+        ".": "./dist/index.js",
         "./parser": "./dist/parser.js"
     },
     "typesVersions": {
