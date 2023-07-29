@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup';
 import { resolve, join } from 'path';
 
 export default defineConfig({
-    entry: ['src/parser.ts'],
+    entry: ['src/index.ts', 'src/parser.ts'],
     splitting: true,
     sourcemap: false,
     clean: true,
