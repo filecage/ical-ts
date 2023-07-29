@@ -8,6 +8,7 @@ export default defineConfig({
     clean: true,
     format: 'esm',
     dts: true,
+    metafile: true,
     esbuildPlugins: [
         {
             name: 'add-local-imports-extension',
