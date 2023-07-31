@@ -1,3 +1,7 @@
+// This script prepares the release by setting the release version and exported build files
+// to the package.json. It also cleans up some release-obsolete properties, like `scripts`
+// or `devDependencies`
+
 import {resolve, dirname, parse, format} from 'path';
 import {fileURLToPath} from 'url';
 import fs from 'fs/promises';
