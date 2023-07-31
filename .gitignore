@@ -4,3 +4,9 @@ node_modules
 coverage/
 dist/
 .DS_Store
+
+# These files are created for builds and releases, we don't want to track them in GitHub
+src/Components.ts
+src/Parameters.ts
+src/Properties.ts
+src/ValueTypes.ts

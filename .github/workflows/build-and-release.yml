@@ -13,6 +13,7 @@ jobs:
           node-version: latest
           registry-url: 'https://registry.npmjs.org'
       - run: npm i
+      - run: npm run prepare:build
       - run: npm run build
       - name: Prepare Release
         run: npm run prepare:release ${{ github.ref_name }}

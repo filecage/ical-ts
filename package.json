@@ -8,18 +8,25 @@
     "types": "./dist/index.d.ts",
     "exports": {
         ".": "./dist/index.js",
-        "./parser": "./dist/parser.js"
+        "./parser": "./dist/parser.js",
+        "./Components": "./dist/Components.js",
+        "./Parameters": "./dist/Parameters.js",
+        "./Properties": "./dist/Properties.js",
+        "./ValueTypes": "./dist/ValueTypes.js"
     },
     "typesVersions": {
         "*": {
-            "parser": [
-                "dist/parser.d.ts"
-            ]
+            "parser": ["dist/parser.d.ts"],
+            "Components": ["dist/Components.d.ts"],
+            "Parameters": ["dist/Parameters.d.ts"],
+            "Properties": ["dist/Properties.d.ts"],
+            "ValueTypes": ["dist/ValueTypes.d.ts"]
         }
     },
     "scripts": {
         "build": "tsup",
         "lint": "eslint src/**",
+        "prepare:build": "node bin/prepare-build.js",
         "prepare:release": "node bin/prepare-release.js",
         "compile:parameters": "node --loader=./loader.js compiler/parameters.ts",
         "compile:properties": "node --loader=./loader.js compiler/properties.ts",
