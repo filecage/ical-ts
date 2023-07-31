@@ -15,19 +15,7 @@ assert(version !== undefined && version.match(/^\d+.\d+.\d+$/), `ERROR: Not a va
 assert(packageDefinition.version === undefined, `ERROR: 'version' is already defined in package.json`);
 assert(packageDefinition.files === undefined, `ERROR: 'files' is already defined in package.json`);
 
-// Collect files that the build emitted
-const files = [];
-for (const file of Object.keys(buildMeta.outputs)) {
-    files.push(file);
 
-    const types = replaceExt(file, '.d.ts');
-    try {
-        await fs.access(buildAppPath(types));
-        files.push(types);
-    } catch {
-        // its ok, i got u
-    }
-};
 
 // Delete obsolete flags that only clutter the file
 delete packageDefinition.scripts;
@@ -38,12 +26,12 @@ const releasePackageDefinition = {
     name: packageDefinition.name,
     version,
     ...packageDefinition,
-    files,
+    files: (await collectDistFiles()),
 };
 
 
 // Write file
-const packageDefinitionFilePath = buildAppPath('/package.json');
+const packageDefinitionFilePath = buildAppPath('/dist/package.json');
 await fs.writeFile(packageDefinitionFilePath, JSON.stringify(releasePackageDefinition, null, '    '));
 
 console.log(`OK: Release ${version}`);
@@ -64,4 +52,10 @@ function assert (assertion, errorMessage) {
         console.log(errorMessage);
         process.exit(1);
     }
+}
+
+async function collectDistFiles () {
+    return (await fs.readdir(buildAppPath('/dist'), {withFileTypes: true}))
+        .filter(dirent => dirent.isFile())
+        .map(file => file.name);
 }

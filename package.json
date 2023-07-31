@@ -4,23 +4,23 @@
     "type": "module",
     "repository": "https://github.com/filecage/ical-ts",
     "keywords": ["icalendar", "ical", "ics", "icalendar-rfc", "rfc5545", "icalendar-parsing"],
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "main": "./index.js",
+    "types": "./index.d.ts",
     "exports": {
-        ".": "./dist/index.js",
-        "./parser": "./dist/parser.js",
-        "./Components": "./dist/Components.js",
-        "./Parameters": "./dist/Parameters.js",
-        "./Properties": "./dist/Properties.js",
-        "./ValueTypes": "./dist/ValueTypes.js"
+        ".": "./index.js",
+        "./parser": "./parser.js",
+        "./Components": "./Components.js",
+        "./Parameters": "./Parameters.js",
+        "./Properties": "./Properties.js",
+        "./ValueTypes": "./ValueTypes.js"
     },
     "typesVersions": {
         "*": {
-            "parser": ["dist/parser.d.ts"],
-            "Components": ["dist/Components.d.ts"],
-            "Parameters": ["dist/Parameters.d.ts"],
-            "Properties": ["dist/Properties.d.ts"],
-            "ValueTypes": ["dist/ValueTypes.d.ts"]
+            "parser": ["parser.d.ts"],
+            "Components": ["Components.d.ts"],
+            "Parameters": ["Parameters.d.ts"],
+            "Properties": ["Properties.d.ts"],
+            "ValueTypes": ["ValueTypes.d.ts"]
         }
     },
     "scripts": {
