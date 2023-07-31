@@ -17,6 +17,7 @@ jobs:
       - run: npm run build
       - name: Prepare Release
         run: npm run prepare:release ${{ github.ref_name }}
-      - run: npm publish --access public
+      - name: npm publish
+        run: cd dist && npm publish --access public
         env:
             NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
