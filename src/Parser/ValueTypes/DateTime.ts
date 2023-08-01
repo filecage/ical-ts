@@ -1,6 +1,6 @@
 import {XOR} from "ts-xor";
 
-export type DateTime = DateTimeClass & XOR<{isUTC: true, timezoneIdentifier: undefined}, {isUTC: false, timezoneIdentifier: string|undefined}>;
+export type DateTime = Omit<DateTimeClass, 'timeToString' | 'dateToString'> & XOR<{isUTC: true, timezoneIdentifier: undefined}, {isUTC: false, timezoneIdentifier: string|undefined}>;
 export type UTCDateTime = Omit<DateTime, 'isUTC' | 'timezoneIdentifier'> & {isUTC: true, timezoneIdentifier: undefined};
 
 export class DateTimeClass {
