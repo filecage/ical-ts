@@ -2,10 +2,12 @@ export default abstract class Property<T = string, P extends {[key: string]: str
     public abstract readonly key: string;
     public readonly value: T;
     public readonly parameters: P;
+    public readonly isNonStandard: boolean;
 
-    constructor (value: T, parameters: P) {
+    constructor (value: T, parameters: P, isNonStandard: boolean = false) {
         this.value = value;
         this.parameters = parameters;
+        this.isNonStandard = isNonStandard;
     }
 
     toString () : string {

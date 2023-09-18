@@ -15,6 +15,7 @@ describe('Parse ICS to JSON', () => {
         'forced_types.ics',
         'google_birthday.ics',
         'minimal.ics',
+        'non-standard-properties.ics',
         'only_dtstart_date.ics',
         'only_dtstart_time.ics',
         'parserv2.ics',
@@ -29,11 +30,12 @@ describe('Parse ICS to JSON', () => {
         const json = JSON.stringify(ics, (key, value) => {
             if (value instanceof Property) {
                     // If we have no parameters we also don't export them to JSON
-                    if (Object.keys(value.parameters).length > 0) {
+                    if (Object.keys(value.parameters).length > 0 || value.isNonStandard) {
                         value = {
                             key: value.key,
                             __value__: value.value,
                             ...value.parameters,
+                            ...value.isNonStandard && {__nonStandard__: true},
                         };
                     } else {
                         value = value.toString();
