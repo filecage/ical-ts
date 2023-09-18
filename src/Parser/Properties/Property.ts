@@ -20,18 +20,5 @@ export default abstract class Property<T = string, P extends {[key: string]: str
         throw new Error(`Can not convert non-string ICSData.Value to string for property '${this.constructor.name}' (key '${this.key}')`);
     }
 
-    toJSON () : object|string {
-        // If we have no parameters we also don't export them to JSON
-        if (Object.keys(this.parameters).length === 0) {
-            return this.toString();
-        }
-
-        return {
-            key: this.key,
-            __value__: this.value,
-            ...this.parameters
-        };
-    }
-
 
 }

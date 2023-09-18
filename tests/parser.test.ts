@@ -2,6 +2,7 @@ import {readSample} from "./util/readSample";
 import {sortedJSONKeysReplacer} from "./util/sortedJSONKeysReplacer";
 import {unfold} from "../src/Parser/unfold";
 import {parseString} from "../src/parser";
+import Property from "../src/Parser/Properties/Property";
 
 describe('Parse ICS to JSON', () => {
     const samples = [
@@ -25,7 +26,22 @@ describe('Parse ICS to JSON', () => {
     it.each(samples)('Parses ICS and matches JSON snapshot `%s`', async sample => {
         const sampleData = await readSample(sample);
         const ics = parseString(sampleData);
-        const json = JSON.stringify(ics, sortedJSONKeysReplacer);
+        const json = JSON.stringify(ics, (key, value) => {
+            if (value instanceof Property) {
+                    // If we have no parameters we also don't export them to JSON
+                    if (Object.keys(value.parameters).length > 0) {
+                        value = {
+                            key: value.key,
+                            __value__: value.value,
+                            ...value.parameters,
+                        };
+                    } else {
+                        value = value.toString();
+                    }
+            }
+
+            return sortedJSONKeysReplacer(key, value);
+        });
         expect(json).toMatchSnapshot();
     });
 });
