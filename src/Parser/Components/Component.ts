@@ -93,7 +93,7 @@ export default abstract class Component<S extends object = Context> {
     protected pickNonStandardProperties(data: { [key: string]: unknown }): ICS.NonStandardPropertyAware {
         const nonStandardPropertyData: { [key: string]: Property } = {};
         for (const [key, value] of Object.entries(data)) {
-            if (key.startsWith('X-') && value instanceof Property) {
+            if (value instanceof Property && value.isNonStandard) {
                 nonStandardPropertyData[key] = value as Property;
             }
         }
