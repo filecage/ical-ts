@@ -1,0 +1,8 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:blank_line_mid
+COMMENT:This blank line is invalid
+X-PREFIXED:Hello
+IANA-PREFIXED:World
+UNPREFIXED:This should work as well
+END:VCALENDAR
