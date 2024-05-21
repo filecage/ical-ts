@@ -17,14 +17,14 @@ export default class Calendar extends Component<ICS.VCALENDAR> {
 
     protected build(context: Context) : ICS.VCALENDAR {
         return {
+            ...this.pickNonStandardProperties(context),
             PRODID: this.pickOrThrow(context, 'PRODID'),
             VERSION: this.pickOrThrow(context, 'VERSION'),
             CALSCALE: this.pick(context, 'CALSCALE'),
             COMMENT: this.pick(context, 'COMMENT'),
-            ...this.pickNonStandardProperties(context),
             VTIMEZONE: this.pick<ICS.VTIMEZONE[]>(context, ComponentName.VTIMEZONE),
             VEVENT: this.pick<ICS.VEVENT.Published[]>(context, ComponentName.VEVENT),
-        }
+        } as ICS.VCALENDAR;
     }
 
 }
