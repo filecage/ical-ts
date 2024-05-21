@@ -5,8 +5,8 @@
 import {resolve, dirname, parse, format} from 'path';
 import {fileURLToPath} from 'url';
 import fs from 'fs/promises';
-import packageDefinition from '../package.json' assert { type: "json" };
-import buildMeta from '../dist/metafile-esm.json' assert { type: "json" };
+import packageDefinition from '../package.json' with { type: "json" };
+import buildMeta from '../dist/metafile-esm.json' with { type: "json" };
 
 const [,,version] = process.argv;
 
