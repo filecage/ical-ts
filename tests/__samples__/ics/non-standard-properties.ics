@@ -5,4 +5,7 @@ COMMENT:This blank line is invalid
 X-PREFIXED:Hello
 IANA-PREFIXED:World
 UNPREFIXED:This should work as well
+X-LIST:This
+X-LIST:Should
+X-LIST:Work
 END:VCALENDAR

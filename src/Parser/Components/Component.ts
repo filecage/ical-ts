@@ -4,9 +4,10 @@ import {BEGIN, END, LIST_PROPERTIES, Property as EProperty} from "../Constants";
 import {parseProperty} from "../parseProperties";
 import Property from "../Properties/Property";
 import {ComponentName} from "./ComponentName";
+import PropertyList from "../PropertyList";
 
 export type ContextValue = Property<unknown>|Component|undefined;
-export type Context = {[key: string]: ContextValue|ContextValue[]|Context|Context[]};
+export type Context = {[key: string]: ContextValue|ContextValue[]|PropertyList|Context|Context[]};
 
 export default abstract class Component<S extends object = Context> {
     public abstract readonly key: ComponentName;
@@ -50,12 +51,12 @@ export default abstract class Component<S extends object = Context> {
                 closed = true;
             } else {
                 const property = parseProperty(name, value);
-                if (LIST_PROPERTIES.includes(property.key as EProperty)) {
+                if (LIST_PROPERTIES.includes(property.key as EProperty) || property.isNonStandard) {
                     if (context[property.key] === undefined) {
-                        context[property.key] = [];
+                        context[property.key] = new PropertyList();
                     }
 
-                    (context[property.key] as Property<unknown>[]).push(property);
+                    (context[property.key] as PropertyList).push(property);
                 } else {
                     if (context[property.key] !== undefined) {
                         throw new Error(`Non-list property '${property.key}' appeared twice in component '${this.key}'`);
@@ -90,11 +91,11 @@ export default abstract class Component<S extends object = Context> {
         return data[key] as T;
     }
 
-    protected pickNonStandardProperties(data: { [key: string]: unknown }): ICS.NonStandardPropertyAware {
-        const nonStandardPropertyData: { [key: string]: Property } = {};
+    protected pickNonStandardProperties(data: Context): ICS.NonStandardPropertyAware {
+        const nonStandardPropertyData: { [key: `${string}`]: Property<unknown>[] } = {};
         for (const [key, value] of Object.entries(data)) {
-            if (value instanceof Property && value.isNonStandard) {
-                nonStandardPropertyData[key] = value as Property;
+            if (value instanceof PropertyList && value.containsNonStandard()) {
+                nonStandardPropertyData[key] = value.nonStandardProperties;
             }
         }
 
