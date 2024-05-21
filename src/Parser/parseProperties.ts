@@ -110,10 +110,8 @@ export function parseProperty (key: string, value: string) {
 
         default:
             return new class extends Property<string> {
-                readonly key;
-                constructor(key: string, value: string) {
+                constructor(public readonly key: string, value: string) {
                     super(value, {}, true);
-                    this.key = key;
                 }
             } (key, value);
     }
