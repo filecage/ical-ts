@@ -17,6 +17,7 @@ export default class Event extends Component<ICS.VEVENT.Published> {
 
     protected build(context: Context) : ICS.VEVENT.Published {
         return {
+            ...this.pickNonStandardProperties(context),
             DTSTAMP: this.pickOrThrow(context, 'DTSTAMP'),
             DTSTART: this.pickOrThrow(context, 'DTSTART'),
             ...this.pickDurationOrDateTimeEnd(context),
@@ -38,8 +39,7 @@ export default class Event extends Component<ICS.VEVENT.Published> {
             RDATE: this.pick(context, 'RDATE'),
             EXDATE: this.pick(context, 'EXDATE'),
             ATTENDEE: this.pick(context, 'ATTENDEE'),
-            ...this.pickNonStandardProperties(context),
-        };
+        } as ICS.VEVENT.Published;
     }
 
     private pickDurationOrDateTimeEnd (data: {[key: string]: unknown}) : undefined|XOR<{DURATION: Duration}, {DTEND: DateTimeEnd}> {

@@ -35,14 +35,13 @@ import Categories from "./Parser/Properties/Categories";
 import DateTimeEnd from "./Parser/Properties/DateTimeEnd";
 
 export namespace ICS {
-    export type NonStandardPropertyAware = { [key: `X-${string}`]: Property|undefined }
-    export type IANAPropertyAware = { [key: `IANA-${string}`]: Property|undefined }
+    export type NonStandardPropertyAware = {[key: string]: undefined|Property<unknown>[] };
 
     export type JSON = {
         VCALENDAR: VCALENDAR[]
     }
 
-    export type VCALENDAR = NonStandardPropertyAware & IANAPropertyAware & {
+    export type VCALENDAR = NonStandardPropertyAware & {
         PRODID: Property,
         VERSION: Version,
         CALSCALE?: CalendarScale,
@@ -51,7 +50,7 @@ export namespace ICS {
         VTIMEZONE?: VTIMEZONE[],
     };
 
-    export type VTIMEZONE = NonStandardPropertyAware & IANAPropertyAware & {
+    export type VTIMEZONE = NonStandardPropertyAware & {
         TZID: TimeZoneIdentifier,
         TZURL?: TimeZoneUrl,
         'LAST-MODIFIED'?: LastModified,
@@ -59,7 +58,7 @@ export namespace ICS {
         STANDARD?: TimezoneDefinition[]
     }
 
-    export type TimezoneDefinition = NonStandardPropertyAware & IANAPropertyAware & {
+    export type TimezoneDefinition = NonStandardPropertyAware & {
         COMMENT?: Property[],
         TZOFFSETFROM: TimeZoneOffsetFrom, // Example: -0800
         TZOFFSETTO: TimeZoneOffsetTo,   // Example: -0700
@@ -67,7 +66,7 @@ export namespace ICS {
         TZNAME?: TimeZoneName,
     } & XOR<{ RRULE?: RecurrenceRule }, {RDATE?: RecurrenceDateTimes[]}>
 
-    export type VALARM = NonStandardPropertyAware & IANAPropertyAware & {
+    export type VALARM = NonStandardPropertyAware & {
         ACTION: Action,
         TRIGGER: Duration,
         DESCRIPTION?: Description,
@@ -78,7 +77,7 @@ export namespace ICS {
     export namespace VEVENT {
         export type Published = {DTSTART: DateTimeStart} & Event;
 
-        type Event = NonStandardPropertyAware & IANAPropertyAware & {
+        type Event = NonStandardPropertyAware & {
             UID: UniqueIdentifier,
             DTSTAMP: DateTimeStamp,
             SUMMARY: Summary,

@@ -16,10 +16,10 @@ export default class Timezone extends Component<ICS.VTIMEZONE> {
 
     build (context: Context) : ICS.VTIMEZONE {
         return {
-            TZID: this.pickOrThrow(context, 'TZID'),
             ...this.pickNonStandardProperties(context),
+            TZID: this.pickOrThrow(context, 'TZID'),
             DAYLIGHT: this.pick(context, 'DAYLIGHT'),
             STANDARD: this.pick(context, 'STANDARD'),
-        }
+        } as ICS.VTIMEZONE;
     }
 }
