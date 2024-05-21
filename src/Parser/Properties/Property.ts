@@ -1,14 +1,7 @@
 export default abstract class Property<T = string, P extends {[key: string]: string|string[]|undefined} = Record<string, string|string[]>> {
     public abstract readonly key: string;
-    public readonly value: T;
-    public readonly parameters: P;
-    public readonly isNonStandard: boolean;
 
-    constructor (value: T, parameters: P, isNonStandard: boolean = false) {
-        this.value = value;
-        this.parameters = parameters;
-        this.isNonStandard = isNonStandard;
-    }
+    constructor (public readonly value: T, public readonly parameters: P, public readonly isNonStandard: boolean = false) {}
 
     toString () : string {
         if (typeof this.value === 'string') {
