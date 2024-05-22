@@ -10,6 +10,7 @@
         ".": "./index.js",
         "./parser": "./parser.js",
         "./Components": "./Components.js",
+        "./Getters": "./Getters.js",
         "./Parameters": "./Parameters.js",
         "./Properties": "./Properties.js",
         "./ValueTypes": "./ValueTypes.js"
@@ -18,6 +19,7 @@
         "*": {
             "parser": ["parser.d.ts"],
             "Components": ["Components.d.ts"],
+            "Getters": ["Getters.d.ts"],
             "Parameters": ["Parameters.d.ts"],
             "Properties": ["Properties.d.ts"],
             "ValueTypes": ["ValueTypes.d.ts"]

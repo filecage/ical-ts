@@ -3,10 +3,11 @@ import fs from 'fs/promises';
 import {dirname, basename, resolve, parse, format} from 'path';
 import {fileURLToPath} from 'url';
 
-await exportBundle('Parser/Components', 'src/Components.ts');
-await exportBundle('Parser/Properties', 'src/Properties.ts');
-await exportBundle('Parser/Parameters', 'src/Parameters.ts');
-await exportBundle('Parser/ValueTypes', 'src/ValueTypes.ts');
+await exportBundle('Parser/Components');
+await exportBundle('Parser/Properties');
+await exportBundle('Parser/Parameters');
+await exportBundle('Parser/ValueTypes');
+await exportBundle('Getters');
 
 console.log('All OK');
 

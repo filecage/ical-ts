@@ -10,3 +10,4 @@ src/Components.ts
 src/Parameters.ts
 src/Properties.ts
 src/ValueTypes.ts
+src/Getters.ts

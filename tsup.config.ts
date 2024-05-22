@@ -6,6 +6,7 @@ export default defineConfig({
         'src/index.ts',
         'src/parser.ts',
         'src/Components.ts',
+        'src/Getters.ts',
         'src/Parameters.ts',
         'src/Properties.ts',
         'src/ValueTypes.ts',
