@@ -7,13 +7,17 @@ It normalizes values where possible (e.g. possible list values are always access
 but it does not interpret values (like RRULE or timezone references) apart from the value encoding
 defined in RFC 5545 and RFC 6868.
 
+> [!NOTICE]
+> This is a very early development release. The interface is still experimental and many things might not yet
+> work as expected.
+
 **Install via npm**
 ```bash
 npm i --save @filecage/ical
 ```
-
-> ⚠️ RFC compliance and validation strictness in development versions are not guaranteed.
-> Anything can change at any time until release 1.x
+> [!WARNING]
+> RFC compliance and validation strictness in development versions are not guaranteed.
+> Anything can change at any time until release 1.x.
 
 ## Why?
 There are several existing parsers for iCalendar/ICS formats, but none of them met my expectations in neither
