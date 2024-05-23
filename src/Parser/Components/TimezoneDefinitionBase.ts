@@ -17,7 +17,7 @@ export default abstract class TimezoneDefinitionBase extends Component<ICS.Timez
             DTSTART: this.pickOrThrow(context, 'DTSTART'),
             ...this.pickNonStandardProperties(context),
             ...this.pickRRuleOrRdate(context),
-        } as ICS.TimezoneDefinition;
+        };
     }
 
     private pickRRuleOrRdate (data: {[key: string]: unknown}) : undefined | {RRULE: RecurrenceRule} | {RDATE: RecurrenceDateTimes[]} {

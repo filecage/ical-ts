@@ -24,7 +24,7 @@ export default class Calendar extends Component<ICS.VCALENDAR> {
             COMMENT: this.pick(context, 'COMMENT'),
             VTIMEZONE: this.pick<ICS.VTIMEZONE[]>(context, ComponentName.VTIMEZONE),
             VEVENT: this.pick<ICS.VEVENT.Published[]>(context, ComponentName.VEVENT),
-        } as ICS.VCALENDAR;
+        };
     }
 
 }

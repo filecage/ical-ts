@@ -20,6 +20,6 @@ export default class Timezone extends Component<ICS.VTIMEZONE> {
             TZID: this.pickOrThrow(context, 'TZID'),
             DAYLIGHT: this.pick(context, 'DAYLIGHT'),
             STANDARD: this.pick(context, 'STANDARD'),
-        } as ICS.VTIMEZONE;
+        };
     }
 }

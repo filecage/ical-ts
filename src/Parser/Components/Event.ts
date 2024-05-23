@@ -39,7 +39,7 @@ export default class Event extends Component<ICS.VEVENT.Published> {
             RDATE: this.pick(context, 'RDATE'),
             EXDATE: this.pick(context, 'EXDATE'),
             ATTENDEE: this.pick(context, 'ATTENDEE'),
-        } as ICS.VEVENT.Published;
+        };
     }
 
     private pickDurationOrDateTimeEnd (data: {[key: string]: unknown}) : undefined|XOR<{DURATION: Duration}, {DTEND: DateTimeEnd}> {

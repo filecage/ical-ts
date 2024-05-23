@@ -35,7 +35,7 @@ import Categories from "./Parser/Properties/Categories";
 import DateTimeEnd from "./Parser/Properties/DateTimeEnd";
 
 export namespace ICS {
-    export type NonStandardPropertyAware = {[key: string]: undefined|Property<unknown>[] };
+    export type NonStandardPropertyAware = {nonStandard?: {[key: string]: undefined|Property<unknown>[] }};
 
     export type JSON = {
         VCALENDAR: VCALENDAR[]

@@ -17,6 +17,6 @@ export default class Alarm extends Component<ICS.VALARM> {
             SUMMARY: this.pick(context, 'SUMMARY'),
             ATTENDEE: this.pick(context, 'ATTENDEE'),
             TRIGGER: this.pickOrThrow(context, 'TRIGGER'),
-        } as ICS.VALARM;
+        };
     }
 }

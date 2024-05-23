@@ -99,7 +99,7 @@ export default abstract class Component<S extends object = Context> {
             }
         }
 
-        return nonStandardPropertyData;
+        return {nonStandard: nonStandardPropertyData};
     }
 
 }
