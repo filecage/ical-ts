@@ -9,7 +9,7 @@ import {compileValueParserImports} from "./lib/compile";
 
 // Map all exported value parsers to an indexed object
 const valueParserFns = Object.entries(await import('../src/Parser/parseValues'))
-    .reduce((parsers: {[key: string]: ValueParserFn}, [name, fn]) => ({...parsers, [name]: fn}), {});
+    .reduce((parsers, [name, fn]) => ({...parsers, [name]: fn}), {}) as {[key: string]: ValueParserFn};
 
 const valueTypeParserMap: {[k:string]: ValueParserFn} = {
     __number: valueParserFns.parseNumber,
