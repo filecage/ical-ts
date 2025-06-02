@@ -7,7 +7,7 @@ It normalizes values where possible (e.g. possible list values are always access
 but it does not interpret values (like RRULE or timezone references) apart from the value encoding
 defined in RFC 5545 and RFC 6868.
 
-> [!NOTICE]
+> [!NOTE]
 > This is a very early development release. The interface is still experimental and many things might not yet
 > work as expected.
 
