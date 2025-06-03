@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * Imported from https://github.com/maninak/ts-xor/tree/master to avoid dependency
  * Original license & copyright:
