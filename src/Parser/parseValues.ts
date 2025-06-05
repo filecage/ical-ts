@@ -1,8 +1,10 @@
-import {PERIOD, CAPITAL_T, CAPITAL_Z, COMMA, QUOTES, SOLIDUS, HYPHEN_MINUS} from "./Constants";
+import isEnumValue from "../Util/isEnumValue";
+import {CAPITAL_T, CAPITAL_Z, COMMA, EQUAL, HYPHEN_MINUS, PERIOD, QUOTES, SEMICOLON, SOLIDUS} from "./Constants";
 import {DateTime, DateTimeClass, UTCDateTime} from "./ValueTypes/DateTime";
 import {Period} from "./ValueTypes/Period";
 import {Parameters} from "./Parameters/Parameters";
 import {Duration, formatDuration} from "./ValueTypes/Duration";
+import {Recur, RecurByWeekday, RecurFrequency, RecurModifier, RecurWeekday} from "./ValueTypes/Recur";
 
 const matchDoubleQuotesString = `${QUOTES}([^${QUOTES}\\\\]*(\\\\.[^${QUOTES}\\\\]*)*)${QUOTES}`;
 const escapedDoubleQuotesStringRegex = new RegExp(`^${matchDoubleQuotesString}$`);
@@ -10,7 +12,7 @@ const listStringRegex = new RegExp(`((${matchDoubleQuotesString})|([^${COMMA}]+)
 const durationRegex = new RegExp(/^(?<sign>[-+])?P(?<weeks>\d+[.,]?\d*W)?(?<days>\d+[.,]?\d*D)?(?:T(?<hours>\d+[.,]?\d*H)?(?<minutes>\d+[.,]?\d*M)?(?<seconds>\d+[.,]?\d*S)?)?$/);
 
 export interface ValueParserFn<T extends object = Record<string, unknown>> {
-    (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|Duration|number
+    (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|Duration|Recur|number
 }
 
 export function parseList (input: string) : string[] {
@@ -128,4 +130,38 @@ export function parseUTCDateTimeOrDuration (value: string, parameters: Parameter
     }
 
     return parseDuration(value);
+}
+
+export function parseRecurrence (value: string) : Recur {
+    const parts = value.split(SEMICOLON).reduce((parts, part) => {
+        const [key, value] = part.split(EQUAL);
+
+        return {
+            ...parts,
+            ...{[key]: value},
+        };
+    }, {} as {[K: string]: undefined|string});
+
+    if (parts.FREQ === undefined || !isEnumValue(RecurFrequency, parts.FREQ)) {
+        throw new Error(`Invalid recurrence value '${value}': missing or invalid FREQ`);
+    }
+
+    return {...{
+        frequency: parts.FREQ,
+        byDay: undefined,
+        byHour: undefined,
+        byMinute: undefined,
+        byMonth: undefined,
+        byMonthday: undefined,
+        bySecond: undefined,
+        bySetPos: undefined,
+        byWeekNo: undefined,
+        byYearday: undefined,
+        count: undefined,
+        until: undefined,
+        interval: 0,
+        weekstart: undefined,
+        toString: () => value
+    } as Recur};
+}
 }

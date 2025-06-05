@@ -5,7 +5,7 @@
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 
-import {parseDateTime, parseDateTimeOrPeriod, parseDuration, parseList, parseNumber, parsePeriod, parseUTCDateTime, parseUTCDateTimeOrDuration, parseValueRaw} from "./parseValues"
+import {parseDateTime, parseDateTimeOrPeriod, parseDuration, parseList, parseNumber, parsePeriod, parseRecurrence, parseUTCDateTime, parseUTCDateTimeOrDuration, parseValueRaw} from "./parseValues"
 import Acknowledged from "./Properties/Acknowledged";
 import Action from "./Properties/Action";
 import Attachment from "./Properties/Attachment";
@@ -100,8 +100,8 @@ export function parseProperty (key: string, value: string) {
         case 'PROXIMITY': return new Proximity(parseValueRaw(value), parameters);
         case 'RDATE': return new RecurrenceDateTimes(parseList(value).map(value => parseDateTimeOrPeriod(value, parameters)), parameters);
         case 'RECURRENCE-ID': return new RecurrenceID(parseDateTime(value, parameters), parameters);
-        case 'RRULE': return new RecurrenceRule(parseValueRaw(value), parameters);
-        case 'REFRESH-INTERVAL': return new RefreshInterval(parseDuration(value), parameters);
+        case 'REFRESH-INTERVAL': return new RefreshInterval(parseDuration(value), parameters)
+        case 'RRULE': return new RecurrenceRule(parseRecurrence(value), parameters);
         case 'RELATED-TO': return new RelatedTo(parseValueRaw(value), parameters);
         case 'REPEAT': return new Repeat(parseValueRaw(value), parameters);
         case 'RESOURCES': return new Resources(parseValueRaw(value), parameters);
