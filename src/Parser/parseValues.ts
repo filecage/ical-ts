@@ -152,6 +152,11 @@ export function parseRecurrence (value: string) : Recur {
         throw new Error(`Invalid recurrence value '${value}': missing or invalid FREQ`);
     }
 
+    const interval = parts.INTERVAL ? parseNumber(parts.INTERVAL) : undefined;
+    if (interval !== undefined && interval <= 0) {
+        throw new Error(`Invalid recurrence value '${value}': invalid non-positive INTERVAL`);
+    }
+
     return {...{
         frequency: parts.FREQ,
         byDay: parts.BYDAY ? parseByWeekdayList(parts.BYDAY) : undefined,
@@ -165,7 +170,7 @@ export function parseRecurrence (value: string) : Recur {
         byYearday: undefined,
         count: parts.COUNT ? parseNumber(parts.COUNT) : undefined,
         until: parts.UNTIL ? parseDateTime(parts.UNTIL, {}) : undefined,
-        interval: parts.INTERVAL ? parseNumber(parts.INTERVAL) : undefined,
+        interval,
         weekstart: undefined,
         toString: () => value
     } as Recur};
