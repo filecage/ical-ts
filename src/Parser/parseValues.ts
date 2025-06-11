@@ -36,7 +36,12 @@ export function parseValueRaw (value: string) : string {
 }
 
 export function parseNumber (value: string) : number {
-    return parseInt(value);
+    const number =  parseInt(value, 10);
+    if (isNaN(number)) {
+        throw new Error(`Invalid number value '${value}'`);
+    }
+
+    return number;
 }
 
 export function parseDateTime (value: string, parameters: Parameters.TimeZoneIdentifier) : DateTime {
