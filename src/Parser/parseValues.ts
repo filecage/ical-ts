@@ -10,6 +10,7 @@ const matchDoubleQuotesString = `${QUOTES}([^${QUOTES}\\\\]*(\\\\.[^${QUOTES}\\\
 const escapedDoubleQuotesStringRegex = new RegExp(`^${matchDoubleQuotesString}$`);
 const listStringRegex = new RegExp(`((${matchDoubleQuotesString})|([^${COMMA}]+))(${COMMA}|$)`, 'g');
 const durationRegex = new RegExp(/^(?<sign>[-+])?P(?<weeks>\d+[.,]?\d*W)?(?<days>\d+[.,]?\d*D)?(?:T(?<hours>\d+[.,]?\d*H)?(?<minutes>\d+[.,]?\d*M)?(?<seconds>\d+[.,]?\d*S)?)?$/);
+const byWeekdayRegex = new RegExp(/^((?<sign>[+-])?(?<offset>[0-9]{1,2}))?(?<weekday>MO|TU|WE|TH|FR|SA|SU)$/);
 
 export interface ValueParserFn<T extends object = Record<string, unknown>> {
     (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|Duration|Recur|number
@@ -153,7 +154,7 @@ export function parseRecurrence (value: string) : Recur {
 
     return {...{
         frequency: parts.FREQ,
-        byDay: undefined,
+        byDay: parts.BYDAY ? parseByWeekdayList(parts.BYDAY) : undefined,
         byHour: undefined,
         byMinute: undefined,
         byMonth: undefined,
@@ -169,4 +170,28 @@ export function parseRecurrence (value: string) : Recur {
         toString: () => value
     } as Recur};
 }
+
+function parseWeekday (value: string): RecurWeekday {
+    if (!isEnumValue(RecurWeekday, value)) {
+        throw new Error(`Invalid recurrence weekday '${value}': not a valid weekday`);
+    }
+
+    return value;
+}
+
+function parseByWeekdayList (value: string) : RecurByWeekday[] {
+    return parseList(value).map((definition, index) => {
+        const matches = definition.match(byWeekdayRegex);
+        if (matches === null || !matches.groups) {
+            throw new Error(`Invalid recurrence weekday value '${value}' at index #${index}: invalid format`);
+        }
+
+        const {weekday, sign, offset} = matches.groups;
+
+        return {
+            weekday: parseWeekday(weekday),
+            modifier: sign !== undefined && isEnumValue(RecurModifier, sign) ? sign : RecurModifier.None,
+            offset: offset !== undefined ? parseNumber(offset) : 0,
+        }
+    });
 }
