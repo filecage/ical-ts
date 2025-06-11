@@ -162,9 +162,9 @@ export function parseRecurrence (value: string) : Recur {
         bySetPos: undefined,
         byWeekNo: undefined,
         byYearday: undefined,
-        count: undefined,
-        until: undefined,
-        interval: 0,
+        count: parts.COUNT ? parseNumber(parts.COUNT) : undefined,
+        until: parts.UNTIL ? parseDateTime(parts.UNTIL, {}) : undefined,
+        interval: parts.INTERVAL ? parseNumber(parts.INTERVAL) : undefined,
         weekstart: undefined,
         toString: () => value
     } as Recur};
