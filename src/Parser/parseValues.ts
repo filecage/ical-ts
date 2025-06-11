@@ -171,7 +171,7 @@ export function parseRecurrence (value: string) : Recur {
         count: parts.COUNT ? parseNumber(parts.COUNT) : undefined,
         until: parts.UNTIL ? parseDateTime(parts.UNTIL, {}) : undefined,
         interval,
-        weekstart: undefined,
+        weekstart: parts.WKST ? parseWeekday(parts.WKST) : undefined,
         toString: () => value
     } as Recur};
 }
