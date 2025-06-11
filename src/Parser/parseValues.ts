@@ -82,7 +82,7 @@ export function parseDuration (value: string) : Duration {
         throw new Error(`Invalid duration value '${value}'`);
     }
 
-    const duration = {
+    const duration: Duration = {
         inverted: matches.groups.sign === HYPHEN_MINUS,
         weeks: durationToNumber(matches.groups.weeks),
         days: durationToNumber(matches.groups.days),
