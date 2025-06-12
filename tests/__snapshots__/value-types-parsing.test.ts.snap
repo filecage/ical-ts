@@ -1,0 +1,292 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Bi-weekly Friday 1`] = `
+{
+  "byDay": [
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "FR",
+    },
+  ],
+  "count": 6,
+  "frequency": "WEEKLY",
+  "interval": 2,
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Bi-weekly Friday 2`] = `"FREQ=WEEKLY;INTERVAL=2;BYDAY=FR;COUNT=6"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Complex multiple BY rules 1`] = `
+{
+  "byMonth": [
+    6,
+    12,
+  ],
+  "byMonthday": [
+    1,
+    15,
+  ],
+  "count": 8,
+  "frequency": "YEARLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Complex multiple BY rules 2`] = `"FREQ=YEARLY;BYMONTH=6,12;BYMONTHDAY=1,15;COUNT=8"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Daily basic 1`] = `
+{
+  "count": 5,
+  "frequency": "DAILY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Daily basic 2`] = `"FREQ=DAILY;COUNT=5"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Daily with interval 1`] = `
+{
+  "count": 5,
+  "frequency": "DAILY",
+  "interval": 2,
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Daily with interval 2`] = `"FREQ=DAILY;INTERVAL=2;COUNT=5"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for First weekday of month 1`] = `
+{
+  "byDay": [
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "MO",
+    },
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "TU",
+    },
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "WE",
+    },
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "TH",
+    },
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "FR",
+    },
+  ],
+  "bySetPos": [
+    1,
+  ],
+  "count": 6,
+  "frequency": "MONTHLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for First weekday of month 2`] = `"FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1;COUNT=6"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Leap year February 29 1`] = `
+{
+  "byMonth": [
+    2,
+  ],
+  "byMonthday": [
+    29,
+  ],
+  "count": 3,
+  "frequency": "YEARLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Leap year February 29 2`] = `"FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=29;COUNT=3"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Monthly first Monday 1`] = `
+{
+  "byDay": [
+    {
+      "modifier": "",
+      "offset": 1,
+      "weekday": "MO",
+    },
+  ],
+  "count": 6,
+  "frequency": "MONTHLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Monthly first Monday 2`] = `"FREQ=MONTHLY;BYDAY=1MO;COUNT=6"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Monthly last day 1`] = `
+{
+  "byMonthday": [
+    -1,
+  ],
+  "count": 6,
+  "frequency": "MONTHLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Monthly last day 2`] = `"FREQ=MONTHLY;BYMONTHDAY=-1;COUNT=6"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Monthly specific date 1`] = `
+{
+  "byMonthday": [
+    15,
+  ],
+  "count": 6,
+  "frequency": "MONTHLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Monthly specific date 2`] = `"FREQ=MONTHLY;BYMONTHDAY=15;COUNT=6"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Quarterly first day 1`] = `
+{
+  "byMonthday": [
+    1,
+  ],
+  "count": 4,
+  "frequency": "MONTHLY",
+  "interval": 3,
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Quarterly first day 2`] = `"FREQ=MONTHLY;INTERVAL=3;BYMONTHDAY=1;COUNT=4"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Time-bounded weekly 1`] = `
+{
+  "byDay": [
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "TU",
+    },
+  ],
+  "frequency": "WEEKLY",
+  "until": "20240301T000000Z",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Time-bounded weekly 2`] = `"FREQ=WEEKLY;BYDAY=TU;UNTIL=20240301T000000Z"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Weekly weekdays 1`] = `
+{
+  "byDay": [
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "MO",
+    },
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "WE",
+    },
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "FR",
+    },
+  ],
+  "count": 6,
+  "frequency": "WEEKLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Weekly weekdays 2`] = `"FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=6"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Weekly weekends 1`] = `
+{
+  "byDay": [
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "SA",
+    },
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "SU",
+    },
+  ],
+  "count": 4,
+  "frequency": "WEEKLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Weekly weekends 2`] = `"FREQ=WEEKLY;BYDAY=SA,SU;COUNT=4"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Weekly with WKST 1`] = `
+{
+  "byDay": [
+    {
+      "modifier": "",
+      "offset": 0,
+      "weekday": "MO",
+    },
+  ],
+  "count": 4,
+  "frequency": "WEEKLY",
+  "weekstart": "SU",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Weekly with WKST 2`] = `"FREQ=WEEKLY;BYDAY=MO;WKST=SU;COUNT=4"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Yearly Christmas 1`] = `
+{
+  "byMonth": [
+    12,
+  ],
+  "byMonthday": [
+    25,
+  ],
+  "count": 3,
+  "frequency": "YEARLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Yearly Christmas 2`] = `"FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=25;COUNT=3"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Yearly Thanksgiving 1`] = `
+{
+  "byDay": [
+    {
+      "modifier": "",
+      "offset": 4,
+      "weekday": "TH",
+    },
+  ],
+  "byMonth": [
+    11,
+  ],
+  "count": 3,
+  "frequency": "YEARLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Yearly Thanksgiving 2`] = `"FREQ=YEARLY;BYMONTH=11;BYDAY=4TH;COUNT=3"`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Zero BYHOUR/BYMINUTE/BYSECOND offsets 1`] = `
+{
+  "byHour": [
+    0,
+  ],
+  "byMinute": [
+    0,
+  ],
+  "bySecond": [
+    0,
+  ],
+  "frequency": "MONTHLY",
+}
+`;
+
+exports[`Value Type Parsers RRule Should correctly parse RRule segments for Zero BYHOUR/BYMINUTE/BYSECOND offsets 2`] = `"FREQ=MONTHLY;BYHOUR=0;BYMINUTE=0;BYSECOND=0"`;
