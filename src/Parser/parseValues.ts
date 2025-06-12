@@ -164,8 +164,15 @@ export function parseRecurrence (value: string) : Recur {
     const byMonthday = parts.BYMONTHDAY !== undefined ? parseList(parts.BYMONTHDAY).map(parseNumber).map(assertInRange(-31, 31, false)) : undefined;
     const bySecond = parts.BYSECOND !== undefined ? parseList(parts.BYSECOND).map(parseNumber).map(assertInRange(0, 60, true)) : undefined;
     const bySetPos = parts.BYSETPOS !== undefined ? parseList(parts.BYSETPOS).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
-    const byWeekNo = parts.BYWEEKNO !== undefined ? parseList(parts.BYWEEKNO).map(parseNumber).map(assertInRange(-53, 51, false)) : undefined;
+    const byWeekNo = parts.BYWEEKNO !== undefined ? parseList(parts.BYWEEKNO).map(parseNumber).map(assertInRange(-53, 53, false)) : undefined;
     const byYearday = parts.BYYEARDAY !== undefined ? parseList(parts.BYYEARDAY).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
+
+    // BYSETPOS is only allowed in conjunction with another BY-rule
+    if (bySetPos !== undefined && (
+        !byDay && !byHour && !byMinute && !byMonth && !byMonthday && !bySecond && !byWeekNo && !byYearday
+    )) {
+        throw new Error(`Invalid recurrence value '${value}': BYSETPOS must be used in conjunction with another 'BY-' defintion`)
+    }
 
     const rrule: Recur = {
         frequency: parts.FREQ,
@@ -185,7 +192,12 @@ export function parseRecurrence (value: string) : Recur {
     if (parts.COUNT !== undefined && parts.UNTIL !== undefined) {
         throw new Error(`Invalid recurrence value '${value}': COUNT and UNTIL are mutually exclusive`);
     } else if (parts.COUNT !== undefined) {
-        rrule.count = parseNumber(parts.COUNT);
+        const count = parseNumber(parts.COUNT);
+        if (count < 1) {
+            throw new Error(`Invalid recurrence value '${value}': invalid non-positive COUNT`)
+        }
+
+        rrule.count = count;
         rrule.until = undefined;
     } else if (parts.UNTIL !== undefined) {
         rrule.until = parseDateTime(parts.UNTIL, {});
@@ -229,7 +241,7 @@ function parseByWeekdayList (value: string) : RecurByWeekday[] {
         return {
             weekday: parseWeekday(weekday),
             modifier: sign !== undefined && isEnumValue(RecurModifier, sign) ? sign : RecurModifier.None,
-            offset: offset !== undefined ? parseNumber(offset) : 0,
+            offset: offset !== undefined ? assertInRange(1, 53, false)(parseNumber(offset)) : 0,
         }
     });
 }
