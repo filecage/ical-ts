@@ -158,14 +158,14 @@ export function parseRecurrence (value: string) : Recur {
     }
 
     // BYMONTH, BYWEEKNO, BYYEARDAY, BYMONTHDAY, BYDAY, BYHOUR, BYMINUTE, BYSECOND
-    const byMonth = parts.BYMONTH ? parseList(parts.BYMONTH).map(parseNumber).map(assertInRange(-12, 12, false)) : undefined;
-    const byWeekNo = parts.BYWEEKNO ? parseList(parts.BYWEEKNO).map(parseNumber).map(assertInRange(-53, 51, false)) : undefined;
-    const byYearday = parts.BYYEARDAY ? parseList(parts.BYYEARDAY).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
-    const byMonthday = parts.BYMONTHDAY ? parseList(parts.BYMONTHDAY).map(parseNumber).map(assertInRange(-31, 31, false)) : undefined;
-    const byHour = parts.BYHOUR ? parseList(parts.BYHOUR).map(parseNumber).map(assertInRange(0, 23, true)) : undefined;
-    const byMinute = parts.BYMINUTE ? parseList(parts.BYMINUTE).map(parseNumber).map(assertInRange(0, 59, true)) : undefined;
-    const bySecond = parts.BYSECOND ? parseList(parts.BYSECOND).map(parseNumber).map(assertInRange(0, 60, true)) : undefined;
-    const bySetPos = parts.BYSETPOS ? parseList(parts.BYSETPOS).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
+    const byMonth = parts.BYMONTH !== undefined ? parseList(parts.BYMONTH).map(parseNumber).map(assertInRange(-12, 12, false)) : undefined;
+    const byWeekNo = parts.BYWEEKNO !== undefined ? parseList(parts.BYWEEKNO).map(parseNumber).map(assertInRange(-53, 51, false)) : undefined;
+    const byYearday = parts.BYYEARDAY !== undefined ? parseList(parts.BYYEARDAY).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
+    const byMonthday = parts.BYMONTHDAY !== undefined ? parseList(parts.BYMONTHDAY).map(parseNumber).map(assertInRange(-31, 31, false)) : undefined;
+    const byHour = parts.BYHOUR !== undefined ? parseList(parts.BYHOUR).map(parseNumber).map(assertInRange(0, 23, true)) : undefined;
+    const byMinute = parts.BYMINUTE !== undefined ? parseList(parts.BYMINUTE).map(parseNumber).map(assertInRange(0, 59, true)) : undefined;
+    const bySecond = parts.BYSECOND !== undefined ? parseList(parts.BYSECOND).map(parseNumber).map(assertInRange(0, 60, true)) : undefined;
+    const bySetPos = parts.BYSETPOS !== undefined ? parseList(parts.BYSETPOS).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
 
     const rrule: Recur = {
         frequency: parts.FREQ,
@@ -182,12 +182,12 @@ export function parseRecurrence (value: string) : Recur {
         weekstart: parts.WKST ? parseWeekday(parts.WKST) : undefined
     };
 
-    if (parts.COUNT && parts.UNTIL) {
+    if (parts.COUNT !== undefined && parts.UNTIL !== undefined) {
         throw new Error(`Invalid recurrence value '${value}': COUNT and UNTIL are mutually exclusive`);
-    } else if (parts.COUNT) {
+    } else if (parts.COUNT !== undefined) {
         rrule.count = parseNumber(parts.COUNT);
         rrule.until = undefined;
-    } else if (parts.UNTIL) {
+    } else if (parts.UNTIL !== undefined) {
         rrule.until = parseDateTime(parts.UNTIL, {});
         rrule.count = undefined;
     }
