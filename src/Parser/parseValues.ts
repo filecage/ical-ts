@@ -178,11 +178,19 @@ export function parseRecurrence (value: string) : Recur {
         bySetPos,
         byWeekNo,
         byYearday,
-        count: parts.COUNT ? parseNumber(parts.COUNT) : undefined,
-        until: parts.UNTIL ? parseDateTime(parts.UNTIL, {}) : undefined,
         interval,
         weekstart: parts.WKST ? parseWeekday(parts.WKST) : undefined
     };
+
+    if (parts.COUNT && parts.UNTIL) {
+        throw new Error(`Invalid recurrence value '${value}': COUNT and UNTIL are mutually exclusive`);
+    } else if (parts.COUNT) {
+        rrule.count = parseNumber(parts.COUNT);
+        rrule.until = undefined;
+    } else if (parts.UNTIL) {
+        rrule.until = parseDateTime(parts.UNTIL, {});
+        rrule.count = undefined;
+    }
 
     return {...rrule, toString: () => value} as Recur;
 }
