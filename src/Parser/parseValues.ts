@@ -157,23 +157,48 @@ export function parseRecurrence (value: string) : Recur {
         throw new Error(`Invalid recurrence value '${value}': invalid non-positive INTERVAL`);
     }
 
-    return {...{
+    // BYMONTH, BYWEEKNO, BYYEARDAY, BYMONTHDAY, BYDAY, BYHOUR, BYMINUTE, BYSECOND
+    const byMonth = parts.BYMONTH ? parseList(parts.BYMONTH).map(parseNumber).map(assertInRange(-12, 12, false)) : undefined;
+    const byWeekNo = parts.BYWEEKNO ? parseList(parts.BYWEEKNO).map(parseNumber).map(assertInRange(-53, 51, false)) : undefined;
+    const byYearday = parts.BYYEARDAY ? parseList(parts.BYYEARDAY).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
+    const byMonthday = parts.BYMONTHDAY ? parseList(parts.BYMONTHDAY).map(parseNumber).map(assertInRange(-31, 31, false)) : undefined;
+    const byHour = parts.BYHOUR ? parseList(parts.BYHOUR).map(parseNumber).map(assertInRange(0, 23, true)) : undefined;
+    const byMinute = parts.BYMINUTE ? parseList(parts.BYMINUTE).map(parseNumber).map(assertInRange(0, 59, true)) : undefined;
+    const bySecond = parts.BYSECOND ? parseList(parts.BYSECOND).map(parseNumber).map(assertInRange(0, 60, true)) : undefined;
+    const bySetPos = parts.BYSETPOS ? parseList(parts.BYSETPOS).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
+
+    const rrule: Recur = {
         frequency: parts.FREQ,
         byDay: parts.BYDAY ? parseByWeekdayList(parts.BYDAY) : undefined,
-        byHour: undefined,
-        byMinute: undefined,
-        byMonth: undefined,
-        byMonthday: undefined,
-        bySecond: undefined,
-        bySetPos: undefined,
-        byWeekNo: undefined,
-        byYearday: undefined,
+        byHour,
+        byMinute,
+        byMonth,
+        byMonthday,
+        bySecond,
+        bySetPos,
+        byWeekNo,
+        byYearday,
         count: parts.COUNT ? parseNumber(parts.COUNT) : undefined,
         until: parts.UNTIL ? parseDateTime(parts.UNTIL, {}) : undefined,
         interval,
-        weekstart: parts.WKST ? parseWeekday(parts.WKST) : undefined,
-        toString: () => value
-    } as Recur};
+        weekstart: parts.WKST ? parseWeekday(parts.WKST) : undefined
+    };
+
+    return {...rrule, toString: () => value} as Recur;
+}
+
+function assertInRange (min: number, max: number, allowZero: boolean) : (value: number) => number {
+    return value => {
+        if (notInRange(value, min, max, allowZero)) {
+            throw new Error(`Invalid number: '${value.toString()}': not in range of ${min} to ${max}`);
+        }
+
+        return value;
+    }
+}
+
+function notInRange (value: number, min: number, max: number, allowZero: boolean) : boolean {
+    return value < min || value > max || (!allowZero && value === 0);
 }
 
 function parseWeekday (value: string): RecurWeekday {
