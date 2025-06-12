@@ -157,18 +157,19 @@ export function parseRecurrence (value: string) : Recur {
         throw new Error(`Invalid recurrence value '${value}': invalid non-positive INTERVAL`);
     }
 
-    const byMonth = parts.BYMONTH !== undefined ? parseList(parts.BYMONTH).map(parseNumber).map(assertInRange(-12, 12, false)) : undefined;
-    const byWeekNo = parts.BYWEEKNO !== undefined ? parseList(parts.BYWEEKNO).map(parseNumber).map(assertInRange(-53, 51, false)) : undefined;
-    const byYearday = parts.BYYEARDAY !== undefined ? parseList(parts.BYYEARDAY).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
-    const byMonthday = parts.BYMONTHDAY !== undefined ? parseList(parts.BYMONTHDAY).map(parseNumber).map(assertInRange(-31, 31, false)) : undefined;
+    const byDay = parts.BYDAY !== undefined ? parseByWeekdayList(parts.BYDAY) : undefined;
     const byHour = parts.BYHOUR !== undefined ? parseList(parts.BYHOUR).map(parseNumber).map(assertInRange(0, 23, true)) : undefined;
     const byMinute = parts.BYMINUTE !== undefined ? parseList(parts.BYMINUTE).map(parseNumber).map(assertInRange(0, 59, true)) : undefined;
+    const byMonth = parts.BYMONTH !== undefined ? parseList(parts.BYMONTH).map(parseNumber).map(assertInRange(-12, 12, false)) : undefined;
+    const byMonthday = parts.BYMONTHDAY !== undefined ? parseList(parts.BYMONTHDAY).map(parseNumber).map(assertInRange(-31, 31, false)) : undefined;
     const bySecond = parts.BYSECOND !== undefined ? parseList(parts.BYSECOND).map(parseNumber).map(assertInRange(0, 60, true)) : undefined;
     const bySetPos = parts.BYSETPOS !== undefined ? parseList(parts.BYSETPOS).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
+    const byWeekNo = parts.BYWEEKNO !== undefined ? parseList(parts.BYWEEKNO).map(parseNumber).map(assertInRange(-53, 51, false)) : undefined;
+    const byYearday = parts.BYYEARDAY !== undefined ? parseList(parts.BYYEARDAY).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
 
     const rrule: Recur = {
         frequency: parts.FREQ,
-        byDay: parts.BYDAY ? parseByWeekdayList(parts.BYDAY) : undefined,
+        byDay,
         byHour,
         byMinute,
         byMonth,
