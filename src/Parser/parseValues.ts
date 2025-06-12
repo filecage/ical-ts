@@ -157,7 +157,6 @@ export function parseRecurrence (value: string) : Recur {
         throw new Error(`Invalid recurrence value '${value}': invalid non-positive INTERVAL`);
     }
 
-    // BYMONTH, BYWEEKNO, BYYEARDAY, BYMONTHDAY, BYDAY, BYHOUR, BYMINUTE, BYSECOND
     const byMonth = parts.BYMONTH !== undefined ? parseList(parts.BYMONTH).map(parseNumber).map(assertInRange(-12, 12, false)) : undefined;
     const byWeekNo = parts.BYWEEKNO !== undefined ? parseList(parts.BYWEEKNO).map(parseNumber).map(assertInRange(-53, 51, false)) : undefined;
     const byYearday = parts.BYYEARDAY !== undefined ? parseList(parts.BYYEARDAY).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
