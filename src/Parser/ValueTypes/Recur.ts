@@ -8,11 +8,11 @@ export type Recur = {
     byMinute?: number[],
     byHour?: number[],
     byDay?: RecurByWeekday[],
-    byMonthday?: RecurByNumberWithModifier[],
-    byYearday?: RecurByNumberWithModifier[],
-    byWeekNo?: RecurByNumberWithModifier[],
+    byMonthday?: number[],
+    byYearday?: number[],
+    byWeekNo?: number[],
     byMonth?: number[],
-    bySetPos?: RecurByNumberWithModifier[],
+    bySetPos?: number[],
     weekstart?: RecurWeekday,
 } & XOR<{until?: DateTime}, {count?: number}>;
 
