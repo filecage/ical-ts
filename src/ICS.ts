@@ -87,7 +87,7 @@ export namespace ICS {
 
             CLASS?: Classification,
             CREATED?: DateTimeCreated,
-            DESCRIPTION?: Description,
+            DESCRIPTION?: Description[],
             DTSTART?: DateTimeStart,
             GEO?: GeographicPosition,
             'LAST-MODIFIED'?: LastModified,

@@ -28,6 +28,7 @@ export enum Property {
     RRULE = 'RRULE',
     RRDATE = 'RDATE',
     COMMENT = 'COMMENT',
+    DESCRIPTION = 'DESCRIPTION',
     EXDATE = 'EXDATE',
 }
 
@@ -37,5 +38,6 @@ export const LIST_PROPERTIES: Property[] = [
     Property.ATTENDEE,
     Property.RRDATE,
     Property.COMMENT,
+    Property.DESCRIPTION,
     Property.EXDATE,
 ];
