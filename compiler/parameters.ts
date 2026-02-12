@@ -22,6 +22,7 @@ const valueParserMap = {
     Uri: parseValueRaw,
     LanguageTag: parseValueRaw,
     CalAddress: parseValueRaw,
+    EmailAddress: parseValueRaw,
 };
 
 const exports: {[key: string]: Type} = {};
