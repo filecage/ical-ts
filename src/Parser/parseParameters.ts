@@ -6,7 +6,7 @@ import {Parameters} from "./Parameters/Parameters";
 
 import {parseValueRaw} from "./parseValues"
 
-export function parseParameters (fragments: string[])  : Parameters.AlternateTextRepresentation&Parameters.CommonName&Parameters.CalendarUserType&Parameters.Delegators&Parameters.Delegatees&Parameters.DirectoryEntryReference&Parameters.InlineEncoding&Parameters.FormatType&Parameters.FreeBusyTimeType&Parameters.Language&Parameters.GroupOrListMembership&Parameters.ParticipationStatusTodo&Parameters.Range&Parameters.AlarmTriggerRelationship&Parameters.RelationshipType&Parameters.ParticipationRole&Parameters.RSVPExpectation&Parameters.SentBy&Parameters.TimeZoneIdentifier&Parameters.ValueDataTypes {
+export function parseParameters (fragments: string[])  : Parameters.AlternateTextRepresentation&Parameters.CommonName&Parameters.CalendarUserType&Parameters.Delegators&Parameters.Delegatees&Parameters.DirectoryEntryReference&Parameters.Display&Parameters.Email&Parameters.Feature&Parameters.InlineEncoding&Parameters.FormatType&Parameters.FreeBusyTimeType&Parameters.Language&Parameters.Label&Parameters.GroupOrListMembership&Parameters.ParticipationStatusTodo&Parameters.Range&Parameters.AlarmTriggerRelationship&Parameters.RelationshipType&Parameters.ParticipationRole&Parameters.RSVPExpectation&Parameters.SentBy&Parameters.TimeZoneIdentifier&Parameters.ValueDataTypes {
     return fragments.reduce((parameters, fragment) => {
         const [parameterKey, parameterValue] = fragment.split(EQUAL);
 
@@ -17,10 +17,14 @@ export function parseParameters (fragments: string[])  : Parameters.AlternateTex
             case 'DELEGATED-FROM': return {...parameters, ...parser.parseDELEGATED_FROM(parameterValue)};
             case 'DELEGATED-TO': return {...parameters, ...parser.parseDELEGATED_TO(parameterValue)};
             case 'DIR': return {...parameters, ...parser.parseDIR(parameterValue)};
+            case 'DISPLAY': return {...parameters, ...parser.parseDISPLAY(parameterValue)};
+            case 'EMAIL': return {...parameters, ...parser.parseEMAIL(parameterValue)};
+            case 'FEATURE': return {...parameters, ...parser.parseFEATURE(parameterValue)};
             case 'ENCODING': return {...parameters, ...parser.parseENCODING(parameterValue)};
             case 'FMTTYPE': return {...parameters, ...parser.parseFMTTYPE(parameterValue)};
             case 'FBTYPE': return {...parameters, ...parser.parseFBTYPE(parameterValue)};
             case 'LANGUAGE': return {...parameters, ...parser.parseLANGUAGE(parameterValue)};
+            case 'LABEL': return {...parameters, ...parser.parseLABEL(parameterValue)};
             case 'MEMBER': return {...parameters, ...parser.parseMEMBER(parameterValue)};
             case 'PARTSTAT': return {...parameters, ...parser.parsePARTSTAT(parameterValue)};
             case 'RANGE': return {...parameters, ...parser.parseRANGE(parameterValue)};
@@ -79,6 +83,24 @@ namespace parser {
         return {'DIR': value} as Parameters.DirectoryEntryReference;
     }
     
+    export function parseDISPLAY(parameterValue: string) {
+        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseValueRaw(parameterValue));
+        
+        return {'DISPLAY': value} as Parameters.Display;
+    }
+    
+    export function parseEMAIL(parameterValue: string) {
+        const value = parseValueRaw(parameterValue);
+        
+        return {'EMAIL': value} as Parameters.Email;
+    }
+    
+    export function parseFEATURE(parameterValue: string) {
+        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseValueRaw(parameterValue));
+        
+        return {'FEATURE': value} as Parameters.Feature;
+    }
+    
     export function parseENCODING(parameterValue: string) {
         const value = parseValueRaw(parameterValue);
         
@@ -105,6 +127,12 @@ namespace parser {
         const value = parseValueRaw(parameterValue);
         
         return {'LANGUAGE': value} as Parameters.Language;
+    }
+    
+    export function parseLABEL(parameterValue: string) {
+        const value = parseValueRaw(parameterValue);
+        
+        return {'LABEL': value} as Parameters.Label;
     }
     
     export function parseMEMBER(parameterValue: string) {
