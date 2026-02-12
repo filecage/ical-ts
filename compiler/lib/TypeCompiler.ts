@@ -90,6 +90,12 @@ export default class TypeCompiler {
                 isList = true;
                 break;
 
+            case ts.SyntaxKind.ParenthesizedType:
+                // It looks like these can be safely ignored and everything is handled correctly within `ArrayType`
+                // However, I'm leaving a message here that this is not a fully tested featured and we might have to re-visit later
+                console.log(`NOTICE: ParenthesizedType used in '${name}', these are not fully tested`);
+                break;
+
             default:
                 console.log(`WARN: Unexpected type property kind '${type.kind}' for parameter '${name}'`);
                 break;
