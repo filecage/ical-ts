@@ -1,0 +1,19 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 Single Conference Test//EN
+CALSCALE:GREGORIAN
+NAME:Single Conference Test
+UID:single-conference-test@example.com
+BEGIN:VEVENT
+UID:single-conference-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260227T150000Z
+DTEND:20260227T160000Z
+SUMMARY:Event with Single Conference
+ORGANIZER;CN=Conference Host;EMAIL=host@conference.example.com:mailto:host
+ @conference.example.com
+CONFERENCE;VALUE=URI;FEATURE=VIDEO;LABEL=Video Conference Link:https://mee
+ t.example.com/single-conf-12345
+COLOR:teal
+END:VEVENT
+END:VCALENDAR

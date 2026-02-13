@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 Conference Features Test//EN
+CALSCALE:GREGORIAN
+NAME:Conference Features Test
+UID:conference-features-test@example.com
+BEGIN:VEVENT
+UID:multi-feature-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260218T090000Z
+DTEND:20260218T100000Z
+SUMMARY:All Conference Features Test
+DESCRIPTION:Tests comma-separated FEATURE values
+ORGANIZER;CN=Test Organizer;EMAIL=test@example.com:mailto:test@example.com
+ATTENDEE;CN=Participant 1;EMAIL=p1@example.com:mailto:p1@example.com
+ATTENDEE;CN=Participant 2;EMAIL=p2@example.com:mailto:p2@example.com
+CONFERENCE;VALUE=URI;FEATURE=AUDIO,VIDEO,CHAT,SCREEN,MODERATOR;LABEL=Full 
+ Featured Conference:https://conf.example.com/room/full-featured
+CONFERENCE;VALUE=URI;FEATURE=PHONE,AUDIO;LABEL=Phone Dial-in:tel:+1-800-55
+ 5-0199,,99887766#
+CONFERENCE;VALUE=URI;FEATURE=VIDEO;LABEL=Video Only Room:https://video.exa
+ mple.com/room/video-only
+CONFERENCE;VALUE=URI;FEATURE=CHAT;LABEL=Chat Room:https://chat.example.com
+ /room/discussion
+COLOR:olive
+END:VEVENT
+END:VCALENDAR

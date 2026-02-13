@@ -21,7 +21,19 @@ describe('Parse ICS to JSON', () => {
         'parserv2.ics',
         'recur_instances.ics',
         'recur_instances_finite.ics',
-        'utc_negative_zero.ics'
+        'utc_negative_zero.ics',
+        'rfc7986_base64_calendar_image.ics',
+        'rfc7986_categories_refresh.ics',
+        'rfc7986_color_variations.ics',
+        'rfc7986_comprehensive.ics',
+        'rfc7986_conference_features.ics',
+        'rfc7986_edge_cases.ics',
+        'rfc7986_image_display_types.ics',
+        'rfc7986_minimal.ics',
+        'rfc7986_refresh_interval_daily.ics',
+        'rfc7986_refresh_interval_hourly.ics',
+        'rfc7986_single_conference.ics',
+        'rfc7986_source_property.ics',
     ];
 
     it.each(samples)('Parses ICS and matches JSON snapshot `%s`', async sample => {

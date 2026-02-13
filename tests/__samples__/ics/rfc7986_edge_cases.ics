@@ -1,0 +1,59 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 Edge Cases Test//EN
+CALSCALE:GREGORIAN
+NAME:RFC 7986 Edge Cases
+UID:edge-cases-test@example.com
+CATEGORIES:edge-testing
+REFRESH-INTERVAL;VALUE=DURATION:PT30M
+COLOR:#ABCDEF
+BEGIN:VEVENT
+UID:tel-uri-conference@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260305T100000Z
+DTEND:20260305T110000Z
+SUMMARY:Conference with tel: URI scheme
+ORGANIZER;CN=Phone Host;EMAIL=phone@example.com:mailto:phone@example.com
+CONFERENCE;VALUE=URI;FEATURE=PHONE,AUDIO;LABEL=International Dial-in:tel:+
+ 44-20-1234-5678,,9876543210#*12#
+CONFERENCE;VALUE=URI;FEATURE=PHONE;LABEL=US Toll Free:tel:+1-800-555-1234,
+ ,555666#
+END:VEVENT
+BEGIN:VEVENT
+UID:no-feature-conference@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260305T140000Z
+DTEND:20260305T150000Z
+SUMMARY:Conference without FEATURE parameter
+CONFERENCE;VALUE=URI;LABEL=Simple Conference Link:https://simple.example.c
+ om/room
+END:VEVENT
+BEGIN:VEVENT
+UID:multiple-images-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260305T160000Z
+DTEND:20260305T170000Z
+SUMMARY:Event with Multiple Images
+IMAGE;DISPLAY=BADGE;FMTTYPE=image/png:https://example.com/badge1.png
+IMAGE;DISPLAY=THUMBNAIL;FMTTYPE=image/jpeg:https://example.com/thumb1.jpg
+IMAGE;DISPLAY=FULLSIZE;FMTTYPE=image/gif:https://example.com/full1.gif
+COLOR:silver
+END:VEVENT
+BEGIN:VEVENT
+UID:long-category-list@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260305T180000Z
+DTEND:20260305T190000Z
+SUMMARY:Event Testing Multiple Attendees with EMAIL
+ORGANIZER;CN=Main Organizer;EMAIL=main.organizer@example.com:mailto:main.o
+ rganizer@example.com
+ATTENDEE;CN=Attendee 1;EMAIL=a1@example.com;ROLE=REQ-PARTICIPANT:mailto:a1
+ @example.com
+ATTENDEE;CN=Attendee 2;EMAIL=a2@example.com;ROLE=OPT-PARTICIPANT:mailto:a2
+ @example.com
+ATTENDEE;CN=Attendee 3;EMAIL=a3@example.com;ROLE=NON-PARTICIPANT:mailto:a3
+ @example.com
+ATTENDEE;CN=Attendee 4;EMAIL=a4@example.com;ROLE=CHAIR:mailto:a4@example.c
+ om
+END:VEVENT
+END:VCALENDAR

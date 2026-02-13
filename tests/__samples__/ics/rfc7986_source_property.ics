@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 SOURCE Property Test//EN
+CALSCALE:GREGORIAN
+NAME:SOURCE Property Test Calendar
+UID:source-test@example.com
+SOURCE;VALUE=URI:https://calendar.example.com/public/calendar.ics
+COLOR:gold
+BEGIN:VEVENT
+UID:source-test-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260306T100000Z
+DTEND:20260306T110000Z
+SUMMARY:Event with SOURCE at Calendar Level
+ORGANIZER;EMAIL=source@example.com:mailto:source@example.com
+END:VEVENT
+END:VCALENDAR

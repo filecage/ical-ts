@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 Refresh Interval Test//EN
+CALSCALE:GREGORIAN
+NAME:Refresh Interval Test Calendar
+UID:refresh-interval-test@example.com
+REFRESH-INTERVAL;VALUE=DURATION:P1D
+COLOR:cyan
+BEGIN:VEVENT
+UID:daily-refresh-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260221T100000Z
+DTEND:20260221T110000Z
+SUMMARY:Event with Daily Refresh Interval Calendar
+ORGANIZER;EMAIL=daily@example.com:mailto:daily@example.com
+END:VEVENT
+END:VCALENDAR

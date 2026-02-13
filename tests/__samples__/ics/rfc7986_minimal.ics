@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 Minimal Test//EN
+CALSCALE:GREGORIAN
+NAME:Minimal RFC 7986 Test
+UID:minimal-rfc7986-test@example.com
+BEGIN:VEVENT
+UID:minimal-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260226T100000Z
+DTEND:20260226T110000Z
+SUMMARY:Minimal Event with EMAIL only
+ORGANIZER;EMAIL=minimal@example.com:mailto:minimal@example.com
+ATTENDEE;EMAIL=attendee@example.com:mailto:attendee@example.com
+END:VEVENT
+END:VCALENDAR
