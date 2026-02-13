@@ -28,8 +28,10 @@ export enum Property {
     RRULE = 'RRULE',
     RRDATE = 'RDATE',
     COMMENT = 'COMMENT',
+    CONFERENCE = 'CONFERENCE',
     DESCRIPTION = 'DESCRIPTION',
     EXDATE = 'EXDATE',
+    IMAGE = 'IMAGE',
 }
 
 // This defines components that will always be treated as a list (and put into an array when parsing)
@@ -38,6 +40,8 @@ export const LIST_PROPERTIES: Property[] = [
     Property.ATTENDEE,
     Property.RRDATE,
     Property.COMMENT,
+    Property.CONFERENCE,
     Property.DESCRIPTION,
     Property.EXDATE,
+    Property.IMAGE,
 ];
