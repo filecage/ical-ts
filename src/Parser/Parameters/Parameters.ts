@@ -4,7 +4,7 @@ import {LanguageTag} from "../ValueTypes/LanguageTag";
 import {EmailAddress} from "../ValueTypes/EmailAddress";
 
 export namespace Parameters {
-    // TODO: We could define defaults for all parameters using the @default annotation
+    // TODO: We could define defaults for all parameters using the @default annotation, see https://github.com/filecage/ical-ts/issues/4
 
     // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.2
     // @see https://datatracker.ietf.org/doc/html/rfc7986#section-6
