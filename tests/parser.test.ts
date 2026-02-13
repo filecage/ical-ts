@@ -70,6 +70,10 @@ describe('Throw errors for invalid ICS files', () => {
         ['invalid-component.ics', "Unexpected sub-component 'X-UNKNOWN' not allowed in component 'ROOT'"],
         ['invalid-end.ics', "Unexpected 'END:VCALENDAR' in component 'VEVENT'"],
         ['missing-end.ics', "Unexpected EOF: missing END declaration for component 'VCALENDAR'"],
+
+        // RFC 7986 invalid test cases
+        ['invalid-refresh-interval-format.ics', "Invalid duration value 'NOT_A_DURATION'"],
+        ['invalid-color-placement.ics', "Invalid parameter 'COLOR'"],
     ]
 
     it.each(invalidSamples)(`Correctly throws for invalid sample '%s'`, async (sample, expectedErrorMessage) => {
