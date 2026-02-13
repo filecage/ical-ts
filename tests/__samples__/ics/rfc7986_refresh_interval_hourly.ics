@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 Refresh Interval Hourly Test//EN
+CALSCALE:GREGORIAN
+NAME:Hourly Refresh Calendar
+UID:hourly-refresh-test@example.com
+REFRESH-INTERVAL;VALUE=DURATION:PT1H
+BEGIN:VEVENT
+UID:hourly-refresh-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260222T140000Z
+DTEND:20260222T150000Z
+SUMMARY:Event with Hourly Refresh
+ORGANIZER;EMAIL=hourly@example.com:mailto:hourly@example.com
+COLOR:magenta
+END:VEVENT
+END:VCALENDAR

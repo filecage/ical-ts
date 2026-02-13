@@ -37,7 +37,8 @@ SUMMARY:Really long event name thing
 TRANSP:OPAQUE
 BEGIN:VALARM
 ACTION:EMAIL
-DESCRIPTION:This is an event reminder
+DESCRIPTION;LANGUAGE=en_US:This is an event reminder
+DESCRIPTION;LANGUAGE=de_DE:Dies ist eine Erinnerung
 SUMMARY:Alarm notification
 ATTENDEE:mailto:calmozilla1@gmail.com
 TRIGGER:-P0DT0H30M0S

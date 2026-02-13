@@ -1,0 +1,59 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 Test Suite//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:RFC 7986 Comprehensive Test Calendar
+UID:rfc7986-comprehensive-test@example.com
+CATEGORIES:testing,rfc7986,development
+REFRESH-INTERVAL;VALUE=DURATION:PT1H
+COLOR:turquoise
+IMAGE;DISPLAY=BADGE;FMTTYPE=image/png:https://example.com/calendar-badge.
+ png
+BEGIN:VEVENT
+UID:event-001@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260215T140000Z
+DTEND:20260215T150000Z
+SUMMARY:RFC 7986 Feature Test Event
+DESCRIPTION:Tests EMAIL\, IMAGE\, CONFERENCE\, and COLOR properties
+ORGANIZER;CN=John Doe;EMAIL=john.doe@example.com:mailto:john.doe@example.c
+ om
+ATTENDEE;CN=Jane Smith;EMAIL=jane.smith@example.com;RSVP=TRUE:mailto:jane.
+ smith@example.com
+ATTENDEE;CN=Bob Johnson;EMAIL=bob.johnson@example.com;RSVP=TRUE:mailto:bob
+ .johnson@example.com
+CONFERENCE;VALUE=URI;FEATURE=AUDIO,VIDEO,CHAT;LABEL=Main Meeting Room:http
+ s://meet.example.com/room123
+CONFERENCE;VALUE=URI;FEATURE=PHONE;LABEL=Dial-in:tel:+1-555-0100,,12345678
+ #
+IMAGE;DISPLAY=FULLSIZE;FMTTYPE=image/jpeg:https://example.com/event-banner
+ .jpg
+COLOR:lightblue
+END:VEVENT
+BEGIN:VEVENT
+UID:event-002@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260216T100000Z
+DTEND:20260216T110000Z
+SUMMARY:Event with Base64 Image
+ORGANIZER;CN=Admin;EMAIL=admin@example.com:mailto:admin@example.com
+IMAGE;ENCODING=BASE64;VALUE=BINARY;FMTTYPE=image/png:iVBORw0KGgoAAAANSUhEU
+ gAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJ
+ ggg==
+COLOR:coral
+END:VEVENT
+BEGIN:VEVENT
+UID:event-003@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260217T153000Z
+DTEND:20260217T163000Z
+SUMMARY:Multiple Features and Conference Types
+ORGANIZER;CN=Meeting Host;EMAIL=host@example.com:mailto:host@example.com
+CONFERENCE;VALUE=URI;FEATURE=VIDEO,SCREEN,AUDIO,PHONE,CHAT;LABEL=Primary V
+ ideo Conference:https://video.example.com/session/abc123
+CONFERENCE;VALUE=URI;FEATURE=AUDIO;LABEL=Audio Only Backup:https://audio.e
+ xample.com/call/xyz789
+IMAGE;DISPLAY=THUMBNAIL;FMTTYPE=image/gif:https://example.com/thumb.gif
+END:VEVENT
+END:VCALENDAR

@@ -51,6 +51,7 @@ export default abstract class Component<S extends object = Context> {
                 closed = true;
             } else {
                 const property = parseProperty(name, value);
+                // TODO: This requires some context-awareness. Properties like `DESCRIPTION` or `CATEGORIES` is a list property for `VCALENDAR`, but not for `VEVENT`
                 if (LIST_PROPERTIES.includes(property.key as EProperty) || property.isNonStandard) {
                     if (context[property.key] === undefined) {
                         context[property.key] = new PropertyList();

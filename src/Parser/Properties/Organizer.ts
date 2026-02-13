@@ -6,7 +6,8 @@ export default class Organizer extends Property<CalAddress,
     Parameters.Language &
     Parameters.CommonName &
     Parameters.DirectoryEntryReference &
-    Parameters.SentBy
+    Parameters.SentBy &
+    Parameters.Email
 > {
     public readonly key = 'ORGANIZER';
 }

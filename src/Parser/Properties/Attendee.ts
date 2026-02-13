@@ -13,7 +13,8 @@ export default class Attendee extends Property<CalAddress,
     Parameters.Delegators &
     Parameters.SentBy &
     Parameters.CommonName &
-    Parameters.DirectoryEntryReference
+    Parameters.DirectoryEntryReference &
+    Parameters.Email
 > {
     public readonly key = 'ATTENDEE';
 }

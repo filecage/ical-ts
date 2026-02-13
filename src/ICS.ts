@@ -33,6 +33,11 @@ import UniformResourceLocator from "./Parser/Properties/UniformResourceLocator";
 import ExceptionDateTimes from "./Parser/Properties/ExceptionDateTimes";
 import Categories from "./Parser/Properties/Categories";
 import DateTimeEnd from "./Parser/Properties/DateTimeEnd";
+import RefreshInterval from "./Parser/Properties/RefreshInterval";
+import Source from "./Parser/Properties/Source";
+import Color from "./Parser/Properties/Color";
+import Image from "./Parser/Properties/Image";
+import Conference from "./Parser/Properties/Conference";
 
 export namespace ICS {
     export type NonStandardPropertyAware = {nonStandard?: {[key: string]: undefined|Property<unknown>[] }};
@@ -44,8 +49,16 @@ export namespace ICS {
     export type VCALENDAR = NonStandardPropertyAware & {
         PRODID: Property,
         VERSION: Version,
+        UID?: UniqueIdentifier,
+        'LAST-MODIFIED'?: LastModified,
+        URL?: UniformResourceLocator,
         CALSCALE?: CalendarScale,
+        CATEGORIES?: Categories,
+        COLOR?: Color,
         COMMENT?: Comment[],
+        IMAGE?: Image,
+        'REFRESH-INTERVAL'?: RefreshInterval,
+        SOURCE?: Source,
         VEVENT?: VEVENT.Published[],
         VTIMEZONE?: VTIMEZONE[],
     };
@@ -87,9 +100,12 @@ export namespace ICS {
 
             CLASS?: Classification,
             CREATED?: DateTimeCreated,
-            DESCRIPTION?: Description,
+            COLOR?: Color,
+            CONFERENCE?: Conference[],
+            DESCRIPTION?: Description[],
             DTSTART?: DateTimeStart,
             GEO?: GeographicPosition,
+            IMAGE?: Image,
             'LAST-MODIFIED'?: LastModified,
             'RECURRENCE-ID'?: RecurrenceID,
             LOCATION?: Location,

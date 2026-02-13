@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 Categories and Refresh Test//EN
+CALSCALE:GREGORIAN
+NAME:Categories and Weekly Refresh Test
+UID:categories-refresh-test@example.com
+CATEGORIES:work,meetings,important,quarterly-review
+REFRESH-INTERVAL;VALUE=DURATION:P1W
+COLOR:lime
+BEGIN:VEVENT
+UID:weekly-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260224T090000Z
+DTEND:20260224T100000Z
+SUMMARY:Weekly Refresh Event with Multiple Calendar Categories
+ORGANIZER;EMAIL=weekly@example.com:mailto:weekly@example.com
+END:VEVENT
+END:VCALENDAR

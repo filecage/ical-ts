@@ -1,0 +1,45 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RFC7986 Image Display Test//EN
+CALSCALE:GREGORIAN
+NAME:Image Display Variations Test
+UID:image-display-test@example.com
+BEGIN:VEVENT
+UID:badge-image-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260219T100000Z
+DTEND:20260219T110000Z
+SUMMARY:Event with Badge Image
+IMAGE;DISPLAY=BADGE;FMTTYPE=image/png:https://example.com/badge.png
+COLOR:yellow
+END:VEVENT
+BEGIN:VEVENT
+UID:thumbnail-image-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260219T140000Z
+DTEND:20260219T150000Z
+SUMMARY:Event with Thumbnail Image
+IMAGE;DISPLAY=THUMBNAIL;FMTTYPE=image/jpeg:https://example.com/thumbnail.j
+ pg
+COLOR:pink
+END:VEVENT
+BEGIN:VEVENT
+UID:fullsize-image-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260219T160000Z
+DTEND:20260219T170000Z
+SUMMARY:Event with Fullsize Image
+IMAGE;DISPLAY=FULLSIZE;FMTTYPE=image/gif:https://example.com/fullsize.gif
+COLOR:purple
+END:VEVENT
+BEGIN:VEVENT
+UID:background-image-event@example.com
+DTSTAMP:20260213T120000Z
+DTSTART:20260219T180000Z
+DTEND:20260219T190000Z
+SUMMARY:Event with Background Image
+IMAGE;DISPLAY=BACKGROUND;FMTTYPE=image/svg+xml:https://example.com/backgro
+ und.svg
+COLOR:navy
+END:VEVENT
+END:VCALENDAR
