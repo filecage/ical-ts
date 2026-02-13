@@ -3,9 +3,14 @@ This is a library to parse and read iCalendar files (.ics, .ical). Unlike other 
 typed and thus provides a pleasant type hinting experience. It was built along the RFC standard definitions
 and validates raw input while parsing.
 
-It normalizes values where possible (e.g. possible list values are always accessed as array),
+It implements [RFC 5545](https://datatracker.ietf.org/doc/html/rfc5545),
+[RFC 6868](https://datatracker.ietf.org/doc/html/rfc6868),
+[RFC 7986](https://datatracker.ietf.org/doc/html/rfc7986)
+and [RFC 9074](https://datatracker.ietf.org/doc/html/rfc9074). 
+
+Values are normalized where possible (e.g. possible list values are always accessed as array),
 but it does not interpret values (like RRULE or timezone references) apart from the value encoding
-defined in RFC 5545 and RFC 6868.
+defined in RFC 5545 and RFC 6868. You'll need to handle these yourself.
 
 > [!NOTE]
 > This is a very early development release. The interface is still experimental and many things might not yet
