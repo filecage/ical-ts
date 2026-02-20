@@ -16,11 +16,6 @@ export type Recur = {
     weekstart?: RecurWeekday,
 } & XOR<{until?: DateTime}, {count?: number}>;
 
-export type RecurByNumberWithModifier = {
-    monthday: number,
-    modifier: RecurModifier,
-}
-
 export type RecurByWeekday = {
     weekday: RecurWeekday,
     modifier: RecurModifier,
