@@ -1,16 +1,19 @@
-import {PERIOD, CAPITAL_T, CAPITAL_Z, COMMA, QUOTES, SOLIDUS, HYPHEN_MINUS} from "./Constants";
+import isEnumValue from "../Util/isEnumValue";
+import {CAPITAL_T, CAPITAL_Z, COMMA, EQUAL, HYPHEN_MINUS, PERIOD, QUOTES, SEMICOLON, SOLIDUS} from "./Constants";
 import {DateTime, DateTimeClass, UTCDateTime} from "./ValueTypes/DateTime";
 import {Period} from "./ValueTypes/Period";
 import {Parameters} from "./Parameters/Parameters";
 import {Duration, formatDuration} from "./ValueTypes/Duration";
+import {Recur, RecurByWeekday, RecurFrequency, RecurModifier, RecurWeekday} from "./ValueTypes/Recur";
 
 const matchDoubleQuotesString = `${QUOTES}([^${QUOTES}\\\\]*(\\\\.[^${QUOTES}\\\\]*)*)${QUOTES}`;
 const escapedDoubleQuotesStringRegex = new RegExp(`^${matchDoubleQuotesString}$`);
 const listStringRegex = new RegExp(`((${matchDoubleQuotesString})|([^${COMMA}]+))(${COMMA}|$)`, 'g');
 const durationRegex = new RegExp(/^(?<sign>[-+])?P(?<weeks>\d+[.,]?\d*W)?(?<days>\d+[.,]?\d*D)?(?:T(?<hours>\d+[.,]?\d*H)?(?<minutes>\d+[.,]?\d*M)?(?<seconds>\d+[.,]?\d*S)?)?$/);
+const byWeekdayRegex = new RegExp(/^((?<sign>[+-])?(?<offset>[0-9]{1,2}))?(?<weekday>MO|TU|WE|TH|FR|SA|SU)$/);
 
 export interface ValueParserFn<T extends object = Record<string, unknown>> {
-    (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|Duration|number
+    (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|Duration|Recur|number
 }
 
 export function parseList (input: string) : string[] {
@@ -34,7 +37,12 @@ export function parseValueRaw (value: string) : string {
 }
 
 export function parseNumber (value: string) : number {
-    return parseInt(value);
+    const number =  parseInt(value, 10);
+    if (isNaN(number)) {
+        throw new Error(`Invalid number value '${value}'`);
+    }
+
+    return number;
 }
 
 export function parseDateTime (value: string, parameters: Parameters.TimeZoneIdentifier) : DateTime {
@@ -75,7 +83,7 @@ export function parseDuration (value: string) : Duration {
         throw new Error(`Invalid duration value '${value}'`);
     }
 
-    const duration = {
+    const duration: Duration = {
         inverted: matches.groups.sign === HYPHEN_MINUS,
         weeks: durationToNumber(matches.groups.weeks),
         days: durationToNumber(matches.groups.days),
@@ -128,4 +136,112 @@ export function parseUTCDateTimeOrDuration (value: string, parameters: Parameter
     }
 
     return parseDuration(value);
+}
+
+export function parseRecurrence (value: string) : Recur {
+    const parts = value.split(SEMICOLON).reduce((parts, part) => {
+        const [key, value] = part.split(EQUAL);
+
+        return {
+            ...parts,
+            ...{[key]: value},
+        };
+    }, {} as {[K: string]: undefined|string});
+
+    if (parts.FREQ === undefined || !isEnumValue(RecurFrequency, parts.FREQ)) {
+        throw new Error(`Invalid recurrence value '${value}': missing or invalid FREQ`);
+    }
+
+    const interval = parts.INTERVAL ? parseNumber(parts.INTERVAL) : undefined;
+    if (interval !== undefined && interval <= 0) {
+        throw new Error(`Invalid recurrence value '${value}': invalid non-positive INTERVAL`);
+    }
+
+    const byDay = parts.BYDAY !== undefined ? parseByWeekdayList(parts.BYDAY) : undefined;
+    const byHour = parts.BYHOUR !== undefined ? parseList(parts.BYHOUR).map(parseNumber).map(assertInRange(0, 23, true)) : undefined;
+    const byMinute = parts.BYMINUTE !== undefined ? parseList(parts.BYMINUTE).map(parseNumber).map(assertInRange(0, 59, true)) : undefined;
+    const byMonth = parts.BYMONTH !== undefined ? parseList(parts.BYMONTH).map(parseNumber).map(assertInRange(-12, 12, false)) : undefined;
+    const byMonthday = parts.BYMONTHDAY !== undefined ? parseList(parts.BYMONTHDAY).map(parseNumber).map(assertInRange(-31, 31, false)) : undefined;
+    const bySecond = parts.BYSECOND !== undefined ? parseList(parts.BYSECOND).map(parseNumber).map(assertInRange(0, 60, true)) : undefined;
+    const bySetPos = parts.BYSETPOS !== undefined ? parseList(parts.BYSETPOS).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
+    const byWeekNo = parts.BYWEEKNO !== undefined ? parseList(parts.BYWEEKNO).map(parseNumber).map(assertInRange(-53, 53, false)) : undefined;
+    const byYearday = parts.BYYEARDAY !== undefined ? parseList(parts.BYYEARDAY).map(parseNumber).map(assertInRange(-366, 366, false)) : undefined;
+
+    // BYSETPOS is only allowed in conjunction with another BY-rule
+    if (bySetPos !== undefined && (
+        !byDay && !byHour && !byMinute && !byMonth && !byMonthday && !bySecond && !byWeekNo && !byYearday
+    )) {
+        throw new Error(`Invalid recurrence value '${value}': BYSETPOS must be used in conjunction with another 'BY-' defintion`)
+    }
+
+    const rrule: Recur = {
+        frequency: parts.FREQ,
+        byDay,
+        byHour,
+        byMinute,
+        byMonth,
+        byMonthday,
+        bySecond,
+        bySetPos,
+        byWeekNo,
+        byYearday,
+        interval,
+        weekstart: parts.WKST ? parseWeekday(parts.WKST) : undefined
+    };
+
+    if (parts.COUNT !== undefined && parts.UNTIL !== undefined) {
+        throw new Error(`Invalid recurrence value '${value}': COUNT and UNTIL are mutually exclusive`);
+    } else if (parts.COUNT !== undefined) {
+        const count = parseNumber(parts.COUNT);
+        if (count < 1) {
+            throw new Error(`Invalid recurrence value '${value}': invalid non-positive COUNT`)
+        }
+
+        rrule.count = count;
+        rrule.until = undefined;
+    } else if (parts.UNTIL !== undefined) {
+        rrule.until = parseDateTime(parts.UNTIL, {});
+        rrule.count = undefined;
+    }
+
+    return {...rrule, toString: () => value} as Recur;
+}
+
+function assertInRange (min: number, max: number, allowZero: boolean) : (value: number) => number {
+    return value => {
+        if (notInRange(value, min, max, allowZero)) {
+            throw new Error(`Invalid number: '${value.toString()}': not in range of ${min} to ${max}`);
+        }
+
+        return value;
+    }
+}
+
+function notInRange (value: number, min: number, max: number, allowZero: boolean) : boolean {
+    return value < min || value > max || (!allowZero && value === 0);
+}
+
+function parseWeekday (value: string): RecurWeekday {
+    if (!isEnumValue(RecurWeekday, value)) {
+        throw new Error(`Invalid recurrence weekday '${value}': not a valid weekday`);
+    }
+
+    return value;
+}
+
+function parseByWeekdayList (value: string) : RecurByWeekday[] {
+    return parseList(value).map((definition, index) => {
+        const matches = definition.match(byWeekdayRegex);
+        if (matches === null || !matches.groups) {
+            throw new Error(`Invalid recurrence weekday value '${value}' at index #${index}: invalid format`);
+        }
+
+        const {weekday, sign, offset} = matches.groups;
+
+        return {
+            weekday: parseWeekday(weekday),
+            modifier: sign !== undefined && isEnumValue(RecurModifier, sign) ? sign : RecurModifier.None,
+            offset: offset !== undefined ? assertInRange(1, 53, false)(parseNumber(offset)) : 0,
+        }
+    });
 }

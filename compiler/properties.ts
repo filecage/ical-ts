@@ -21,7 +21,7 @@ const valueTypeParserMap: {[k:string]: ValueParserFn} = {
     Offset: valueParserFns.parseValueRaw,
     Period: valueParserFns.parsePeriod,
     Raw: valueParserFns.parseValueRaw,
-    Recur: valueParserFns.parseValueRaw,
+    Recur: valueParserFns.parseRecurrence,
     Uri: valueParserFns.parseValueRaw,
     ParticipationStatusTodo: valueParserFns.parseValueRaw,
 }

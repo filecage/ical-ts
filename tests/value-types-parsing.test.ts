@@ -1,8 +1,8 @@
 import {parseProperty} from "../src/Parser/parseProperties";
-import {parseDateTime, parseDuration, parseList, parsePeriod, parseValueRaw} from "../src/Parser/parseValues";
-import {DateTime} from "../src/Parser/ValueTypes/DateTime";
+import {parseDateTime, parseDuration, parseList, parsePeriod, parseRecurrence, parseValueRaw} from "../src/Parser/parseValues";
 import RecurrenceDateTimes from "../src/Parser/Properties/RecurrenceDateTimes";
 import {Duration} from "../src/Parser/ValueTypes/Duration";
+import {deleteUndefined} from "./util/deleteUndefined";
 
 describe('Property ValueType Parsing and Encoding', () => {
 
@@ -206,4 +206,76 @@ describe('Value Type Parsers', () => {
             expect(() => parsePeriod('20230405', {})).toThrowError(`Invalid period value '20230405': missing end/duration`)
         });
     });
+
+    describe('Offset', () => {
+        // TODO: Implement
+    });
+
+    describe('RRule', () => {
+        // Samples are taken from https://icalendar.org/iCalendar-RFC-5545/3-8-5-3-recurrence-rule.html
+        const rruleSamples: [string,string][] = [
+            ['Daily basic', 'FREQ=DAILY;COUNT=5'], // Every day for 5 occurrences
+            ['Daily with interval', 'FREQ=DAILY;INTERVAL=2;COUNT=5'], // Every other day for 5 occurrences
+            ['Weekly weekdays', 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=6'], // Monday, Wednesday, Friday for 6 occurrences
+            ['Weekly weekends', 'FREQ=WEEKLY;BYDAY=SA,SU;COUNT=4'], // Saturday and Sunday for 4 occurrences
+            ['Monthly specific date', 'FREQ=MONTHLY;BYMONTHDAY=15;COUNT=6'], // 15th of each month for 6 occurrences
+            ['Monthly first Monday', 'FREQ=MONTHLY;BYDAY=1MO;COUNT=6'], // First Monday of each month for 6 occurrences
+            ['Monthly last day', 'FREQ=MONTHLY;BYMONTHDAY=-1;COUNT=6'], // Last day of each month for 6 occurrences
+            ['Yearly Christmas', 'FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=25;COUNT=3'], // December 25th for 3 years
+            ['Yearly Thanksgiving', 'FREQ=YEARLY;BYMONTH=11;BYDAY=4TH;COUNT=3'], // 4th Thursday of November for 3 years
+            ['Bi-weekly Friday', 'FREQ=WEEKLY;INTERVAL=2;BYDAY=FR;COUNT=6'], // Every other Friday for 6 occurrences
+            ['Quarterly first day', 'FREQ=MONTHLY;INTERVAL=3;BYMONTHDAY=1;COUNT=4'], // First day of every quarter for 4 occurrences
+            ['Time-bounded weekly', 'FREQ=WEEKLY;BYDAY=TU;UNTIL=20240301T000000Z'], // Every Tuesday until March 1, 2024
+            ['Complex multiple BY rules', 'FREQ=YEARLY;BYMONTH=6,12;BYMONTHDAY=1,15;COUNT=8'], // 1st and 15th of June and December
+            ['First weekday of month', 'FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1;COUNT=6'], // First weekday of each month using BYSETPOS
+            ['Leap year February 29', 'FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=29;COUNT=3'], // February 29th (leap years only)
+            ['Weekly with WKST', 'FREQ=WEEKLY;BYDAY=MO;WKST=SU;COUNT=4'], // Every Monday with week starting on Sunday
+            ['Zero BYHOUR/BYMINUTE/BYSECOND offsets', 'FREQ=MONTHLY;BYHOUR=0;BYMINUTE=0;BYSECOND=0'] // Time Offsets with value 0
+        ] as const;
+
+        it.each(rruleSamples)('Should correctly parse RRule segments for %s', (name, sample) => {
+            const {toString, ...rrule} = parseRecurrence(sample);
+
+            expect(deleteUndefined(rrule)).toMatchSnapshot();
+            expect(toString ? toString() : rrule.toString()).toMatchSnapshot();
+        });
+
+        const brokenRrules: [string, string, string][] = [
+            ['missing frequency', '', `Invalid recurrence value '': missing or invalid FREQ`],
+            ['invalid frequency', 'FREQ=PERIODICALLY', `Invalid recurrence value 'FREQ=PERIODICALLY': missing or invalid FREQ`],
+            ['invalid negative interval', 'FREQ=DAILY;INTERVAL=-1', `Invalid recurrence value 'FREQ=DAILY;INTERVAL=-1': invalid non-positive INTERVAL`],
+            ['invalid zero interval', 'FREQ=DAILY;INTERVAL=0', `Invalid recurrence value 'FREQ=DAILY;INTERVAL=0': invalid non-positive INTERVAL`],
+            ['Negative COUNT', 'FREQ=DAILY;COUNT=-5', `Invalid recurrence value 'FREQ=DAILY;COUNT=-5': invalid non-positive COUNT`],
+            ['Zero COUNT', 'FREQ=DAILY;COUNT=0', `Invalid recurrence value 'FREQ=DAILY;COUNT=0': invalid non-positive COUNT`],
+            ['Invalid month', 'FREQ=YEARLY;BYMONTH=13', `Invalid number: '13': not in range of -12 to 12`],
+            ['Invalid month zero', 'FREQ=YEARLY;BYMONTH=0', `Invalid number: '0': not in range of -12 to 12`],
+            ['Invalid day of month', 'FREQ=MONTHLY;BYMONTHDAY=32', `Invalid number: '32': not in range of -31 to 31`],
+            ['Invalid day of month zero', 'FREQ=MONTHLY;BYMONTHDAY=0', `Invalid number: '0': not in range of -31 to 31`],
+            ['Invalid weekday', 'FREQ=WEEKLY;BYDAY=XX', `Invalid recurrence weekday value 'XX' at index #0: invalid format`],
+            ['Invalid weekday position zero', 'FREQ=MONTHLY;BYDAY=0MO', `Invalid number: '0': not in range of 1 to 53`],
+            ['Invalid weekday position high', 'FREQ=MONTHLY;BYDAY=54TU', `Invalid number: '54': not in range of 1 to 53`],
+            ['Invalid week number', 'FREQ=YEARLY;BYWEEKNO=54', `Invalid number: '54': not in range of -53 to 53`],
+            ['Invalid week number zero', 'FREQ=YEARLY;BYWEEKNO=0', `Invalid number: '0': not in range of -53 to 53`],
+            ['Invalid year day', 'FREQ=YEARLY;BYYEARDAY=367', `Invalid number: '367': not in range of -366 to 366`],
+            ['Invalid year day zero', 'FREQ=YEARLY;BYYEARDAY=0', `Invalid number: '0': not in range of -366 to 366`],
+            ['Invalid hour', 'FREQ=DAILY;BYHOUR=25', `Invalid number: '25': not in range of 0 to 23`],
+            ['Invalid minute', 'FREQ=DAILY;BYMINUTE=60', `Invalid number: '60': not in range of 0 to 59`],
+            ['Invalid WKST', 'FREQ=WEEKLY;WKST=XX', `Invalid recurrence weekday 'XX': not a valid weekday`],
+            ['Invalid UNTIL format', 'FREQ=DAILY;UNTIL=2024-01-01', `Invalid date value for date/datetime '2024-01-01'`],
+            ['COUNT and UNTIL together', 'FREQ=DAILY;COUNT=5;UNTIL=20240301T000000Z', `Invalid recurrence value 'FREQ=DAILY;COUNT=5;UNTIL=20240301T000000Z': COUNT and UNTIL are mutually exclusive`],
+            ['Invalid BYSETPOS range', 'FREQ=MONTHLY;BYDAY=MO;BYSETPOS=367', `Invalid number: '367': not in range of -366 to 366`],
+            ['BYSETPOS without other BY rule', 'FREQ=MONTHLY;BYSETPOS=1', `Invalid recurrence value 'FREQ=MONTHLY;BYSETPOS=1': BYSETPOS must be used in conjunction with another 'BY-' defintion`],
+            ['Invalid INTERVAL zero', 'FREQ=DAILY;INTERVAL=0', `Invalid recurrence value 'FREQ=DAILY;INTERVAL=0': invalid non-positive INTERVAL`],
+            ['Malformed syntax', 'FREQ=DAILY,COUNT=5', `Invalid recurrence value 'FREQ=DAILY,COUNT=5': missing or invalid FREQ`],
+            ['Missing equals', 'FREQ DAILY;COUNT=5', `Invalid recurrence value 'FREQ DAILY;COUNT=5': missing or invalid FREQ`],
+            ['Case sensitive violation', 'freq=daily;count=5', `Invalid recurrence value 'freq=daily;count=5': missing or invalid FREQ`],
+            ['Empty parameter value', 'FREQ=DAILY;COUNT=', `Invalid number value ''`],
+            ['Invalid WKST with Wnumber', 'FREQ=WEEKLY;WKST=1', `Invalid recurrence weekday '1': not a valid weekday`]
+        ];
+
+        it.each(brokenRrules)('Should throw for %s', (name, sample, expectedError) => {
+            expect(() => parseRecurrence(sample)).toThrow(expectedError);
+        });
+    })
+
 });

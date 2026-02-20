@@ -9,7 +9,7 @@ It implements [RFC 5545](https://datatracker.ietf.org/doc/html/rfc5545),
 and [RFC 9074](https://datatracker.ietf.org/doc/html/rfc9074). 
 
 Values are normalized where possible (e.g. possible list values are always accessed as array),
-but it does not interpret values (like RRULE or timezone references) apart from the value encoding
+but it does not interpret values (like timezone references) apart from the value encoding
 defined in RFC 5545 and RFC 6868. You'll need to handle these yourself.
 
 > [!NOTE]
