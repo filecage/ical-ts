@@ -5,6 +5,7 @@ import {Period} from "./ValueTypes/Period";
 import {Parameters} from "./Parameters/Parameters";
 import {Duration, formatDuration} from "./ValueTypes/Duration";
 import {Recur, RecurByWeekday, RecurFrequency, RecurModifier, RecurWeekday} from "./ValueTypes/Recur";
+import {Offset} from "./ValueTypes/Offset";
 
 const matchDoubleQuotesString = `${QUOTES}([^${QUOTES}\\\\]*(\\\\.[^${QUOTES}\\\\]*)*)${QUOTES}`;
 const escapedDoubleQuotesStringRegex = new RegExp(`^${matchDoubleQuotesString}$`);
@@ -136,6 +137,18 @@ export function parseUTCDateTimeOrDuration (value: string, parameters: Parameter
     }
 
     return parseDuration(value);
+}
+
+export function parseOffset (value: string) : Offset {
+    const multiplier = value.charCodeAt(0) === 45 ? -1 : 1;
+    const hours = 10 * (value.charCodeAt(1) - 48) + value.charCodeAt(2) - 48;
+    const minutes = 10 * (value.charCodeAt(3) - 48) + value.charCodeAt(4) - 48;
+    const seconds = (value.length > 5) ? 10 * (value.charCodeAt(5) - 48) + value.charCodeAt(6) - 48 : 0;
+
+    return {
+        toString: () => value,
+        seconds: multiplier * (hours * 3600 + minutes * 60 + seconds),
+    };
 }
 
 export function parseRecurrence (value: string) : Recur {

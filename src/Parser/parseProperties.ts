@@ -5,7 +5,7 @@
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 
-import {parseDateTime, parseDateTimeOrPeriod, parseDuration, parseList, parseNumber, parsePeriod, parseRecurrence, parseUTCDateTime, parseUTCDateTimeOrDuration, parseValueRaw} from "./parseValues"
+import {parseDateTime, parseDateTimeOrPeriod, parseDuration, parseList, parseNumber, parseOffset, parsePeriod, parseRecurrence, parseUTCDateTime, parseUTCDateTimeOrDuration, parseValueRaw} from "./parseValues"
 import Acknowledged from "./Properties/Acknowledged";
 import Action from "./Properties/Action";
 import Attachment from "./Properties/Attachment";
@@ -112,8 +112,8 @@ export function parseProperty (key: string, value: string) {
         case 'TRANSP': return new TimeTransparency(assertEnum('TimeTransparency', parseValueRaw(value), ['OPAQUE', 'TRANSPARENT'] as const), parameters);
         case 'TZID': return new TimeZoneIdentifier(parseValueRaw(value), parameters);
         case 'TZNAME': return new TimeZoneName(parseValueRaw(value), parameters);
-        case 'TZOFFSETFROM': return new TimeZoneOffsetFrom(parseValueRaw(value), parameters);
-        case 'TZOFFSETTO': return new TimeZoneOffsetTo(parseValueRaw(value), parameters);
+        case 'TZOFFSETFROM': return new TimeZoneOffsetFrom(parseOffset(value), parameters);
+        case 'TZOFFSETTO': return new TimeZoneOffsetTo(parseOffset(value), parameters);
         case 'TZURL': return new TimeZoneUrl(parseValueRaw(value), parameters);
         case 'TRIGGER': return new Trigger(parseUTCDateTimeOrDuration(value, parameters), parameters);
         case 'URL': return new UniformResourceLocator(parseValueRaw(value), parameters);

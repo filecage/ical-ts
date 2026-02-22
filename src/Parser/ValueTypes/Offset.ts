@@ -1,3 +1,4 @@
-import {Raw} from "./Raw";
-
-export type Offset = Raw;
+export type Offset = {
+    toString() : string,
+    seconds: number,
+};

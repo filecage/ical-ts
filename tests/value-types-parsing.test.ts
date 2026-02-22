@@ -1,5 +1,5 @@
 import {parseProperty} from "../src/Parser/parseProperties";
-import {parseDateTime, parseDuration, parseList, parsePeriod, parseRecurrence, parseValueRaw} from "../src/Parser/parseValues";
+import {parseDateTime, parseDuration, parseList, parseOffset, parsePeriod, parseRecurrence, parseValueRaw} from "../src/Parser/parseValues";
 import RecurrenceDateTimes from "../src/Parser/Properties/RecurrenceDateTimes";
 import {Duration} from "../src/Parser/ValueTypes/Duration";
 import {deleteUndefined} from "./util/deleteUndefined";
@@ -208,7 +208,23 @@ describe('Value Type Parsers', () => {
     });
 
     describe('Offset', () => {
-        // TODO: Implement
+        const samples: [string, number][] = [
+            ['+000000', 0],
+            ['+0800', 28800],
+            ['+1234', 45240],
+            ['+123456', 45296],
+            ['-0800', -28800],
+            ['-1234', -45240],
+            ['-123456', -45296],
+            ['+3200', 115200],
+        ];
+
+        it.each(samples)('Should correctly parse Offset for %s', (offsetString, expectedOffsetSeconds) => {
+            const offset = parseOffset(offsetString);
+
+            expect(offset).toHaveProperty('seconds', expectedOffsetSeconds);
+            expect(String(offset)).toBe(offsetString);
+        });
     });
 
     describe('RRule', () => {
