@@ -10,4 +10,11 @@ import {DateTime} from "../Parser/ValueTypes/DateTime";
  * @param timezones
  */
 export default function getLocalOffsetForDateTime (dateTime: DateTime, timezones: ICS.VTIMEZONE[]) : Offset {
+    // UTC times and floating times need no offset
+    // Floating times would technically require an offset, but JavaScript's `Date` implementation already does that
+    // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.5
+    // @todo When switching to `Temporal`, this needs to be reworked
+    if (dateTime.isUTC || dateTime.timezoneIdentifier === undefined) {
+        return {toString: () => '+0000', seconds: 0};
+    }
 }
