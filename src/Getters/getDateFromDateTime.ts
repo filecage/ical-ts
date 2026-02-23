@@ -11,5 +11,7 @@ import getLocalOffsetForDateTime from "./getLocalOffsetForDateTime";
  * @throws Error if `dateTime` references a timezone identifier that is not present in the `calendarTimezones`
  */
 export function getDateFromDateTime (dateTime: DateTime, calendarTimezones: ICS.VTIMEZONE[]) : Date {
-    // TODO: Implement
+    const offset = getLocalOffsetForDateTime(dateTime, calendarTimezones);
+
+    return new Date(dateTime.date.getTime() + offset.seconds * 1000);
 }
