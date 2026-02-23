@@ -17,4 +17,9 @@ export default function getLocalOffsetForDateTime (dateTime: DateTime, timezones
     if (dateTime.isUTC || dateTime.timezoneIdentifier === undefined) {
         return {toString: () => '+0000', seconds: 0};
     }
+
+    const timezone = timezones.find(timezone => timezone.TZID.value === dateTime.timezoneIdentifier);
+    if (timezone === undefined) {
+        throw new Error(`Missing timezone definition for needle TZID '${dateTime.timezoneIdentifier}'`);
+    }
 }
