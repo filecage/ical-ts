@@ -8,6 +8,7 @@ await exportBundle('Parser/Properties');
 await exportBundle('Parser/Parameters');
 await exportBundle('Parser/ValueTypes');
 await exportBundle('Getters');
+await exportBundle('Formatters');
 
 console.log('All OK');
 
