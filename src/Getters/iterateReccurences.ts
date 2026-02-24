@@ -37,6 +37,28 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
     }
 }
 
+type WeekdayMap = {[k in RecurWeekday]: number};
+const WEEKDAYS = [
+    RecurWeekday.Sunday,
+    RecurWeekday.Monday,
+    RecurWeekday.Tuesday,
+    RecurWeekday.Wednesday,
+    RecurWeekday.Thursday,
+    RecurWeekday.Friday,
+    RecurWeekday.Saturday,
+];
+
+function reorderWeek(weekstart: RecurWeekday): WeekdayMap {
+    const startIndex = WEEKDAYS.indexOf(weekstart);
+    const reorderedData: {[k in RecurWeekday]?: number} = {};
+
+    WEEKDAYS.forEach((day: RecurWeekday, i) => {
+        reorderedData[day] = (i - startIndex + 7) % 7;
+    });
+
+    return reorderedData as WeekdayMap;
+}
+
 function *frequencyIterator (frequency: RecurFrequency, interval: number, start: Date, end: Date|undefined) : Generator<Date> {
     let date = new Date(start);
 
