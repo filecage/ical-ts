@@ -1,5 +1,5 @@
 import {XOR} from "ts-xor";
-import {Recur, RecurFrequency, RecurWeekday} from "../Parser/ValueTypes/Recur";
+import {Recur, RecurByWeekday, RecurFrequency, RecurModifier, RecurWeekday} from "../Parser/ValueTypes/Recur";
 import {DateTime} from "../Parser/ValueTypes/DateTime";
 import {ICS} from "../ICS";
 import {Period} from "../Parser/ValueTypes/Period";
@@ -28,28 +28,106 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
     const start = getDateFromDateTime(options.DTSTART, options.VTIMEZONE ?? []);
     const end = options.end;
     let count = 0;
-    
-    for (const occurence of frequencyIterator(recur.frequency, recur.interval || 1, start, end)) {
 
-        const dates: Date[] = [];
-        if (recur.byDay !== undefined) {
-            if (recur.frequency === RecurFrequency.Weekly) {
-                const weekstart = recur.weekstart || RecurWeekday.Monday;
-                const weekdayMap = reorderWeek(weekstart);
-                const firstDayOfWeek = new Date(occurence);
+    for (const entryDate of frequencyIterator(recur.frequency, recur.interval || 1, start, end)) {
+        let occurences: Date[] = [];
 
-                firstDayOfWeek.setDate(firstDayOfWeek.getDate() - (firstDayOfWeek.getDay() - WEEKDAYS.indexOf(weekstart) + 7) % 7);
+        if (recur.byMonth !== undefined) {
+            // BYMONTH expands for YEARLY and limits for everything else
+            if (recur.frequency === RecurFrequency.Yearly) {
+                for (const month of recur.byMonth) {
+                    const nextDayInMonth = new Date(entryDate.getFullYear(), month - 1, 1, entryDate.getHours(), entryDate.getMinutes(), entryDate.getSeconds(), entryDate.getMilliseconds());
 
-                dates.push(...recur.byDay.map(byDay => {
-                    const date = new Date(firstDayOfWeek);
-                    date.setDate(date.getDate() + weekdayMap[byDay.weekday]);
-
-                    return date;
-                }));
+                    while (nextDayInMonth.getMonth() === month - 1) {
+                        occurences.push(new Date(nextDayInMonth));
+                        nextDayInMonth.setDate(nextDayInMonth.getDate() + 1);
+                    }
+                }
             }
         }
 
-        const targetDates = dates.length ? dates.sort((a, b) => a.getTime() - b.getTime()) : [occurence];
+        if (recur.byWeekNo) {
+            // TODO: Implement
+            throw new Error("Missing support for RRULE.BYWEEKNO");
+        }
+
+        if (recur.byYearday) {
+            // TODO: Implement
+            throw new Error("Missing support for RRULE.BYYEARDAY");
+        }
+
+        if (recur.byMonthday) {
+            // TODO: Implement
+            throw new Error("Missing support for RRULE.BYMONTHDAY");
+        }
+
+        if (recur.byDay !== undefined) {
+            switch (recur.frequency) {
+                case RecurFrequency.Weekly:
+                    const weekstart = recur.weekstart || RecurWeekday.Monday;
+                    const weekdayMap = reorderWeek(weekstart);
+                    const firstDayOfWeek = new Date(entryDate);
+
+                    firstDayOfWeek.setDate(firstDayOfWeek.getDate() - (firstDayOfWeek.getDay() - WEEKDAYS.indexOf(weekstart) + 7) % 7);
+
+                    occurences.push(...recur.byDay.map(byDay => {
+                        const date = new Date(firstDayOfWeek);
+                        date.setDate(date.getDate() + weekdayMap[byDay.weekday]);
+
+                        return date;
+                    }));
+                    break;
+
+                case RecurFrequency.Yearly:
+                    if (recur.byMonthday || recur.byYearday) {
+                        // TODO: Limit if BYMONTHDAY or or BYYEARDAY is present
+                    } else {
+                        // Consolidate all weekday filters, so we can select the required indices in one batch
+                        const weekdayFilters = recur.byDay.reduce((filters, filter) => {
+                            if (!filters[filter.weekday]) {
+                                filters[filter.weekday] = [];
+                            }
+
+                            filters[filter.weekday].push(filter);
+
+                            return filters;
+                        }, {} as {[k in RecurWeekday]: RecurByWeekday[]});
+
+                        occurences = (Object.entries(weekdayFilters) as [RecurWeekday, RecurByWeekday[]][]).flatMap(([weekday, byDays]) => {
+                            const weekdayIndex = WEEKDAYS.indexOf(weekday);
+                            const offsets = byDays.map(byDay => byDay.offset * (byDay.modifier === RecurModifier.Minus ? -1 : 1));
+                            const candidates = occurences.filter(date => date.getDay() === weekdayIndex);
+
+                            // Correct offset to 0-indexed if it's not negative
+                            return offsets.map(offset => candidates.at(offset < 0 ? offset : offset - 1))
+                                .filter(candidate => candidate !== undefined);
+                        });
+                    }
+                    break;
+            }
+        }
+
+        if (recur.byHour) {
+            // TODO: Implement
+            throw new Error("Missing support for RRULE.BYHOUR");
+        }
+
+        if (recur.byMinute) {
+            // TODO: Implement
+            throw new Error("Missing support for RRULE.BYMINUTE");
+        }
+
+        if (recur.bySecond) {
+            // TODO: Implement
+            throw new Error("Missing support for RRULE.BYSECOND");
+        }
+
+        if (recur.bySetPos) {
+            // TODO: Implement
+            throw new Error("Missing support for RRULE.BYSETPOS");
+        }
+
+        const targetDates = occurences.length ? occurences.sort((a, b) => a.getTime() - b.getTime()) : [entryDate];
 
         for (const date of targetDates) {
             // Skip if the date is too early
