@@ -52,6 +52,16 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
         const targetDates = dates.length ? dates.sort((a, b) => a.getTime() - b.getTime()) : [occurence];
 
         for (const date of targetDates) {
+            // Skip if the date is too early
+            if (date < start) {
+                continue;
+            }
+
+            // Break out if we've exceeded the limit date before yielding
+            if (end && date >= end) {
+                return;
+            }
+
             yield date;
 
             // Break out if we've exceeded the limit count
