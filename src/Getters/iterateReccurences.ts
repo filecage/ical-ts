@@ -45,6 +45,8 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                         nextDayInMonth.setDate(nextDayInMonth.getDate() + 1);
                     }
                 }
+            } else {
+                throw new Error(`Missing support for RRULE.BYMONTH with FREQ=${recur.frequency}`);
             }
         }
 
@@ -106,6 +108,9 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                         });
                     }
                     break;
+
+                default:
+                    throw new Error(`Missing support for RRULE.BYDAY with FREQ=${recur.frequency}`);
             }
         }
 
