@@ -17,6 +17,7 @@ import {getDateFromDateTime} from "./getDateFromDateTime";
  *
  *                A start date is required
  *                An end date is optional (iterator will continue indefinitely until it's no longer consumed)
+ *                If `options.end` is provided and the RRULE has an `UNTIL`, the earlier of the two will be chosen as end date
  *
  *                Can be called with `null` VTIMEZONE to explicitly opt out of TZID conversions
  */
@@ -26,7 +27,8 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
         & XOR<{RDATE: (DateTime|Period)[]}, {rdates?: Date[]}>
 ) : Generator<Date> {
     const start = getDateFromDateTime(options.DTSTART, options.VTIMEZONE ?? []);
-    const end = options.end;
+    const until = recur.until ? getDateFromDateTime(recur.until, options.VTIMEZONE ?? []) : undefined;
+    const end = (options.end && until) ? new Date(Math.min(until.getTime(), options.end.getTime())) : (options.end || until);
     let count = 0;
 
     for (const entryDate of frequencyIterator(recur.frequency, recur.interval || 1, start, end)) {

@@ -86,6 +86,36 @@ describe('iterateReccurences Tests', () => {
         });
     });
 
+    describe('Correct end datetime selection', () => {
+        it(`does not include end date`, () => {
+            const recurrences = [...iterateReccurences(parseRecurrence(`FREQ=DAILY`), {
+                DTSTART: new DateTimeClass(new Date('2026-01-01'), true, true, undefined) as UTCDateTime,
+                VTIMEZONE: null,
+                end: new Date('2026-01-03'),
+            })];
 
+            expect(recurrences).toHaveLength(2);
+        });
+
+        it(`selects options.end over until if it's the earlier one`, () => {
+            const recurrences = [...iterateReccurences(parseRecurrence(`FREQ=DAILY;UNTIL=20260104T000000Z`), {
+                DTSTART: new DateTimeClass(new Date('2026-01-01'), true, true, undefined) as UTCDateTime,
+                VTIMEZONE: null,
+                end: new Date('2026-01-03'),
+            })];
+
+            expect(recurrences).toHaveLength(2);
+        });
+
+        it(`selects until over options.end if it's the earlier one`, () => {
+            const recurrences = [...iterateReccurences(parseRecurrence(`FREQ=DAILY;UNTIL=20260103T000000Z`), {
+                DTSTART: new DateTimeClass(new Date('2026-01-01'), true, true, undefined) as UTCDateTime,
+                VTIMEZONE: null,
+                end: new Date('2026-01-04'),
+            })];
+
+            expect(recurrences).toHaveLength(2);
+        });
+    })
 
 });
