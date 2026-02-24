@@ -133,7 +133,6 @@ function *frequencyIterator (frequency: RecurFrequency, interval: number, start:
         case RecurFrequency.Monthly:
             const day = date.getDate();
             yield *iterate(() => {
-
                 // Target day 0 moves the date back one month, meaning we need to add another one to the equation (hence the +1)
                 const nextMonth = (new Date(date));
                 nextMonth.setMonth(date.getMonth() + interval + 1, 0);
