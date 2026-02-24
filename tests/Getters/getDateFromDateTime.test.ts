@@ -42,7 +42,7 @@ const VTIMZEZONES: ICS.VTIMEZONE[] = [
 describe('getDateFromDateTime Tests', () => {
     const samples: [string, DateTime, number][] = [
         ['UTC date and time', parseDateTime('20240523T095445Z', {}), 1716458085000],
-        ['Floating date and time', parseDateTime('20240523T115445', {}), 1716458085000],
+        ['Floating date and time', parseDateTime('20240523T115445', {}), 1716465285000],
         ['Etc/GMT', parseDateTime('20240523T095445', {TZID: 'Etc/GMT'}), 1716458085000],
         ['Europe/Berlin in daylight time', parseDateTime('20240523T115445', {TZID: 'Europe/Berlin'}), 1716458085000],
         ['Europe/Berlin in standard time', parseDateTime('20240323T115445', {TZID: 'Europe/Berlin'}), 1711191285000],

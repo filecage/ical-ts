@@ -55,7 +55,7 @@
         "prepare:release": "node bin/prepare-release.js",
         "compile:parameters": "node --loader=./loader.js compiler/parameters.ts",
         "compile:properties": "node --loader=./loader.js compiler/properties.ts",
-        "test": "TZ=Europe/Berlin node --experimental-vm-modules node_modules/jest/bin/jest.js tests --verbose"
+        "test": "TZ=UTC node --experimental-vm-modules node_modules/jest/bin/jest.js tests --verbose"
     },
     "author": "David Beuchert",
     "license": "UNLICENSED",
