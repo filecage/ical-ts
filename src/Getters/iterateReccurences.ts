@@ -1,5 +1,5 @@
 import {XOR} from "ts-xor";
-import {Recur, RecurFrequency} from "../Parser/ValueTypes/Recur";
+import {Recur, RecurFrequency, RecurWeekday} from "../Parser/ValueTypes/Recur";
 import {DateTime} from "../Parser/ValueTypes/DateTime";
 import {ICS} from "../ICS";
 import {Period} from "../Parser/ValueTypes/Period";
@@ -29,10 +29,34 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
 
     let count = 0;
     for (const occurence of frequencyIterator(recur.frequency, recur.interval || 1, start, options.end)) {
-        yield occurence;
 
-        if (recur.count && ++count >= recur.count) {
-            break;
+        const dates: Date[] = [];
+        if (recur.byDay !== undefined) {
+            if (recur.frequency === RecurFrequency.Weekly) {
+                const weekstart = recur.weekstart || RecurWeekday.Monday;
+                const weekdayMap = reorderWeek(weekstart);
+                const firstDayOfWeek = new Date(occurence);
+
+                firstDayOfWeek.setDate(firstDayOfWeek.getDate() - (firstDayOfWeek.getDay() - WEEKDAYS.indexOf(weekstart) + 7) % 7);
+
+                dates.push(...recur.byDay.map(byDay => {
+                    const date = new Date(firstDayOfWeek);
+                    date.setDate(date.getDate() + weekdayMap[byDay.weekday]);
+
+                    return date;
+                }));
+            }
+        }
+
+        const targetDates = dates.length ? dates.sort((a, b) => a.getTime() - b.getTime()) : [occurence];
+
+        for (const date of targetDates) {
+            yield date;
+
+            // Break out if we've exceeded the limit count
+            if (recur.count && ++count >= recur.count) {
+                return;
+            }
         }
     }
 }

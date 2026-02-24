@@ -294,6 +294,24 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
 ]
 `;
 
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Every second weekend with weekstart on Monday 1`] = `
+[
+  2026-02-28T00:00:00.000Z,
+  2026-03-01T00:00:00.000Z,
+  2026-03-14T00:00:00.000Z,
+  2026-03-15T00:00:00.000Z,
+]
+`;
+
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Every second weekend with weekstart on Sunday 1`] = `
+[
+  2026-02-28T00:00:00.000Z,
+  2026-03-08T00:00:00.000Z,
+  2026-03-14T00:00:00.000Z,
+  2026-03-22T00:00:00.000Z,
+]
+`;
+
 exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Weekly weekdays 1`] = `
 [
   2026-02-23T00:00:00.000Z,
@@ -301,6 +319,15 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
   2026-02-27T00:00:00.000Z,
   2026-03-02T00:00:00.000Z,
   2026-03-04T00:00:00.000Z,
-  2026-03-06T23:00:00.000Z,
+  2026-03-06T00:00:00.000Z,
+]
+`;
+
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Weekly weekends 1`] = `
+[
+  2026-02-28T00:00:00.000Z,
+  2026-03-01T00:00:00.000Z,
+  2026-03-07T00:00:00.000Z,
+  2026-03-08T00:00:00.000Z,
 ]
 `;

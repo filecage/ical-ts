@@ -9,7 +9,9 @@ describe('iterateReccurences Tests', () => {
         ['Daily basic', 'FREQ=DAILY;COUNT=5'], // Every day for 5 occurrences
         ['Daily with interval', 'FREQ=DAILY;INTERVAL=2;COUNT=5'], // Every other day for 5 occurrences
         ['Weekly weekdays', 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=6'], // Monday, Wednesday, Friday for 6 occurrences
-        // ['Weekly weekends', 'FREQ=WEEKLY;BYDAY=SA,SU;COUNT=4'], // Saturday and Sunday for 4 occurrences
+        ['Weekly weekends', 'FREQ=WEEKLY;BYDAY=SA,SU;COUNT=4'], // Saturday and Sunday for 4 occurrences
+        ['Every second weekend with weekstart on Monday', 'FREQ=WEEKLY;BYDAY=SA,SU;COUNT=4;INTERVAL=2'],
+        ['Every second weekend with weekstart on Sunday', 'FREQ=WEEKLY;BYDAY=SA,SU;COUNT=4;INTERVAL=2;WKST=SU'],
         // ['Monthly specific date', 'FREQ=MONTHLY;BYMONTHDAY=15;COUNT=6'], // 15th of each month for 6 occurrences
         // ['Monthly first Monday', 'FREQ=MONTHLY;BYDAY=1MO;COUNT=6'], // First Monday of each month for 6 occurrences
         // ['Monthly last day', 'FREQ=MONTHLY;BYMONTHDAY=-1;COUNT=6'], // Last day of each month for 6 occurrences
