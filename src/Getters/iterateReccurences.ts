@@ -26,9 +26,10 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
         & XOR<{RDATE: (DateTime|Period)[]}, {rdates?: Date[]}>
 ) : Generator<Date> {
     const start = getDateFromDateTime(options.DTSTART, options.VTIMEZONE ?? []);
-
+    const end = options.end;
     let count = 0;
-    for (const occurence of frequencyIterator(recur.frequency, recur.interval || 1, start, options.end)) {
+    
+    for (const occurence of frequencyIterator(recur.frequency, recur.interval || 1, start, end)) {
 
         const dates: Date[] = [];
         if (recur.byDay !== undefined) {
