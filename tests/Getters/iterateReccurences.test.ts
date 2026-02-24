@@ -13,19 +13,19 @@ describe('iterateReccurences Tests', () => {
         ['Every second weekend with weekstart on Monday', 'FREQ=WEEKLY;BYDAY=SA,SU;COUNT=4;INTERVAL=2'],
         ['Every second weekend with weekstart on Sunday', 'FREQ=WEEKLY;BYDAY=SA,SU;COUNT=4;INTERVAL=2;WKST=SU'],
         ['Next 5 Last Sunday of March', 'FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU;COUNT=5'],
-        // ['Monthly specific date', 'FREQ=MONTHLY;BYMONTHDAY=15;COUNT=6'], // 15th of each month for 6 occurrences
-        // ['Monthly first Monday', 'FREQ=MONTHLY;BYDAY=1MO;COUNT=6'], // First Monday of each month for 6 occurrences
-        // ['Monthly last day', 'FREQ=MONTHLY;BYMONTHDAY=-1;COUNT=6'], // Last day of each month for 6 occurrences
-        // ['Yearly Christmas', 'FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=25;COUNT=3'], // December 25th for 3 years
+        ['Monthly specific date', 'FREQ=MONTHLY;BYMONTHDAY=15;COUNT=6'], // 15th of each month for 6 occurrences
+        ['Monthly first Monday', 'FREQ=MONTHLY;BYDAY=1MO;COUNT=6'], // First Monday of each month for 6 occurrences
+        ['Monthly last day', 'FREQ=MONTHLY;BYMONTHDAY=-1;COUNT=6'], // Last day of each month for 6 occurrences
+        ['Yearly Christmas', 'FREQ=YEARLY;MONTH=12;BYMONTHDAY=25;COUNT=3'], // December 25th for 3 years
         ['Yearly Thanksgiving', 'FREQ=YEARLY;BYMONTH=11;BYDAY=4TH;COUNT=3'], // 4th Thursday of November for 3 years
         ['Bi-weekly Friday', 'FREQ=WEEKLY;INTERVAL=2;BYDAY=FR;COUNT=6'], // Every other Friday for 6 occurrences
-        // ['Quarterly first day', 'FREQ=MONTHLY;INTERVAL=3;BYMONTHDAY=1;COUNT=4'], // First day of every quarter for 4 occurrences
-        // ['Time-bounded weekly', 'FREQ=WEEKLY;BYDAY=TU;UNTIL=20240301T000000Z'], // Every Tuesday until March 1, 2024
-        // ['Complex multiple BY rules', 'FREQ=YEARLY;BYMONTH=6,12;BYMONTHDAY=1,15;COUNT=8'], // 1st and 15th of June and December
-        // ['First weekday of month', 'FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1;COUNT=6'], // First weekday of each month using BYSETPOS
-        // ['Leap year February 29', 'FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=29;COUNT=3'], // February 29th (leap years only)
-        // ['Weekly with WKST', 'FREQ=WEEKLY;BYDAY=MO;WKST=SU;COUNT=4'], // Every Monday with week starting on Sunday
-        // ['Zero BYHOUR/BYMINUTE/BYSECOND offsets', 'FREQ=MONTHLY;BYHOUR=0;BYMINUTE=0;BYSECOND=0'] // Time Offsets with value 0
+        ['Quarterly first day', 'FREQ=MONTHLY;INTERVAL=3;BYMONTHDAY=1;COUNT=4'], // First day of every quarter for 4 occurrences
+        ['Time-bounded weekly', 'FREQ=WEEKLY;BYDAY=TU;UNTIL=20260401T000000Z'], // Every Tuesday until April 1, 2026
+        ['Complex multiple BY rules', 'FREQ=YEARLY;BYMONTH=6,12;BYMONTHDAY=1,15;COUNT=8'], // 1st and 15th of June and December
+        ['First weekday of month', 'FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1;COUNT=6'], // First weekday of each month using BYSETPOS
+        ['Leap year February 29', 'FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=29;COUNT=3'], // February 29th (leap years only)
+        ['Weekly with WKST', 'FREQ=WEEKLY;BYDAY=MO;WKST=SU;COUNT=4'], // Every Monday with week starting on Sunday
+        ['Zero BYHOUR/BYMINUTE/BYSECOND offsets', 'FREQ=MONTHLY;BYHOUR=0;BYMINUTE=0;BYSECOND=0;COUNT=24'] // Time Offsets with value 0
     ] as const;
 
     it.each(rruleSamples)('Should correctly generate RRule recurrences for %s', (name, sample) => {
