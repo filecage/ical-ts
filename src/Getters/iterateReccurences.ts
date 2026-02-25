@@ -287,7 +287,7 @@ function reorderWeek(weekstart: RecurWeekday): WeekdayMap {
 function simpleContextExpansion (context: RecurrenceContext, nextScope: RecurFrequency, expanders: number[], modifier: (nextDate: Date, expander: number) => void) : RecurrenceContext {
     return {
         scope: nextScope,
-            dates: context.dates.flatMap(contextDate => expanders.map(expander => {
+        dates: context.dates.flatMap(contextDate => expanders.map(expander => {
             const nextDate = new Date(contextDate);
 
             modifier(nextDate, expander);
