@@ -356,6 +356,35 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
 ]
 `;
 
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Fixed BYHOUR/BYMINUTE/BYSECOND offsets 1`] = `
+[
+  2026-02-23T14:30:00.000Z,
+  2026-03-23T14:30:00.000Z,
+  2026-04-23T14:30:00.000Z,
+  2026-05-23T14:30:00.000Z,
+  2026-06-23T14:30:00.000Z,
+  2026-07-23T14:30:00.000Z,
+  2026-08-23T14:30:00.000Z,
+  2026-09-23T14:30:00.000Z,
+  2026-10-23T14:30:00.000Z,
+  2026-11-23T14:30:00.000Z,
+  2026-12-23T14:30:00.000Z,
+  2027-01-23T14:30:00.000Z,
+  2027-02-23T14:30:00.000Z,
+  2027-03-23T14:30:00.000Z,
+  2027-04-23T14:30:00.000Z,
+  2027-05-23T14:30:00.000Z,
+  2027-06-23T14:30:00.000Z,
+  2027-07-23T14:30:00.000Z,
+  2027-08-23T14:30:00.000Z,
+  2027-09-23T14:30:00.000Z,
+  2027-10-23T14:30:00.000Z,
+  2027-11-23T14:30:00.000Z,
+  2027-12-23T14:30:00.000Z,
+  2028-01-23T14:30:00.000Z,
+]
+`;
+
 exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Last workday of month using SETPOS 1`] = `
 [
   2026-02-27T00:00:00.000Z,

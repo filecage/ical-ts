@@ -29,7 +29,7 @@ describe('iterateReccurences Tests', () => {
         ['Last workday of month using SETPOS', 'FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1;COUNT=6'],
         ['Leap year February 29', 'FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=29;COUNT=3'], // February 29th (leap years only)
         ['Weekly with WKST', 'FREQ=WEEKLY;BYDAY=MO;WKST=SU;COUNT=4'], // Every Monday with week starting on Sunday
-        ['Zero BYHOUR/BYMINUTE/BYSECOND offsets', 'FREQ=MONTHLY;BYHOUR=0;BYMINUTE=0;BYSECOND=0;COUNT=24'] // Time Offsets with value 0
+        ['Fixed BYHOUR/BYMINUTE/BYSECOND offsets', 'FREQ=MONTHLY;BYHOUR=14;BYMINUTE=30;BYSECOND=00;COUNT=24']
     ] as const;
 
     it.each(rruleSamples)('Should correctly generate RRule recurrences for %s', (name, sample) => {
