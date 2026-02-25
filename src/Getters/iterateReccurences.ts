@@ -124,6 +124,7 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
 
                     break;
 
+                case RecurFrequency.Monthly:
                 case RecurFrequency.Yearly:
                     if (recur.byMonthday || recur.byYearday) {
                         // TODO: Limit if BYMONTHDAY or or BYYEARDAY is present

@@ -16,7 +16,8 @@ describe('iterateReccurences Tests', () => {
         ['Next 5 Last Sunday of March', 'FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU;COUNT=5'],
         ['Today but only in January, June and August', 'FREQ=YEARLY;BYMONTH=1,6,8;COUNT=12'],
         ['Monthly specific date', 'FREQ=MONTHLY;BYMONTHDAY=15;COUNT=6'], // 15th of each month for 6 occurrences
-        ['Monthly first Monday', 'FREQ=MONTHLY;BYDAY=1MO;COUNT=6'], // First Monday of each month for 6 occurrences
+        ['Monthly first Monday', 'FREQ=MONTHLY;BYDAY=1MO;COUNT=6'],
+        ['Monthly last Monday', 'FREQ=MONTHLY;BYDAY=-1MO;COUNT=6'],
         ['Monthly last day', 'FREQ=MONTHLY;BYMONTHDAY=-1;COUNT=6'], // Last day of each month for 6 occurrences
         ['Yearly Christmas', 'FREQ=YEARLY;MONTH=12;BYMONTHDAY=25;COUNT=3'], // December 25th for 3 years
         ['Yearly Thanksgiving', 'FREQ=YEARLY;BYMONTH=11;BYDAY=4TH;COUNT=3'], // 4th Thursday of November for 3 years
