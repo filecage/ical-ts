@@ -176,18 +176,51 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
         }
 
         if (recur.byHour) {
-            // TODO: Implement
-            throw new Error("Missing support for RRULE.BYHOUR");
+            switch (recur.frequency) {
+                case RecurFrequency.Yearly:
+                case RecurFrequency.Monthly:
+                case RecurFrequency.Weekly:
+                case RecurFrequency.Daily:
+                    context = simpleContextExpansion(context, RecurFrequency.Hourly, recur.byHour, (nextDate, hours) => nextDate.setHours(hours));
+                    break;
+
+                default:
+                    // TODO: Implement
+                    throw new Error(`Missing support for RRULE.BYHOUR with FREQ=${recur.frequency}`);
+            }
         }
 
         if (recur.byMinute) {
-            // TODO: Implement
-            throw new Error("Missing support for RRULE.BYMINUTE");
+            switch (recur.frequency) {
+                case RecurFrequency.Yearly:
+                case RecurFrequency.Monthly:
+                case RecurFrequency.Weekly:
+                case RecurFrequency.Daily:
+                case RecurFrequency.Hourly:
+                    context = simpleContextExpansion(context, RecurFrequency.Minutely, recur.byMinute, (nextDate, minutes) => nextDate.setMinutes(minutes));
+                    break;
+
+                default:
+                    // TODO: Implement
+                    throw new Error(`Missing support for RRULE.BYMINUTE with FREQ=${recur.frequency}`);
+            }
         }
 
         if (recur.bySecond) {
-            // TODO: Implement
-            throw new Error("Missing support for RRULE.BYSECOND");
+            switch (recur.frequency) {
+                case RecurFrequency.Yearly:
+                case RecurFrequency.Monthly:
+                case RecurFrequency.Weekly:
+                case RecurFrequency.Daily:
+                case RecurFrequency.Hourly:
+                case RecurFrequency.Minutely:
+                    context = simpleContextExpansion(context, RecurFrequency.Secondly, recur.bySecond, (nextDate, seconds) => nextDate.setSeconds(seconds));
+                    break;
+
+                default:
+                    // TODO: Implement
+                    throw new Error(`Missing support for RRULE.BYSECOND with FREQ=${recur.frequency}`);
+            }
         }
 
         if (recur.bySetPos) {
