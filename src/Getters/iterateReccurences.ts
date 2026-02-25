@@ -164,7 +164,7 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                             // Correct offset to 0-indexed if it's not negative
                             return offsets.map(offset => candidates.at(offset < 0 ? offset : offset - 1))
                                 .filter(candidate => candidate !== undefined);
-                        });
+                        }).sort((a, b) => a.getTime() - b.getTime());
 
                         context = {scope: RecurFrequency.Daily, dates};
                     }
