@@ -32,18 +32,25 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
     let count = 0;
 
     for (const entryDate of frequencyIterator(recur.frequency, recur.interval || 1, start, end)) {
-        let occurences: Date[] = [];
+        // The context always keeps the current dates and their scope
+        // If, for instance, the scope is yearly, each date does not refer to a specific day, but just to the year
+        // If it's monthly, the dates refer to a month and so on and so forth
+        // For performance purpose, the order of dates must always be kept from earliest to latest (so we can always easily select them)
+        let context: RecurrenceContext = {
+            scope: recur.frequency,
+            dates: [entryDate],
+        };
 
         if (recur.byMonth !== undefined) {
             // BYMONTH expands for YEARLY and limits for everything else
             if (recur.frequency === RecurFrequency.Yearly) {
-                for (const month of recur.byMonth) {
-                    const nextDayInMonth = new Date(entryDate.getFullYear(), month - 1, 1, entryDate.getHours(), entryDate.getMinutes(), entryDate.getSeconds(), entryDate.getMilliseconds());
+                context = {
+                    scope: RecurFrequency.Monthly,
+                    dates: recur.byMonth.map(month => {
+                        const nextMonth = new Date(entryDate);
 
-                    while (nextDayInMonth.getMonth() === month - 1) {
-                        occurences.push(new Date(nextDayInMonth));
-                        nextDayInMonth.setDate(nextDayInMonth.getDate() + 1);
-                    }
+                        return new Date(nextMonth.setMonth(month - 1));
+                    })
                 }
             } else {
                 throw new Error(`Missing support for RRULE.BYMONTH with FREQ=${recur.frequency}`);
@@ -74,12 +81,16 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
 
                     firstDayOfWeek.setDate(firstDayOfWeek.getDate() - (firstDayOfWeek.getDay() - WEEKDAYS.indexOf(weekstart) + 7) % 7);
 
-                    occurences.push(...recur.byDay.map(byDay => {
-                        const date = new Date(firstDayOfWeek);
-                        date.setDate(date.getDate() + weekdayMap[byDay.weekday]);
+                    context = {
+                        scope: RecurFrequency.Daily,
+                        dates: recur.byDay.map(byDay => {
+                            const date = new Date(firstDayOfWeek);
+                            date.setDate(date.getDate() + weekdayMap[byDay.weekday]);
 
-                        return date;
-                    }));
+                            return date;
+                        }).sort((a, b) => a.getTime() - b.getTime())
+                    };
+
                     break;
 
                 case RecurFrequency.Yearly:
@@ -87,7 +98,7 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                         // TODO: Limit if BYMONTHDAY or or BYYEARDAY is present
                         throw new Error(`Missing support for RRULE.BYDAY with FREQ=${recur.frequency} in combination with RRULE.BYMONTHDAY or RRULE.BYYEARDAY`);
                     } else {
-                        // Consolidate all weekday filters, so we can select the required indices in one batch
+                        // Consolidate all weekday filters, so we can create the required indices in one batch
                         const weekdayFilters = recur.byDay.reduce((filters, filter) => {
                             if (!filters[filter.weekday]) {
                                 filters[filter.weekday] = [];
@@ -98,15 +109,32 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                             return filters;
                         }, {} as {[k in RecurWeekday]: RecurByWeekday[]});
 
-                        occurences = (Object.entries(weekdayFilters) as [RecurWeekday, RecurByWeekday[]][]).flatMap(([weekday, byDays]) => {
+                        const earliest = earliestDateInContext(context);
+                        const latest = latestDateInContext(context);
+
+                        const dates = (Object.entries(weekdayFilters) as [RecurWeekday, RecurByWeekday[]][]).flatMap(([weekday, byDays]) => {
+                            // For each needle weekday, we generate all occurences within the earliest/latest timeframe
+                            // We do this by selecting the very first occurence of this weekday and then adding 7 days until we've exceeded the latest date
+                            // After this we select the correct indices from the generated stack
                             const weekdayIndex = WEEKDAYS.indexOf(weekday);
+                            const nextWeekday = new Date(earliest);
+                            if (nextWeekday.getDay() !== weekdayIndex) {
+                                nextWeekday.setDate(nextWeekday.getDate() + (weekdayIndex - nextWeekday.getDay() + 7) % 7);
+                            }
+
                             const offsets = byDays.map(byDay => byDay.offset * (byDay.modifier === RecurModifier.Minus ? -1 : 1));
-                            const candidates = occurences.filter(date => date.getDay() === weekdayIndex);
+                            const candidates: Date[] = [];
+                            while (nextWeekday <= latest) {
+                                candidates.push(new Date(nextWeekday));
+                                nextWeekday.setDate(nextWeekday.getDate() + 7);
+                            }
 
                             // Correct offset to 0-indexed if it's not negative
                             return offsets.map(offset => candidates.at(offset < 0 ? offset : offset - 1))
                                 .filter(candidate => candidate !== undefined);
                         });
+
+                        context = {scope: RecurFrequency.Daily, dates};
                     }
                     break;
 
@@ -135,15 +163,14 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
             throw new Error("Missing support for RRULE.BYSETPOS");
         }
 
-        const targetDates = occurences.length ? occurences.sort((a, b) => a.getTime() - b.getTime()) : [entryDate];
 
-        for (const date of targetDates) {
+        for (const date of context.dates) {
             // Skip if the date is too early
             if (date < start) {
                 continue;
             }
 
-            // Break out if we've exceeded the limit date before yielding
+            // Break out if we've exceeded the limit date
             if (end && date >= end) {
                 return;
             }
@@ -157,6 +184,11 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
         }
     }
 }
+
+type RecurrenceContext = {
+    scope: RecurFrequency
+    dates: Date[],
+};
 
 type WeekdayMap = {[k in RecurWeekday]: number};
 const WEEKDAYS = [
@@ -178,6 +210,76 @@ function reorderWeek(weekstart: RecurWeekday): WeekdayMap {
     });
 
     return reorderedData as WeekdayMap;
+}
+
+function earliestDateInContext (context: RecurrenceContext) : Date {
+    if (!context.dates.length) {
+        throw new Error(`Can not find earliest date: RecurrenceContext is empty`);
+    }
+
+    const earliest = new Date(context.dates.at(0)!);
+
+    // Reset the date's properties to whatever is the earliest for the defined scope
+    switch (context.scope) {
+        case RecurFrequency.Yearly:
+            return new Date(earliest.getFullYear(), 0, 1, 0, 0, 0, 0);
+
+        case RecurFrequency.Monthly:
+            return new Date(earliest.getFullYear(), earliest.getMonth(), 1, 0, 0, 0, 0);
+
+        case RecurFrequency.Weekly:
+            // TODO: Does this require the first day of the week or the first week of the year?
+            break;
+
+        case RecurFrequency.Daily:
+            return new Date(earliest.getFullYear(), earliest.getMonth(), earliest.getDate(), 0, 0, 0, 0);
+
+        case RecurFrequency.Hourly:
+            return new Date(earliest.getFullYear(), earliest.getMonth(), earliest.getDate(), earliest.getHours(), 0, 0, 0);
+
+        case RecurFrequency.Minutely:
+            return new Date(earliest.getFullYear(), earliest.getMonth(), earliest.getDate(), earliest.getHours(), earliest.getMinutes(), 0, 0);
+
+        case RecurFrequency.Secondly:
+            return earliest;
+    }
+
+    throw new Error(`Can not find earliest date: unsupported scope '${context.scope}' in RecurrenceContext. This is most likely a bug in ical-ts.`);
+}
+
+function latestDateInContext (context: RecurrenceContext) : Date {
+    if (!context.dates) {
+        throw new Error(`Can not find earliest date: RecurrenceContext is empty`);
+    }
+
+    const latest = new Date(context.dates.at(-1)!);
+
+    // Reset the date's properties to whatever is the latest for the defined scope
+    switch (context.scope) {
+        case RecurFrequency.Yearly:
+            return new Date(latest.getFullYear(), 12, 31, 23, 59, 59, 0);
+
+        case RecurFrequency.Monthly:
+            return new Date(latest.getFullYear(), latest.getMonth() + 1, 0, 23, 59, 59, 0);
+
+        case RecurFrequency.Weekly:
+            // TODO: Does this require the first day of the week or the first week of the year?
+            break;
+
+        case RecurFrequency.Daily:
+            return new Date(latest.getFullYear(), latest.getMonth(), latest.getDate(), 23, 59, 59, 0);
+
+        case RecurFrequency.Hourly:
+            return new Date(latest.getFullYear(), latest.getMonth(), latest.getDate(), latest.getHours(), 59, 59, 0);
+
+        case RecurFrequency.Minutely:
+            return new Date(latest.getFullYear(), latest.getMonth(), latest.getDate(), latest.getHours(), latest.getMinutes(), 59, 0);
+
+        case RecurFrequency.Secondly:
+            return latest;
+    }
+
+    throw new Error(`Can not find earliest date: unsupported scope '${context.scope}' in RecurrenceContext. This is most likely a bug in ical-ts.`);
 }
 
 function *frequencyIterator (frequency: RecurFrequency, interval: number, start: Date, end: Date|undefined) : Generator<Date> {
