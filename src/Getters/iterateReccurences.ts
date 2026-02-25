@@ -42,12 +42,12 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
         };
 
         if (recur.byMonth !== undefined) {
-            // BYMONTH expands for YEARLY and limits for everything else
             if (recur.frequency === RecurFrequency.Yearly) {
                 context = simpleContextExpansion(context, RecurFrequency.Monthly, recur.byMonth, (nextDate, month) => nextDate.setMonth(month - 1));
             } else {
-                // TODO: Implement
-                throw new Error(`Missing support for RRULE.BYMONTH with FREQ=${recur.frequency}`);
+                // Filter potential negative values (they're not allowed when filtering)
+                const includedMonths = recur.byMonth.filter(month => month > 0);
+                context = simpleContextLimiting(context, RecurFrequency.Monthly, contextDate => includedMonths.includes(contextDate.getMonth() + 1))
             }
         }
 
@@ -103,21 +103,22 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                 case RecurFrequency.Weekly:
                     const weekstart = recur.weekstart || RecurWeekday.Monday;
                     const weekdayMap = reorderWeek(weekstart);
-                    // TODO: This should probably act on the context, not on the entry date directly?
-                    //  This will become relevant once the limiter is implemented for BYMONTH
-                    const firstDayOfWeek = new Date(entryDate);
 
-                    firstDayOfWeek.setDate(firstDayOfWeek.getDate() - (firstDayOfWeek.getDay() - WEEKDAYS.indexOf(weekstart) + 7) % 7);
+                    const dates: Date[] = context.dates.flatMap(contextDate => {
+                        const firstDayOfWeek = new Date(contextDate);
 
-                    context = {
-                        scope: RecurFrequency.Daily,
-                        dates: recur.byDay.map(byDay => {
+                        firstDayOfWeek.setDate(firstDayOfWeek.getDate() - (firstDayOfWeek.getDay() - WEEKDAYS.indexOf(weekstart) + 7) % 7);
+
+                        return recur.byDay!.map(byDay => {
                             const date = new Date(firstDayOfWeek);
                             date.setDate(date.getDate() + weekdayMap[byDay.weekday]);
 
                             return date;
-                        }).sort((a, b) => a.getTime() - b.getTime())
-                    };
+                        });
+                    }).sort((a, b) => a.getTime() - b.getTime());
+
+
+                    context = {scope: RecurFrequency.Daily, dates};
 
                     break;
 
@@ -293,6 +294,13 @@ function simpleContextExpansion (context: RecurrenceContext, nextScope: RecurFre
 
             return nextDate;
         }))
+    };
+}
+
+function simpleContextLimiting (context: RecurrenceContext, nextScope: RecurFrequency, filter: (contextDate: Date) => boolean) {
+    return {
+        scope: nextScope,
+        dates: context.dates.filter(filter),
     };
 }
 
