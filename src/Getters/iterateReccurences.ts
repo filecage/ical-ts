@@ -103,6 +103,8 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                 case RecurFrequency.Weekly:
                     const weekstart = recur.weekstart || RecurWeekday.Monday;
                     const weekdayMap = reorderWeek(weekstart);
+                    // TODO: This should probably act on the context, not on the entry date directly?
+                    //  This will become relevant once the limiter is implemented for BYMONTH
                     const firstDayOfWeek = new Date(entryDate);
 
                     firstDayOfWeek.setDate(firstDayOfWeek.getDate() - (firstDayOfWeek.getDay() - WEEKDAYS.indexOf(weekstart) + 7) % 7);
@@ -171,6 +173,7 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                     break;
 
                 default:
+                    // TODO: Implement
                     throw new Error(`Missing support for RRULE.BYDAY with FREQ=${recur.frequency}`);
             }
         }
