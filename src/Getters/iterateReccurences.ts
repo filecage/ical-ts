@@ -144,8 +144,8 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                         const latest = latestDateInContext(context);
 
                         const dates = (Object.entries(weekdayFilters) as [RecurWeekday, RecurByWeekday[]][]).flatMap(([weekday, byDays]) => {
-                            // For each needle weekday, we generate all occurences within the earliest/latest timeframe
-                            // We do this by selecting the very first occurence of this weekday and then adding 7 days until we've exceeded the latest date
+                            // For each needle weekday, we generate all occurrences within the earliest/latest timeframe
+                            // We do this by selecting the very first occurrence of this weekday and then adding 7 days until we've exceeded the latest date
                             // After this we select the correct indices from the generated stack
                             const weekdayIndex = WEEKDAYS.indexOf(weekday);
                             const nextWeekday = new Date(earliest);
