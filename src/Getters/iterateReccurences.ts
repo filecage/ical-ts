@@ -31,14 +31,14 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
     const end = (options.end && until) ? new Date(Math.min(until.getTime(), options.end.getTime())) : (options.end || until);
     let count = 0;
 
-    for (const entryDate of frequencyIterator(recur.frequency, recur.interval || 1, start, end)) {
+    for (const occurrence of frequencyIterator(recur.frequency, recur.interval || 1, start, end)) {
         // The context always keeps the current dates and their scope
         // If, for instance, the scope is yearly, each date does not refer to a specific day, but just to the year
         // If it's monthly, the dates refer to a month and so on and so forth
         // For performance purpose, the order of dates must always be kept from earliest to latest (so we can always easily select them)
         let context: RecurrenceContext = {
             scope: recur.frequency,
-            dates: [entryDate],
+            dates: [occurrence],
         };
 
         if (recur.byMonth !== undefined) {
