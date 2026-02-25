@@ -285,6 +285,19 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
 ]
 `;
 
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Complex multiple BY rules 1`] = `
+[
+  2026-06-01T00:00:00.000Z,
+  2026-06-15T00:00:00.000Z,
+  2026-12-01T00:00:00.000Z,
+  2026-12-15T00:00:00.000Z,
+  2027-06-01T00:00:00.000Z,
+  2027-06-15T00:00:00.000Z,
+  2027-12-01T00:00:00.000Z,
+  2027-12-15T00:00:00.000Z,
+]
+`;
+
 exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Daily basic 1`] = `
 [
   2026-02-23T00:00:00.000Z,
@@ -323,6 +336,36 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
 ]
 `;
 
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Leap year February 29 1`] = `
+[
+  2028-02-29T00:00:00.000Z,
+  2032-02-29T00:00:00.000Z,
+  2036-02-29T00:00:00.000Z,
+]
+`;
+
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Monthly last day 1`] = `
+[
+  2026-02-28T00:00:00.000Z,
+  2026-03-31T00:00:00.000Z,
+  2026-04-30T00:00:00.000Z,
+  2026-05-31T00:00:00.000Z,
+  2026-06-30T00:00:00.000Z,
+  2026-07-31T00:00:00.000Z,
+]
+`;
+
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Monthly specific date 1`] = `
+[
+  2026-03-15T00:00:00.000Z,
+  2026-04-15T00:00:00.000Z,
+  2026-05-15T00:00:00.000Z,
+  2026-06-15T00:00:00.000Z,
+  2026-07-15T00:00:00.000Z,
+  2026-08-15T00:00:00.000Z,
+]
+`;
+
 exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Next 5 Last Sunday of March 1`] = `
 [
   2026-03-29T00:00:00.000Z,
@@ -330,6 +373,15 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
   2028-03-26T00:00:00.000Z,
   2029-03-25T00:00:00.000Z,
   2030-03-31T00:00:00.000Z,
+]
+`;
+
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Quarterly first day 1`] = `
+[
+  2026-05-01T00:00:00.000Z,
+  2026-08-01T00:00:00.000Z,
+  2026-11-01T00:00:00.000Z,
+  2027-02-01T00:00:00.000Z,
 ]
 `;
 
@@ -387,6 +439,14 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
   2026-03-02T00:00:00.000Z,
   2026-03-09T00:00:00.000Z,
   2026-03-16T00:00:00.000Z,
+]
+`;
+
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Yearly Christmas 1`] = `
+[
+  2026-02-25T00:00:00.000Z,
+  2027-02-25T00:00:00.000Z,
+  2028-02-25T00:00:00.000Z,
 ]
 `;
 

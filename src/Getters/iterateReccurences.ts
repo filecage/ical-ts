@@ -68,8 +68,39 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
         }
 
         if (recur.byMonthday) {
-            // TODO: Implement
-            throw new Error("Missing support for RRULE.BYMONTHDAY");
+            switch (recur.frequency) {
+                case RecurFrequency.Monthly:
+                case RecurFrequency.Yearly:
+                    context = {
+                        scope: RecurFrequency.Daily,
+                        dates: context.dates.flatMap(contextDate => recur.byMonthday!.map(monthday => {
+                            const monthdayDate = new Date(contextDate);
+                            const targetMonth = monthdayDate.getMonth();
+
+                            // Negative offsets mean we first have to move to the first day of the last month,
+                            // then apply the offset to move back.
+                            if  (monthday < 1) {
+                                // Cancel the effect of a 0-offset here (not allowed by RFC)
+                                // then adjust +1 so -1 (RFC for "last day") == 0 (`Date()` for "last day")
+                                monthdayDate.setMonth(monthdayDate.getMonth() + 1, Math.min(monthday, -1) + 1);
+                            } else {
+                                monthdayDate.setDate(monthday);
+                            }
+
+                            // Whenever the offset led to a new month, this means the date is invalid
+                            // and needs to be filtered
+                            if (monthdayDate.getMonth() !== targetMonth) {
+                                return undefined;
+                            }
+
+                            return monthdayDate;
+                        }).filter(date => date !== undefined))
+                    }
+                    break;
+
+                default:
+                    throw new Error(`Missing support for RRULE.BYMONTHDAY with FREQ=${recur.frequency}`);
+            }
         }
 
         if (recur.byDay !== undefined) {
