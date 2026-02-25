@@ -34,7 +34,7 @@ export default function getLocalOffsetForDateTime (dateTime: DateTime, timezones
     // Extend each timezone candidate's RRULE to get the latest transition times
     const timezoneCandidatesTransitions = timezoneCandidates.map(timezoneDefinition => {
         if (timezoneDefinition.RDATE) {
-            // TODO: ICS definition only allows RDATE *or* RRULE, but is this really in the RFC?
+            // TODO: ICS definition only allows RDATE *or* RRULE, but is this really in the RFC? @see https://github.com/filecage/ical-ts/issues/11
             throw new Error(`Missing support for RDATE in VTIMEZONE timezone definition`);
         }
 
