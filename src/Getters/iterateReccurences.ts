@@ -161,6 +161,11 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                                 nextWeekday.setDate(nextWeekday.getDate() + 7);
                             }
 
+                            // If there is offset 0 in BYDAY filter, it means no offset given, which effectively means "every occurrence"
+                            if (offsets.includes(0)) {
+                                return candidates;
+                            }
+
                             // Correct offset to 0-indexed if it's not negative
                             return offsets.map(offset => candidates.at(offset < 0 ? offset : offset - 1))
                                 .filter(candidate => candidate !== undefined);
