@@ -336,6 +336,15 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
 ]
 `;
 
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for First Mondays of the next 4 years 1`] = `
+[
+  2027-01-04T00:00:00.000Z,
+  2028-01-03T00:00:00.000Z,
+  2029-01-01T00:00:00.000Z,
+  2030-01-07T00:00:00.000Z,
+]
+`;
+
 exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Leap year February 29 1`] = `
 [
   2028-02-29T00:00:00.000Z,
