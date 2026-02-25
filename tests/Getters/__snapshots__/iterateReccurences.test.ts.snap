@@ -344,6 +344,23 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
 ]
 `;
 
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Today but only in January, June and August 1`] = `
+[
+  2026-06-23T00:00:00.000Z,
+  2026-08-23T00:00:00.000Z,
+  2027-01-23T00:00:00.000Z,
+  2027-06-23T00:00:00.000Z,
+  2027-08-23T00:00:00.000Z,
+  2028-01-23T00:00:00.000Z,
+  2028-06-23T00:00:00.000Z,
+  2028-08-23T00:00:00.000Z,
+  2029-01-23T00:00:00.000Z,
+  2029-06-23T00:00:00.000Z,
+  2029-08-23T00:00:00.000Z,
+  2030-01-23T00:00:00.000Z,
+]
+`;
+
 exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Weekly weekdays 1`] = `
 [
   2026-02-23T00:00:00.000Z,
