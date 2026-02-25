@@ -85,6 +85,7 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                 case RecurFrequency.Yearly:
                     if (recur.byMonthday || recur.byYearday) {
                         // TODO: Limit if BYMONTHDAY or or BYYEARDAY is present
+                        throw new Error(`Missing support for RRULE.BYDAY with FREQ=${recur.frequency} in combination with RRULE.BYMONTHDAY or RRULE.BYYEARDAY`);
                     } else {
                         // Consolidate all weekday filters, so we can select the required indices in one batch
                         const weekdayFilters = recur.byDay.reduce((filters, filter) => {
