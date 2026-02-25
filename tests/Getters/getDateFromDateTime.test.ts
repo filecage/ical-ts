@@ -7,12 +7,14 @@ import TimeZoneOffsetFrom from "../../src/Parser/Properties/TimeZoneOffsetFrom";
 import TimeZoneOffsetTo from "../../src/Parser/Properties/TimeZoneOffsetTo";
 import RecurrenceRule from "../../src/Parser/Properties/RecurrenceRule";
 import {parseDateTime, parseOffset, parseRecurrence} from "../../src/Parser/parseValues";
+import TimeZoneName from "../../src/Parser/Properties/TimeZoneName";
 
 
 const VTIMZEZONES: ICS.VTIMEZONE[] = [
     {
         TZID: new TimeZoneIdentifier('Europe/Berlin', {}),
         DAYLIGHT: [{
+            TZNAME: new TimeZoneName('CEST', {}),
             TZOFFSETFROM: new TimeZoneOffsetFrom(parseOffset('+0100'), {}),
             TZOFFSETTO: new TimeZoneOffsetTo(parseOffset('+0200'), {}),
             DTSTART: new DateTimeStart(parseDateTime('19700329T020000', {}), {}),
@@ -20,6 +22,7 @@ const VTIMZEZONES: ICS.VTIMEZONE[] = [
         }],
         STANDARD: [
             {
+                TZNAME: new TimeZoneName('CET', {}),
                 TZOFFSETFROM: new TimeZoneOffsetFrom(parseOffset('+0200'), {}),
                 TZOFFSETTO: new TimeZoneOffsetTo(parseOffset('+0100'), {}),
                 DTSTART: new DateTimeStart(parseDateTime('19701025T030000', {}), {}),
