@@ -196,10 +196,13 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
         }
 
         if (recur.bySetPos) {
-            // TODO: Implement
-            throw new Error("Missing support for RRULE.BYSETPOS");
-        }
+            const includedIndices = recur.bySetPos.map(index => index > 0
+                ? index - 1 // adjust for zero-based index
+                : context.dates.length + index // calculate index access based on result set length
+            );
 
+            context.dates = context.dates.filter((_, index) => includedIndices.includes(index));
+        }
 
         for (const date of context.dates) {
             // Skip if the date is too early

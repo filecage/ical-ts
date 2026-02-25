@@ -25,7 +25,8 @@ describe('iterateReccurences Tests', () => {
         ['Quarterly first day', 'FREQ=MONTHLY;INTERVAL=3;BYMONTHDAY=1;COUNT=4'], // First day of every quarter for 4 occurrences
         ['Time-bounded weekly', 'FREQ=WEEKLY;BYDAY=TU;UNTIL=20260401T000000Z'], // Every Tuesday until April 1, 2026
         ['Complex multiple BY rules', 'FREQ=YEARLY;BYMONTH=6,12;BYMONTHDAY=1,15;COUNT=8'], // 1st and 15th of June and December
-        ['First weekday of month', 'FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1;COUNT=6'], // First weekday of each month using BYSETPOS
+        ['First workday of month using SETPOS', 'FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1;COUNT=6'],
+        ['Last workday of month using SETPOS', 'FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1;COUNT=6'],
         ['Leap year February 29', 'FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=29;COUNT=3'], // February 29th (leap years only)
         ['Weekly with WKST', 'FREQ=WEEKLY;BYDAY=MO;WKST=SU;COUNT=4'], // Every Monday with week starting on Sunday
         ['Zero BYHOUR/BYMINUTE/BYSECOND offsets', 'FREQ=MONTHLY;BYHOUR=0;BYMINUTE=0;BYSECOND=0;COUNT=24'] // Time Offsets with value 0

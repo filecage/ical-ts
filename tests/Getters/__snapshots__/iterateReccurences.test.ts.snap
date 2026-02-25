@@ -345,6 +345,28 @@ exports[`iterateReccurences Tests Should correctly generate RRule recurrences fo
 ]
 `;
 
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for First workday of month using SETPOS 1`] = `
+[
+  2026-03-02T00:00:00.000Z,
+  2026-04-01T00:00:00.000Z,
+  2026-05-01T00:00:00.000Z,
+  2026-06-01T00:00:00.000Z,
+  2026-07-01T00:00:00.000Z,
+  2026-08-03T00:00:00.000Z,
+]
+`;
+
+exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Last workday of month using SETPOS 1`] = `
+[
+  2026-02-27T00:00:00.000Z,
+  2026-03-31T00:00:00.000Z,
+  2026-04-30T00:00:00.000Z,
+  2026-05-29T00:00:00.000Z,
+  2026-06-30T00:00:00.000Z,
+  2026-07-31T00:00:00.000Z,
+]
+`;
+
 exports[`iterateReccurences Tests Should correctly generate RRule recurrences for Leap year February 29 1`] = `
 [
   2028-02-29T00:00:00.000Z,
