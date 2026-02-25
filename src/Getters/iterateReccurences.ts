@@ -53,6 +53,7 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                     })
                 }
             } else {
+                // TODO: Implement
                 throw new Error(`Missing support for RRULE.BYMONTH with FREQ=${recur.frequency}`);
             }
         }
@@ -99,6 +100,7 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
                     break;
 
                 default:
+                    // TODO: Implement
                     throw new Error(`Missing support for RRULE.BYMONTHDAY with FREQ=${recur.frequency}`);
             }
         }
