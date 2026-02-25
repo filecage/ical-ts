@@ -44,14 +44,7 @@ export default function *iterateReccurences (recur: Recur, options: { end?: Date
         if (recur.byMonth !== undefined) {
             // BYMONTH expands for YEARLY and limits for everything else
             if (recur.frequency === RecurFrequency.Yearly) {
-                context = {
-                    scope: RecurFrequency.Monthly,
-                    dates: recur.byMonth.map(month => {
-                        const nextMonth = new Date(entryDate);
-
-                        return new Date(nextMonth.setMonth(month - 1));
-                    })
-                }
+                context = simpleContextExpansion(context, RecurFrequency.Monthly, recur.byMonth, (nextDate, month) => nextDate.setMonth(month - 1));
             } else {
                 // TODO: Implement
                 throw new Error(`Missing support for RRULE.BYMONTH with FREQ=${recur.frequency}`);
@@ -252,6 +245,19 @@ function reorderWeek(weekstart: RecurWeekday): WeekdayMap {
     });
 
     return reorderedData as WeekdayMap;
+}
+
+function simpleContextExpansion (context: RecurrenceContext, nextScope: RecurFrequency, expanders: number[], modifier: (nextDate: Date, expander: number) => void) : RecurrenceContext {
+    return {
+        scope: nextScope,
+            dates: context.dates.flatMap(contextDate => expanders.map(expander => {
+            const nextDate = new Date(contextDate);
+
+            modifier(nextDate, expander);
+
+            return nextDate;
+        }))
+    };
 }
 
 function earliestDateInContext (context: RecurrenceContext) : Date {
