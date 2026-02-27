@@ -5,6 +5,7 @@ import {EmailAddress} from "../ValueTypes/EmailAddress";
 
 export namespace Parameters {
     // TODO: We could define defaults for all parameters using the @default annotation, see https://github.com/filecage/ical-ts/issues/4
+    // TODO: Consistent support for property list values in parameters, see https://github.com/filecage/ical-ts/issues/9
 
     // @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.2
     // @see https://datatracker.ietf.org/doc/html/rfc7986#section-6
