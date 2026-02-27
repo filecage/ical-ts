@@ -375,7 +375,7 @@ function latestDateInContext (context: RecurrenceContext) : Date {
 }
 
 function *frequencyIterator (frequency: RecurFrequency, interval: number, start: Date, end: Date|undefined) : Generator<Date> {
-    let date = new Date(start);
+    const date = new Date(start);
 
     // The first date is always the starting date without any modifications
     yield new Date(date);
