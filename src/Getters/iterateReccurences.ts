@@ -7,31 +7,25 @@ import {getDateFromDateTime} from "./getDateFromDateTime";
 
 /**
  * @param {Recur} recur The recurrence rule
- * @param options You can either pass the calendar properties (EXDATE, RDATE, DTSTART), but these will require you
- *                to also pass VTIMEZONE (because they might refer to a TZID of the VCALENDAR).
- *                Alternatively, you can pass already normalized exdates/rdates.
- *
- *                However, this is not possible for the start date because recurrence time information is inherited
- *                from DTSTART if not defined otherwise (e.g. 9:30 start time means all recurrences will be 9:30 as well)
- *                This will be changed in a future version when moving to Temporals (@see https://github.com/filecage/ical-ts/issues/8)
- *
+ * @param options
  *                A start date is required
  *                An end date is optional (iterator will continue indefinitely until it's no longer consumed)
  *                If `options.end` is provided and the RRULE has an `UNTIL`, the earlier of the two will be chosen as end date
  *
+ *                VTIMEZONE information is required if a DTSTART or RRULE.UNTIL refers to a TZID
  *                Can be called with `null` VTIMEZONE to explicitly opt out of TZID conversions
  */
 /* eslint-disable no-case-declarations */ // it somehow triggers for the switch/case with enums in this function
-export default function *iterateReccurences (recur: Recur, options: { end?: Date }
-        & {DTSTART: DateTime, VTIMEZONE: ICS.VTIMEZONE[]|null}
-        & XOR<{EXDATE: DateTime[]}, {exdates?: Date[]}>
-        & XOR<{RDATE: (DateTime|Period)[]}, {rdates?: Date[]}>
-) : Generator<Date> {
+export default function *iterateReccurences (recur: Recur, options: {
+    end?: Date
+    DTSTART: DateTime,
+    VTIMEZONE: ICS.VTIMEZONE[]|null
+}) : Generator<Date> {
     const start = getDateFromDateTime(options.DTSTART, options.VTIMEZONE ?? []);
     const until = recur.until ? getDateFromDateTime(recur.until, options.VTIMEZONE ?? []) : undefined;
     const end = (options.end && until) ? new Date(Math.min(until.getTime(), options.end.getTime())) : (options.end || until);
-    let count = 0;
 
+    let count = 0;
     for (const occurrence of frequencyIterator(recur.frequency, recur.interval || 1, start, end)) {
         // The context always keeps the current dates and their scope
         // If, for instance, the scope is yearly, each date does not refer to a specific day, but just to the year
