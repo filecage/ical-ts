@@ -10,6 +10,7 @@ export default tseslint.config(
 		rules: {
 			"@typescript-eslint/no-namespace": "off",
 			"@typescript-eslint/no-redundant-type-constituents": "off",
+			"no-case-declarations": "off"
 		}
 	}
 );
