@@ -1,8 +1,6 @@
-import {XOR} from "ts-xor";
 import {Recur, RecurByWeekday, RecurFrequency, RecurModifier, RecurWeekday} from "../Parser/ValueTypes/Recur";
 import {DateTime} from "../Parser/ValueTypes/DateTime";
 import {ICS} from "../ICS";
-import {Period} from "../Parser/ValueTypes/Period";
 import {getDateFromDateTime} from "./getDateFromDateTime";
 
 /**
