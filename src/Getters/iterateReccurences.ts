@@ -21,6 +21,7 @@ import {getDateFromDateTime} from "./getDateFromDateTime";
  *
  *                Can be called with `null` VTIMEZONE to explicitly opt out of TZID conversions
  */
+/* eslint-disable no-case-declarations */ // it somehow triggers for the switch/case with enums in this function
 export default function *iterateReccurences (recur: Recur, options: { end?: Date }
         & {DTSTART: DateTime, VTIMEZONE: ICS.VTIMEZONE[]|null}
         & XOR<{EXDATE: DateTime[]}, {exdates?: Date[]}>
