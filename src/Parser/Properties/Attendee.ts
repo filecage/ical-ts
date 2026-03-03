@@ -14,7 +14,10 @@ export default class Attendee extends Property<CalAddress,
     Parameters.SentBy &
     Parameters.CommonName &
     Parameters.DirectoryEntryReference &
-    Parameters.Email
+    Parameters.Email &
+    Parameters.ScheduleAgent &
+    Parameters.ScheduleStatus &
+    Parameters.ScheduleForceSend
 > {
     public readonly key = 'ATTENDEE';
 }

@@ -7,7 +7,10 @@ export default class Organizer extends Property<CalAddress,
     Parameters.CommonName &
     Parameters.DirectoryEntryReference &
     Parameters.SentBy &
-    Parameters.Email
+    Parameters.Email &
+    Parameters.ScheduleAgent &
+    Parameters.ScheduleStatus &
+    Parameters.ScheduleForceSend
 > {
     public readonly key = 'ORGANIZER';
 }
