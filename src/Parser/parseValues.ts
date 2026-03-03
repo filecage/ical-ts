@@ -3,7 +3,7 @@ import {CAPITAL_T, CAPITAL_Z, COMMA, EQUAL, HYPHEN_MINUS, PERIOD, QUOTES, SEMICO
 import {DateTime, DateTimeClass, UTCDateTime} from "./ValueTypes/DateTime";
 import {Period} from "./ValueTypes/Period";
 import {Parameters} from "./Parameters/Parameters";
-import {Duration, formatDuration} from "./ValueTypes/Duration";
+import {Duration} from "./ValueTypes/Duration";
 import {Recur, RecurByWeekday, RecurFrequency, RecurModifier, RecurWeekday} from "./ValueTypes/Recur";
 import {Offset} from "./ValueTypes/Offset";
 
@@ -93,7 +93,7 @@ export function parseDuration (value: string) : Duration {
         seconds: durationToNumber(matches.groups.seconds),
     };
 
-    return {...duration, toString: () => formatDuration(duration), toJSON: () => formatDuration(duration)} as Duration;
+    return {...duration, toString: () => value, toJSON: () => value} as Duration;
 }
 
 function durationToNumber (input: string|undefined) : number|undefined {
