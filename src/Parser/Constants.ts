@@ -13,6 +13,7 @@ export const CAPITAL_Z = 'Z';
 export const SOLIDUS = '/';
 export const HYPHEN_MINUS = '-';
 export const PLUS = '+';
+export const BACKSLASH = '\\';
 
 export enum Component {
     VCALENDAR = 'VCALENDAR',
