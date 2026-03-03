@@ -176,7 +176,7 @@ function compileIntersectionType (types: Type[]) : string {
 }
 
 function fnName (key: string) : string {
-    return `parse${key.replace('-', '_')}`;
+    return `parse${key.replaceAll('-', '_')}`;
 }
 
 function sortBlocks (key: string, type: Type, level: number = 0, matchAll: undefined|Type = undefined) : {key: string, type: Type, final: boolean}[] {
