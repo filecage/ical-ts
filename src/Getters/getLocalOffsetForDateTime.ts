@@ -3,7 +3,6 @@ import {Offset} from "../Parser/ValueTypes/Offset";
 import {DateTime} from "../Parser/ValueTypes/DateTime";
 import formatOffset from "../Formatters/formatOffset";
 import iterateReccurences from "./iterateReccurences";
-import TimezoneDefinition = ICS.TimezoneDefinition;
 
 /**
  * Takes a `dateTime` and a list of calendar `VTIMEZONE` definitions and returns the offset that needs
@@ -78,12 +77,12 @@ export default function getLocalOffsetForDateTime (dateTime: DateTime, timezones
     };
 }
 
-function getTimezoneCandidate (at: DateTime, timezones: undefined|TimezoneDefinition[]) : undefined|TimezoneDefinition {
+function getTimezoneCandidate (at: DateTime, timezones: undefined|ICS.TimezoneDefinition[]) : undefined|ICS.TimezoneDefinition {
     if (timezones === undefined) {
         return undefined;
     }
 
-    return timezones.reduce((timezoneCandidate: undefined|TimezoneDefinition, timezoneDefinition) => {
+    return timezones.reduce((timezoneCandidate: undefined|ICS.TimezoneDefinition, timezoneDefinition) => {
         // const timezoneStartsAtUTC = timezoneDefinition.DTSTART.value.date.getTime() + timezoneDefinition.TZOFFSETFROM.value.seconds * 1000;
         // Select the timezone definition with the closest DTSTART to our `at`
         if (timezoneDefinition.DTSTART.value.date <= at.date && (timezoneCandidate === undefined || timezoneCandidate.DTSTART.value.date < timezoneDefinition.DTSTART.value.date)) {
