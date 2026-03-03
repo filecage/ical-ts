@@ -2,6 +2,7 @@ import {CalAddress} from "../ValueTypes/CalAddress";
 import {Uri} from "../ValueTypes/Uri";
 import {LanguageTag} from "../ValueTypes/LanguageTag";
 import {EmailAddress} from "../ValueTypes/EmailAddress";
+import {ReqStatus} from "../ValueTypes/ReqStatus";
 
 export namespace Parameters {
     // TODO: We could define defaults for all parameters using the @default annotation, see https://github.com/filecage/ical-ts/issues/4
@@ -32,6 +33,9 @@ export namespace Parameters {
     export type RelationshipType = { RELTYPE?: string | 'PARENT' | 'CHILD' | 'SIBLING' | 'SNOOZE' };
     export type ParticipationRole = { ROLE?: string | 'CHAIR' | 'REQ-PARTICIPANT' | 'OPT-PARTICIPANT' | 'NON-PARTICIPANT'};
     export type RSVPExpectation = {RSVP?: 'TRUE' | 'FALSE'};
+    export type ScheduleAgent = {'SCHEDULE-AGENT'?: string | 'SERVER' | 'CLIENT' | 'NONE' };
+    export type ScheduleForceSend = {'SCHEDULE-FORCE-SEND'?: string | 'REQUEST' | 'REPLY' };
+    export type ScheduleStatus = {'SCHEDULE-STATUS'?:  ReqStatus};
     export type SentBy = {'SENT-BY'?: CalAddress};
     export type TimeZoneIdentifier = {TZID?: string};
     export type ValueDataTypes = {VALUE?: string | 'BINARY' | 'BOOLEAN' | 'CAL-ADDRESS' | 'DATE' | 'DATE-TIME' | 'DURATION' | 'FLOAT' | 'INTEGER' | 'PERIOD' | 'RECUR' | 'TEXT' | 'TIME' | 'URI' | 'UTC-OFFSET'};
