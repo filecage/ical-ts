@@ -6,7 +6,7 @@ import {Parameters} from "./Parameters/Parameters";
 
 import {parseValueRaw} from "./parseValues"
 
-export function parseParameters (fragments: string[])  : Parameters.AlternateTextRepresentation&Parameters.CommonName&Parameters.CalendarUserType&Parameters.Delegators&Parameters.Delegatees&Parameters.DirectoryEntryReference&Parameters.Display&Parameters.Email&Parameters.Feature&Parameters.InlineEncoding&Parameters.FormatType&Parameters.FreeBusyTimeType&Parameters.Language&Parameters.Label&Parameters.GroupOrListMembership&Parameters.ParticipationStatusTodo&Parameters.Range&Parameters.AlarmTriggerRelationship&Parameters.RelationshipType&Parameters.ParticipationRole&Parameters.RSVPExpectation&Parameters.SentBy&Parameters.TimeZoneIdentifier&Parameters.ValueDataTypes {
+export function parseParameters (fragments: string[])  : Parameters.AlternateTextRepresentation&Parameters.CommonName&Parameters.CalendarUserType&Parameters.Delegators&Parameters.Delegatees&Parameters.DirectoryEntryReference&Parameters.Display&Parameters.Email&Parameters.Feature&Parameters.InlineEncoding&Parameters.FormatType&Parameters.FreeBusyTimeType&Parameters.Language&Parameters.Label&Parameters.GroupOrListMembership&Parameters.ParticipationStatusTodo&Parameters.Range&Parameters.AlarmTriggerRelationship&Parameters.RelationshipType&Parameters.ParticipationRole&Parameters.RSVPExpectation&Parameters.ScheduleAgent&Parameters.ScheduleForceSend&Parameters.ScheduleStatus&Parameters.SentBy&Parameters.TimeZoneIdentifier&Parameters.ValueDataTypes {
     return fragments.reduce((parameters, fragment) => {
         const [parameterKey, parameterValue] = fragment.split(EQUAL);
 
@@ -32,6 +32,9 @@ export function parseParameters (fragments: string[])  : Parameters.AlternateTex
             case 'RELTYPE': return {...parameters, ...parser.parseRELTYPE(parameterValue)};
             case 'ROLE': return {...parameters, ...parser.parseROLE(parameterValue)};
             case 'RSVP': return {...parameters, ...parser.parseRSVP(parameterValue)};
+            case 'SCHEDULE-AGENT': return {...parameters, ...parser.parseSCHEDULE_AGENT(parameterValue)};
+            case 'SCHEDULE-FORCE-SEND': return {...parameters, ...parser.parseSCHEDULE_FORCE_SEND(parameterValue)};
+            case 'SCHEDULE-STATUS': return {...parameters, ...parser.parseSCHEDULE_STATUS(parameterValue)};
             case 'SENT-BY': return {...parameters, ...parser.parseSENT_BY(parameterValue)};
             case 'TZID': return {...parameters, ...parser.parseTZID(parameterValue)};
             case 'VALUE': return {...parameters, ...parser.parseVALUE(parameterValue)};
@@ -192,6 +195,24 @@ namespace parser {
         }
             
         throw new Error(`Invalid value '${value}' for parameter 'RSVP'`);
+    }
+    
+    export function parseSCHEDULE_AGENT(parameterValue: string) {
+        const value = parseValueRaw(parameterValue);
+        
+        return {'SCHEDULE-AGENT': value} as Parameters.ScheduleAgent;
+    }
+    
+    export function parseSCHEDULE_FORCE_SEND(parameterValue: string) {
+        const value = parseValueRaw(parameterValue);
+        
+        return {'SCHEDULE-FORCE-SEND': value} as Parameters.ScheduleForceSend;
+    }
+    
+    export function parseSCHEDULE_STATUS(parameterValue: string) {
+        const value = parseValueRaw(parameterValue);
+        
+        return {'SCHEDULE-STATUS': value} as Parameters.ScheduleStatus;
     }
     
     export function parseSENT_BY(parameterValue: string) {
