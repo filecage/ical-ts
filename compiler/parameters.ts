@@ -3,7 +3,6 @@ import {exportSourceFileRaw, readSourceFile, readSourceFileRaw} from "./lib/read
 import TypeCompiler from "./lib/TypeCompiler";
 import {Type} from "./lib/Type";
 import {format} from "./lib/format";
-import {Parameters} from "../src/Parser/Parameters/Parameters";
 import {parseValueRaw, ValueParserFn} from "../src/Parser/parseValues";
 import {flattenTypeParserFns, mapFnList} from "./lib/flattenTypeEnums";
 import {compileValueParserImports} from "./lib/compile";
