@@ -1,19 +1,19 @@
 /**${TEMPLATE_ONLY_BEGIN}**/
 import Property from "../../src//Parser/Properties/Property";
-import {SEMICOLON} from "../../src/Parser/Constants";
 import {parseParameters} from "./parseParameters.template";
+import {parseFragments} from "../../src/Parser/parseFragments";
 /**${TEMPLATE_ONLY_END}**/
 /**${COMPILED_ONLY_BEGIN}**
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
 // @see compiler/properties.ts
- import {SEMICOLON} from "./Constants";
+ import {parseFragments} from "./parseFragments";
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 /**${COMPILED_ONLY_END}**/
 /**${PROPERTIES_IMPORTS}**/
 
 export function parseProperty (key: string, value: string) {
-    const fragments = key.split(SEMICOLON);
+    const fragments = parseFragments(key);
     const propertyKey = fragments.shift()?.toUpperCase() || '';
     const parameters = parseParameters(fragments);
 

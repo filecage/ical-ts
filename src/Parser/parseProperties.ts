@@ -1,7 +1,7 @@
 
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
 // @see compiler/properties.ts
- import {SEMICOLON} from "./Constants";
+ import {parseFragments} from "./parseFragments";
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 
@@ -62,7 +62,7 @@ import UniqueIdentifier from "./Properties/UniqueIdentifier";
 import Version from "./Properties/Version";
 
 export function parseProperty (key: string, value: string) {
-    const fragments = key.split(SEMICOLON);
+    const fragments = parseFragments(key);
     const propertyKey = fragments.shift()?.toUpperCase() || '';
     const parameters = parseParameters(fragments);
 
