@@ -44,6 +44,7 @@ import RecurrenceRule from "./Properties/RecurrenceRule";
 import RefreshInterval from "./Properties/RefreshInterval";
 import RelatedTo from "./Properties/RelatedTo";
 import Repeat from "./Properties/Repeat";
+import RequestStatus from "./Properties/RequestStatus";
 import Resources from "./Properties/Resources";
 import Sequence from "./Properties/Sequence";
 import Source from "./Properties/Source";
@@ -104,6 +105,7 @@ export function parseProperty (key: string, value: string) {
         case 'REFRESH-INTERVAL': return new RefreshInterval(parseDuration(value), parameters);
         case 'RELATED-TO': return new RelatedTo(parseValueRaw(value), parameters);
         case 'REPEAT': return new Repeat(parseValueRaw(value), parameters);
+        case 'REQUEST-STATUS': return new RequestStatus(parseValueRaw(value), parameters);
         case 'RESOURCES': return new Resources(parseValueRaw(value), parameters);
         case 'SEQUENCE': return new Sequence(parseValueRaw(value), parameters);
         case 'SOURCE': return new Source(parseValueRaw(value), parameters);

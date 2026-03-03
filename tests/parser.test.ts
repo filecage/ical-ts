@@ -21,6 +21,7 @@ describe('Parse ICS to JSON', () => {
         'parserv2.ics',
         'recur_instances.ics',
         'recur_instances_finite.ics',
+        'request_status.ics',
         'utc_negative_zero.ics',
         'rfc7986_base64_calendar_image.ics',
         'rfc7986_categories_refresh.ics',

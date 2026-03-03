@@ -29,6 +29,7 @@ export default class Event extends Component<ICS.VEVENT.Published> {
             IMAGE: this.pick(context, 'IMAGE'),
             'LAST-MODIFIED': this.pick(context, 'LAST-MODIFIED'),
             'RECURRENCE-ID': this.pick(context, 'RECURRENCE-ID'),
+            'REQUEST-STATUS': this.pick(context, 'REQUEST-STATUS'),
             LOCATION: this.pick(context, 'LOCATION'),
             SEQUENCE: this.pick(context, 'SEQUENCE'),
             STATUS: this.pick(context, 'STATUS'),

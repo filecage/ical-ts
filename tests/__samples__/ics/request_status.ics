@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//RFC5545 REQUEST-STATUS Unit Test//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+
+BEGIN:VEVENT
+UID:unit-test-rfc5545-request-status-001@example.com
+DTSTAMP:20260303T130000Z
+DTSTART:20260315T140000Z
+DTEND:20260315T150000Z
+SUMMARY:RFC5545 REQUEST-STATUS Test Event
+ORGANIZER;CN=Alice Organizer:mailto:alice@example.com
+ATTENDEE;CN=Bob Attendee;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:mailto:bob@example.com
+
+DESCRIPTION:Event used to test REQUEST-STATUS parsing.
+
+REQUEST-STATUS:2.0;Success
+REQUEST-STATUS:3.7;Invalid calendar user;ATTENDEE mailto:unknown@example.com
+REQUEST-STATUS:5.1;Service unavailable;Temporary failure\, try again later
+REQUEST-STATUS:4.0;Event conflict;Conflicts with another meeting at 14\:00
+
+SEQUENCE:0
+STATUS:CONFIRMED
+END:VEVENT
+
+END:VCALENDAR

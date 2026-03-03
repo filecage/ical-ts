@@ -32,6 +32,7 @@ export enum Property {
     DESCRIPTION = 'DESCRIPTION',
     EXDATE = 'EXDATE',
     IMAGE = 'IMAGE',
+    REQUEST_STATUS = 'REQUEST-STATUS',
 }
 
 // This defines components that will always be treated as a list (and put into an array when parsing)
@@ -44,4 +45,5 @@ export const LIST_PROPERTIES: Property[] = [
     Property.DESCRIPTION,
     Property.EXDATE,
     Property.IMAGE,
+    Property.REQUEST_STATUS,
 ];

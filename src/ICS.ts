@@ -38,6 +38,7 @@ import Source from "./Parser/Properties/Source";
 import Color from "./Parser/Properties/Color";
 import Image from "./Parser/Properties/Image";
 import Conference from "./Parser/Properties/Conference";
+import RequestStatus from "./Parser/Properties/RequestStatus";
 
 export namespace ICS {
     export type NonStandardPropertyAware = {nonStandard?: {[key: string]: undefined|Property<unknown>[] }};
@@ -108,6 +109,7 @@ export namespace ICS {
             IMAGE?: Image,
             'LAST-MODIFIED'?: LastModified,
             'RECURRENCE-ID'?: RecurrenceID,
+            'REQUEST-STATUS'?: RequestStatus[],
             LOCATION?: Location,
             ORGANIZER?: Organizer,
             ATTENDEE?: Attendee[],
