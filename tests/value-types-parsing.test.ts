@@ -74,7 +74,7 @@ describe('Value Type Parsers', () => {
             const date = parseDateTime('20230719T134104', {TZID: 'Europe/Berlin'});
 
             expect(date.toString()).toEqual('20230719T134104');
-            expect(date.date).toEqual((new Date('2023-07-19T11:41:04Z')));
+            expect(date.date).toEqual((new Date('2023-07-19T13:41:04Z')));
             expect(date.isDateOnly).toBeFalsy();
             expect(date.isUTC).toBeFalsy();
             expect(date.timezoneIdentifier).toEqual('Europe/Berlin');

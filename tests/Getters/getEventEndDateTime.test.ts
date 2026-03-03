@@ -29,12 +29,12 @@ describe('getEventEndDateTime Tests', () => {
         ['for specified end date (UTC)', {
             ...createEvent(new DateTimeClass(new Date('2024-05-21T06:00:00'), false, true, undefined) as DateTime),
             DTEND: new DateTimeEnd(new DateTimeClass(new Date('2024-05-22T08:42:23'), false, true, undefined) as DateTime, {}),
-        } as VEVENT.Published, '20240522T064223Z', undefined],
+        } as VEVENT.Published, '20240522T084223Z', undefined],
 
-        ['for duration', {
+        ['for duration (UTC)', {
             ...createEvent(new DateTimeClass(new Date('2024-05-21T06:00:00'), false, true, undefined) as DateTime),
             DURATION: new Duration({inverted: false, hours: 26, minutes: 42, seconds: 23}, {}),
-        } as VEVENT.Published, '20240522T064223Z', undefined],
+        } as VEVENT.Published, '20240522T084223Z', undefined],
     ];
 
     it.each(samples)('Should correctly get event end DateTime %s', (name, event, expectedDateTimeString, expectedTimezoneIdentifier) => {

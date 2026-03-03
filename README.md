@@ -49,3 +49,11 @@ VERSION:2.0
 END:VCALENDAR
 `);
 ```
+
+### Getters
+To navigate the raw ICS structure, the library exports the `Getters` package with some useful helpers:
+- `getDateFromDateTime` to evaluate a DateTime and resolve the date/datetime from the ICS to a JS `Date` object
+- `getEventEndDateTime` to evaluate the ending time of an event based on `DTEND` or `DURATION`
+- `iterateRecurrences` to iterate over `RRULE` (with basic functionality, see #15 for limitations)
+- `getSecondsFromDuration` to get the number of seconds from a `DURATION` ICS type
+- `getLocalOffsetForDateTime` to find the applicable timezone offset for a DateTime object, based on UTC/floating times or TZID timezone references in the ICS

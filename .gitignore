@@ -11,3 +11,4 @@ src/Parameters.ts
 src/Properties.ts
 src/ValueTypes.ts
 src/Getters.ts
+src/Formatters.ts
