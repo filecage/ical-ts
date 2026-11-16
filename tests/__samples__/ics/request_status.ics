@@ -18,7 +18,7 @@ DESCRIPTION:Event used to test REQUEST-STATUS parsing.
 REQUEST-STATUS:2.0;Success
 REQUEST-STATUS:3.7;Invalid calendar user;ATTENDEE mailto:unknown@example.com
 REQUEST-STATUS:5.1;Service unavailable;Temporary failure\, try again later
-REQUEST-STATUS:4.0;Event conflict;Conflicts with another meeting at 14\:00
+REQUEST-STATUS:4.0;Event conflict;Conflicts with another meeting at 14:00
 
 SEQUENCE:0
 STATUS:CONFIRMED

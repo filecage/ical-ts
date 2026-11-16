@@ -20,6 +20,9 @@ const PARAMETER_VALUE_ESCAPE_CHARACTER_MAP: {[k: string]: string} = {
 };
 
 const PROPERTY_VALUE_ESCAPE_CHARACTER_MAP: {[k: string]: string} = {
+    [BACKSLASH]: BACKSLASH,
+    [COMMA]: COMMA,
+    [SEMICOLON]: SEMICOLON,
     'n': "\n",
     'N': "\n",
 }
@@ -47,7 +50,7 @@ export function parseParameterValueRaw (value: string) : string {
 }
 
 export function parsePropertyValueRaw (value: string) : string {
-    return unescape(value, BACKSLASH, character => PROPERTY_VALUE_ESCAPE_CHARACTER_MAP[character] || character, false);
+    return unescape(value, BACKSLASH, character => PROPERTY_VALUE_ESCAPE_CHARACTER_MAP[character] || `${BACKSLASH}${character}`, true);
 }
 
 export function parseNumber (value: string) : number {

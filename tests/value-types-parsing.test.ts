@@ -99,10 +99,12 @@ describe('Value Type Parsers', () => {
             ['a\\,b', 'a,b'],
             ['a\\;b', 'a;b'],
             ['', ''],
-            ['\\', ''],
-            ['a\\xb', 'axb'],
             ['\\\\\\n', '\\\n'],
             ['\\\\\\\\', '\\\\'],
+
+            // malformed values with invalid escape sequences; should be left as-is after parsing
+            ['\\', '\\'],
+            ['a\\xb', 'a\\xb'],
         ])('Should decode TEXT property value %j as %j', (encoded, decoded) => {
             expect(parsePropertyValueRaw(encoded)).toEqual(decoded);
         });
