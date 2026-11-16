@@ -4,7 +4,7 @@
 import {EQUAL, SEMICOLON} from "./Constants";
 import {Parameters} from "./Parameters/Parameters";
 
-import {parseValueRaw} from "./parseValues"
+import {parseParameterValueRaw} from "./parseValues"
 
 export function parseParameters (fragments: string[])  : Parameters.AlternateTextRepresentation&Parameters.CommonName&Parameters.CalendarUserType&Parameters.Delegators&Parameters.Delegatees&Parameters.DirectoryEntryReference&Parameters.Display&Parameters.Email&Parameters.Feature&Parameters.InlineEncoding&Parameters.FormatType&Parameters.FreeBusyTimeType&Parameters.Language&Parameters.Label&Parameters.GroupOrListMembership&Parameters.ParticipationStatusTodo&Parameters.Range&Parameters.AlarmTriggerRelationship&Parameters.RelationshipType&Parameters.ParticipationRole&Parameters.RSVPExpectation&Parameters.ScheduleAgent&Parameters.ScheduleForceSend&Parameters.ScheduleStatus&Parameters.SentBy&Parameters.TimeZoneIdentifier&Parameters.ValueDataTypes {
     return fragments.reduce((parameters, fragment) => {
@@ -41,7 +41,7 @@ export function parseParameters (fragments: string[])  : Parameters.AlternateTex
 
             default:
                 if (parameterKey.startsWith('X-') || parameterKey.startsWith('IANA-')) {
-                    return {...parameters, [parameterKey]: parseValueRaw(parameterValue)};
+                    return {...parameters, [parameterKey]: parseParameterValueRaw(parameterValue)};
                 }
 
                 throw new Error(`Invalid parameter '${parameterKey}'`);
@@ -51,61 +51,61 @@ export function parseParameters (fragments: string[])  : Parameters.AlternateTex
 
 namespace parser {
     export function parseALTREP(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'ALTREP': value} as Parameters.AlternateTextRepresentation;
     }
     
     export function parseCN(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'CN': value} as Parameters.CommonName;
     }
     
     export function parseCUTYPE(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'CUTYPE': value} as Parameters.CalendarUserType;
     }
     
     export function parseDELEGATED_FROM(parameterValue: string) {
-        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseValueRaw(parameterValue));
+        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseParameterValueRaw(parameterValue));
         
         return {'DELEGATED-FROM': value} as Parameters.Delegators;
     }
     
     export function parseDELEGATED_TO(parameterValue: string) {
-        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseValueRaw(parameterValue));
+        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseParameterValueRaw(parameterValue));
         
         return {'DELEGATED-TO': value} as Parameters.Delegatees;
     }
     
     export function parseDIR(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'DIR': value} as Parameters.DirectoryEntryReference;
     }
     
     export function parseDISPLAY(parameterValue: string) {
-        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseValueRaw(parameterValue));
+        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseParameterValueRaw(parameterValue));
         
         return {'DISPLAY': value} as Parameters.Display;
     }
     
     export function parseEMAIL(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'EMAIL': value} as Parameters.Email;
     }
     
     export function parseFEATURE(parameterValue: string) {
-        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseValueRaw(parameterValue));
+        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseParameterValueRaw(parameterValue));
         
         return {'FEATURE': value} as Parameters.Feature;
     }
     
     export function parseENCODING(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         if (['8BIT', 'BASE64'].includes(value)) {
             return {'ENCODING': value} as Parameters.InlineEncoding;
@@ -115,37 +115,37 @@ namespace parser {
     }
     
     export function parseFMTTYPE(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'FMTTYPE': value} as Parameters.FormatType;
     }
     
     export function parseFBTYPE(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'FBTYPE': value} as Parameters.FreeBusyTimeType;
     }
     
     export function parseLANGUAGE(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'LANGUAGE': value} as Parameters.Language;
     }
     
     export function parseLABEL(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'LABEL': value} as Parameters.Label;
     }
     
     export function parseMEMBER(parameterValue: string) {
-        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseValueRaw(parameterValue));
+        const value = parameterValue.split(SEMICOLON).map(parameterValue => parseParameterValueRaw(parameterValue));
         
         return {'MEMBER': value} as Parameters.GroupOrListMembership;
     }
     
     export function parsePARTSTAT(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         if (['COMPLETED', 'IN-PROCESS'].includes(value)) {
             return {'PARTSTAT': value} as Parameters.ParticipationStatusTodo;
         } else if (['TENTATIVE', 'DELEGATED'].includes(value)) {
@@ -156,7 +156,7 @@ namespace parser {
     }
     
     export function parseRANGE(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         if (['THISANDFUTURE'].includes(value)) {
             return {'RANGE': value} as Parameters.Range;
@@ -166,7 +166,7 @@ namespace parser {
     }
     
     export function parseRELATED(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         if (['START', 'END'].includes(value)) {
             return {'RELATED': value} as Parameters.AlarmTriggerRelationship;
@@ -176,19 +176,19 @@ namespace parser {
     }
     
     export function parseRELTYPE(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'RELTYPE': value} as Parameters.RelationshipType;
     }
     
     export function parseROLE(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'ROLE': value} as Parameters.ParticipationRole;
     }
     
     export function parseRSVP(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         if (['TRUE', 'FALSE'].includes(value)) {
             return {'RSVP': value} as Parameters.RSVPExpectation;
@@ -198,37 +198,37 @@ namespace parser {
     }
     
     export function parseSCHEDULE_AGENT(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'SCHEDULE-AGENT': value} as Parameters.ScheduleAgent;
     }
     
     export function parseSCHEDULE_FORCE_SEND(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'SCHEDULE-FORCE-SEND': value} as Parameters.ScheduleForceSend;
     }
     
     export function parseSCHEDULE_STATUS(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'SCHEDULE-STATUS': value} as Parameters.ScheduleStatus;
     }
     
     export function parseSENT_BY(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'SENT-BY': value} as Parameters.SentBy;
     }
     
     export function parseTZID(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'TZID': value} as Parameters.TimeZoneIdentifier;
     }
     
     export function parseVALUE(parameterValue: string) {
-        const value = parseValueRaw(parameterValue);
+        const value = parseParameterValueRaw(parameterValue);
         
         return {'VALUE': value} as Parameters.ValueDataTypes;
     }

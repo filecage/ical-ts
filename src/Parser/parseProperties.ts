@@ -5,7 +5,7 @@
  import {parseParameters} from "./parseParameters";
  import Property from "./Properties/Property";
 
-import {parseDateTime, parseDateTimeOrPeriod, parseDuration, parseList, parseNumber, parseOffset, parsePeriod, parseRecurrence, parseUTCDateTime, parseUTCDateTimeOrDuration, parseValueRaw} from "./parseValues"
+import {parseDateTime, parseDateTimeOrPeriod, parseDuration, parseList, parseNumber, parseOffset, parsePeriod, parsePropertyValueRaw, parseRecurrence, parseUTCDateTime, parseUTCDateTimeOrDuration} from "./parseValues"
 import Acknowledged from "./Properties/Acknowledged";
 import Action from "./Properties/Action";
 import Attachment from "./Properties/Attachment";
@@ -68,59 +68,59 @@ export function parseProperty (key: string, value: string) {
 
     switch (propertyKey) {
         case 'ACKNOWLEDGED': return new Acknowledged(parseUTCDateTime(value), parameters);
-        case 'ACTION': return new Action(parseValueRaw(value), parameters);
-        case 'ATTACH': return new Attachment(parseValueRaw(value), parameters);
-        case 'ATTENDEE': return new Attendee(parseValueRaw(value), parameters);
-        case 'CALSCALE': return new CalendarScale(assertEnum('CalendarScale', parseValueRaw(value), ['GREGORIAN'] as const), parameters);
-        case 'CATEGORIES': return new Categories(parseValueRaw(value), parameters);
-        case 'CLASS': return new Classification(parseValueRaw(value), parameters);
-        case 'COLOR': return new Color(parseValueRaw(value), parameters);
-        case 'COMMENT': return new Comment(parseValueRaw(value), parameters);
-        case 'CONFERENCE': return new Conference(parseValueRaw(value), parameters);
-        case 'CONTACT': return new Contact(parseValueRaw(value), parameters);
+        case 'ACTION': return new Action(parsePropertyValueRaw(value), parameters);
+        case 'ATTACH': return new Attachment(parsePropertyValueRaw(value), parameters);
+        case 'ATTENDEE': return new Attendee(parsePropertyValueRaw(value), parameters);
+        case 'CALSCALE': return new CalendarScale(assertEnum('CalendarScale', parsePropertyValueRaw(value), ['GREGORIAN'] as const), parameters);
+        case 'CATEGORIES': return new Categories(parsePropertyValueRaw(value), parameters);
+        case 'CLASS': return new Classification(parsePropertyValueRaw(value), parameters);
+        case 'COLOR': return new Color(parsePropertyValueRaw(value), parameters);
+        case 'COMMENT': return new Comment(parsePropertyValueRaw(value), parameters);
+        case 'CONFERENCE': return new Conference(parsePropertyValueRaw(value), parameters);
+        case 'CONTACT': return new Contact(parsePropertyValueRaw(value), parameters);
         case 'COMPLETED': return new DateTimeCompleted(parseUTCDateTime(value), parameters);
         case 'CREATED': return new DateTimeCreated(parseUTCDateTime(value), parameters);
         case 'DUE': return new DateTimeDue(parseDateTime(value, parameters), parameters);
         case 'DTEND': return new DateTimeEnd(parseDateTime(value, parameters), parameters);
         case 'DTSTAMP': return new DateTimeStamp(parseUTCDateTime(value), parameters);
         case 'DTSTART': return new DateTimeStart(parseDateTime(value, parameters), parameters);
-        case 'DESCRIPTION': return new Description(parseValueRaw(value), parameters);
+        case 'DESCRIPTION': return new Description(parsePropertyValueRaw(value), parameters);
         case 'DURATION': return new Duration(parseDuration(value), parameters);
         case 'EXDATE': return new ExceptionDateTimes(parseList(value).map(value => parseDateTime(value, parameters)), parameters);
         case 'FREEBUSY': return new FreeBusyTime(parseList(value).map(value => parsePeriod(value, parameters)), parameters);
-        case 'GEO': return new GeographicPosition(parseValueRaw(value), parameters);
-        case 'IMAGE': return new Image(parseValueRaw(value), parameters);
+        case 'GEO': return new GeographicPosition(parsePropertyValueRaw(value), parameters);
+        case 'IMAGE': return new Image(parsePropertyValueRaw(value), parameters);
         case 'LAST-MODIFIED': return new LastModified(parseUTCDateTime(value), parameters);
-        case 'LOCATION': return new Location(parseValueRaw(value), parameters);
-        case 'METHOD': return new Method(parseValueRaw(value), parameters);
-        case 'NAME': return new Name(parseValueRaw(value), parameters);
-        case 'ORGANIZER': return new Organizer(parseValueRaw(value), parameters);
+        case 'LOCATION': return new Location(parsePropertyValueRaw(value), parameters);
+        case 'METHOD': return new Method(parsePropertyValueRaw(value), parameters);
+        case 'NAME': return new Name(parsePropertyValueRaw(value), parameters);
+        case 'ORGANIZER': return new Organizer(parsePropertyValueRaw(value), parameters);
         case 'PERCENT-COMPLETE': return new PercentComplete(parseNumber(value), parameters);
-        case 'PRIORITY': return new Priority(parseValueRaw(value), parameters);
-        case 'PRODID': return new ProductIdentifier(parseValueRaw(value), parameters);
-        case 'PROXIMITY': return new Proximity(parseValueRaw(value), parameters);
+        case 'PRIORITY': return new Priority(parsePropertyValueRaw(value), parameters);
+        case 'PRODID': return new ProductIdentifier(parsePropertyValueRaw(value), parameters);
+        case 'PROXIMITY': return new Proximity(parsePropertyValueRaw(value), parameters);
         case 'RDATE': return new RecurrenceDateTimes(parseList(value).map(value => parseDateTimeOrPeriod(value, parameters)), parameters);
         case 'RECURRENCE-ID': return new RecurrenceID(parseDateTime(value, parameters), parameters);
         case 'RRULE': return new RecurrenceRule(parseRecurrence(value), parameters);
         case 'REFRESH-INTERVAL': return new RefreshInterval(parseDuration(value), parameters);
-        case 'RELATED-TO': return new RelatedTo(parseValueRaw(value), parameters);
-        case 'REPEAT': return new Repeat(parseValueRaw(value), parameters);
-        case 'REQUEST-STATUS': return new RequestStatus(parseValueRaw(value), parameters);
-        case 'RESOURCES': return new Resources(parseValueRaw(value), parameters);
-        case 'SEQUENCE': return new Sequence(parseValueRaw(value), parameters);
-        case 'SOURCE': return new Source(parseValueRaw(value), parameters);
-        case 'STATUS': return new Status(parseValueRaw(value), parameters);
-        case 'SUMMARY': return new Summary(parseValueRaw(value), parameters);
-        case 'TRANSP': return new TimeTransparency(assertEnum('TimeTransparency', parseValueRaw(value), ['OPAQUE', 'TRANSPARENT'] as const), parameters);
-        case 'TZID': return new TimeZoneIdentifier(parseValueRaw(value), parameters);
-        case 'TZNAME': return new TimeZoneName(parseValueRaw(value), parameters);
+        case 'RELATED-TO': return new RelatedTo(parsePropertyValueRaw(value), parameters);
+        case 'REPEAT': return new Repeat(parsePropertyValueRaw(value), parameters);
+        case 'REQUEST-STATUS': return new RequestStatus(parsePropertyValueRaw(value), parameters);
+        case 'RESOURCES': return new Resources(parsePropertyValueRaw(value), parameters);
+        case 'SEQUENCE': return new Sequence(parsePropertyValueRaw(value), parameters);
+        case 'SOURCE': return new Source(parsePropertyValueRaw(value), parameters);
+        case 'STATUS': return new Status(parsePropertyValueRaw(value), parameters);
+        case 'SUMMARY': return new Summary(parsePropertyValueRaw(value), parameters);
+        case 'TRANSP': return new TimeTransparency(assertEnum('TimeTransparency', parsePropertyValueRaw(value), ['OPAQUE', 'TRANSPARENT'] as const), parameters);
+        case 'TZID': return new TimeZoneIdentifier(parsePropertyValueRaw(value), parameters);
+        case 'TZNAME': return new TimeZoneName(parsePropertyValueRaw(value), parameters);
         case 'TZOFFSETFROM': return new TimeZoneOffsetFrom(parseOffset(value), parameters);
         case 'TZOFFSETTO': return new TimeZoneOffsetTo(parseOffset(value), parameters);
-        case 'TZURL': return new TimeZoneUrl(parseValueRaw(value), parameters);
+        case 'TZURL': return new TimeZoneUrl(parsePropertyValueRaw(value), parameters);
         case 'TRIGGER': return new Trigger(parseUTCDateTimeOrDuration(value, parameters), parameters);
-        case 'URL': return new UniformResourceLocator(parseValueRaw(value), parameters);
-        case 'UID': return new UniqueIdentifier(parseValueRaw(value), parameters);
-        case 'VERSION': return new Version(assertEnum('Version', parseValueRaw(value), ['2.0'] as const), parameters);
+        case 'URL': return new UniformResourceLocator(parsePropertyValueRaw(value), parameters);
+        case 'UID': return new UniqueIdentifier(parsePropertyValueRaw(value), parameters);
+        case 'VERSION': return new Version(assertEnum('Version', parsePropertyValueRaw(value), ['2.0'] as const), parameters);
 
         default:
             return new class extends Property<string> {

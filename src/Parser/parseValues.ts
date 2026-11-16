@@ -1,5 +1,6 @@
 import isEnumValue from "../Util/isEnumValue";
-import {CAPITAL_T, CAPITAL_Z, COMMA, EQUAL, HYPHEN_MINUS, PERIOD, QUOTES, SEMICOLON, SOLIDUS} from "./Constants";
+import unescape from "./unescape";
+import {BACKSLASH, CAPITAL_T, CAPITAL_Z, CIRCUMFLEX, COMMA, EQUAL, HYPHEN_MINUS, PERIOD, QUOTES, SEMICOLON, SOLIDUS} from "./Constants";
 import {DateTime, DateTimeClass, UTCDateTime} from "./ValueTypes/DateTime";
 import {Period} from "./ValueTypes/Period";
 import {Parameters} from "./Parameters/Parameters";
@@ -8,10 +9,20 @@ import {Recur, RecurByWeekday, RecurFrequency, RecurModifier, RecurWeekday} from
 import {Offset} from "./ValueTypes/Offset";
 
 const matchDoubleQuotesString = `${QUOTES}([^${QUOTES}\\\\]*(\\\\.[^${QUOTES}\\\\]*)*)${QUOTES}`;
-const escapedDoubleQuotesStringRegex = new RegExp(`^${matchDoubleQuotesString}$`);
 const listStringRegex = new RegExp(`((${matchDoubleQuotesString})|([^${COMMA}]+))(${COMMA}|$)`, 'g');
 const durationRegex = new RegExp(/^(?<sign>[-+])?P(?<weeks>\d+[.,]?\d*W)?(?<days>\d+[.,]?\d*D)?(?:T(?<hours>\d+[.,]?\d*H)?(?<minutes>\d+[.,]?\d*M)?(?<seconds>\d+[.,]?\d*S)?)?$/);
 const byWeekdayRegex = new RegExp(/^((?<sign>[+-])?(?<offset>[0-9]{1,2}))?(?<weekday>MO|TU|WE|TH|FR|SA|SU)$/);
+
+const PARAMETER_VALUE_ESCAPE_CHARACTER_MAP: {[k: string]: string} = {
+    [CIRCUMFLEX]: CIRCUMFLEX,
+    ['n']: `\n`,
+    [`'`]: `"`
+};
+
+const PROPERTY_VALUE_ESCAPE_CHARACTER_MAP: {[k: string]: string} = {
+    'n': "\n",
+    'N': "\n",
+}
 
 export interface ValueParserFn<T extends object = Record<string, unknown>> {
     (value: string, parameters: T): string|string[]|Period|DateTime|UTCDateTime|Duration|Recur|number
@@ -28,13 +39,15 @@ export function parseList (input: string) : string[] {
     return values;
 }
 
-export function parseValueRaw (value: string) : string {
-    const enquoted = value.match(escapedDoubleQuotesStringRegex);
-    if (!enquoted || enquoted.length === 0) {
-        return value;
-    }
+export function parseParameterValueRaw (value: string) : string {
+    const start = value.startsWith(QUOTES) ? 1 : 0;
+    const end = value.endsWith(QUOTES) ? value.length - 1 : value.length;
 
-    return enquoted[1].replaceAll('\\"', '"');
+    return unescape(value.slice(start, end), CIRCUMFLEX, character => PARAMETER_VALUE_ESCAPE_CHARACTER_MAP[character] || `${CIRCUMFLEX}${character}`, true);
+}
+
+export function parsePropertyValueRaw (value: string) : string {
+    return unescape(value, BACKSLASH, character => PROPERTY_VALUE_ESCAPE_CHARACTER_MAP[character] || character, false);
 }
 
 export function parseNumber (value: string) : number {
