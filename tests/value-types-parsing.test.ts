@@ -77,7 +77,6 @@ describe('Value Type Parsers', () => {
         );
 
         it('Should not treat a backslash as escaping the closing quote', () => {
-            // TODO: Check if this is actually stated in RFC
             expect(parseParameterValueRaw('"a\\"')).toEqual('a\\');
         });
 
