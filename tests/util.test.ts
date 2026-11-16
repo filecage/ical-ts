@@ -1,4 +1,36 @@
 import indexOfUnquoted from "../src/Util/indexOfUnquoted";
+import unescape from "../src/Parser/unescape";
+
+describe('unescape', () => {
+    const decodeEscape = (character: string) => character === 'n' ? '\n' : character;
+
+    it.each([
+        ['', ''],
+        ['foo', 'foo'],
+        ['a^nb', 'a\nb'],
+        ['a^xb', 'axb'],
+        ['^^n', '^n'],
+        ['^^^n', '^\n'],
+        ['^^^^', '^^'],
+        ['foo^', 'foo'],
+    ])('Should unescape %j as %j', (input, expected) => {
+        expect(unescape(input, '^', decodeEscape, false)).toBe(expected);
+    });
+
+    it('Should support a custom dangling escape replacement', () => {
+        expect(unescape('foo^', '^', decodeEscape, true)).toBe('foo^');
+    });
+
+    it('Should decode only escaped characters', () => {
+        const decoded: string[] = [];
+        const decode = (character: string) => {
+            decoded.push(character);
+            return character.toUpperCase();
+        };
+        expect(unescape('a^b^^c^', '^', decode, false)).toBe('aB^c');
+        expect(decoded).toEqual(['b', '^']);
+    });
+});
 
 describe('indexOfUnquoted', () => {
     it.each([
