@@ -41,7 +41,19 @@ describe('Value Type Parsers', () => {
 
     describe('Parameter Value Encoding', () => {
         it('Should parse a simple string value', () => expect(parseParameterValueRaw('foobar')).toEqual('foobar'));
-        it('Should remove surrounding quotes', () => expect(parseParameterValueRaw('"foo"')).toEqual('foo'));
+        it('Should parse an empty parameter value', () => expect(parseParameterValueRaw('')).toEqual(''));
+
+        it.each([
+            ['"foo"', 'foo'],
+            ['"', ''],
+            ['""', ''],
+            ['"foo', 'foo'],
+            ['foo"', 'foo'],
+            ['foo^"', 'foo^'],
+            ['"foo"bar"', 'foo"bar'],
+        ])('Should remove leading and trailing quotes without removing internal quotes in %j', (encoded, decoded) => {
+            expect(parseParameterValueRaw(encoded)).toEqual(decoded);
+        });
 
         it.each([
             ["^'", '"'],
@@ -50,6 +62,8 @@ describe('Value Type Parsers', () => {
             ['^x', '^x'],
             ['^', '^'],
             ['^^n', '^n'],
+            ['^^^n', '^\n'],
+            ['^^^^', '^^'],
         ])('Should decode RFC6868 parameter value %j as %j', (encoded, decoded) => {
             expect(parseParameterValueRaw(encoded)).toEqual(decoded);
             expect(parseParameterValueRaw(`"${encoded}"`)).toEqual(decoded);
@@ -66,6 +80,7 @@ describe('Value Type Parsers', () => {
             // TODO: Check if this is actually stated in RFC
             expect(parseParameterValueRaw('"a\\"')).toEqual('a\\');
         });
+
     });
 
     describe('Property Value Encoding', () => {
@@ -83,6 +98,11 @@ describe('Value Type Parsers', () => {
             ['a\\\\b', 'a\\b'],
             ['a\\,b', 'a,b'],
             ['a\\;b', 'a;b'],
+            ['', ''],
+            ['\\', ''],
+            ['a\\xb', 'axb'],
+            ['\\\\\\n', '\\\n'],
+            ['\\\\\\\\', '\\\\'],
         ])('Should decode TEXT property value %j as %j', (encoded, decoded) => {
             expect(parsePropertyValueRaw(encoded)).toEqual(decoded);
         });
