@@ -1,4 +1,5 @@
 import {readFile} from "fs/promises";
+import indexOfUnquoted from "../Util/indexOfUnquoted";
 import {COLON, END, NEW_LINE} from "./Constants";
 import {unfold} from "./unfold";
 
@@ -23,7 +24,7 @@ export default class CalendarIterator {
         while (line !== undefined) {
             // Only process the line if it's not empty
             if (line.trim() !== '') {
-                const index = line.indexOf(COLON);
+                const index = indexOfUnquoted(line, COLON);
                 const name = line.substring(0, index);
                 const value = line.substring(index + 1);
 

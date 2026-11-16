@@ -47,5 +47,15 @@ describe('Calendar Buffer Tests', () => {
             {name: 'PRODID', value: 'This is a very long prodid string that will be put into the next line and should still be valid'},
             {name: 'END', value: 'VCALENDAR'},
         ]);
-    })
+    });
+
+    it ('Should not split name/value between quoted COLON characters', async () => {
+        const buffer = CalendarIterator.fromString(`DESCRIPTION;ALTREP="cid:part1.0001@example.org":The Fall'98 Wild Wizards Conference`);
+        const lines = [...buffer.iterate()];
+
+        expect(lines).toEqual([
+            {name: 'DESCRIPTION;ALTREP="cid:part1.0001@example.org"', value: `The Fall'98 Wild Wizards Conference`}
+        ]);
+    });
+
 });
