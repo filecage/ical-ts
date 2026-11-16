@@ -14,6 +14,7 @@ export const SOLIDUS = '/';
 export const HYPHEN_MINUS = '-';
 export const PLUS = '+';
 export const BACKSLASH = '\\';
+export const CIRCUMFLEX = `^`;
 
 export enum Component {
     VCALENDAR = 'VCALENDAR',
