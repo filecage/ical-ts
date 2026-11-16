@@ -1,5 +1,5 @@
 // to unfold content lines according to https://datatracker.ietf.org/doc/html/rfc5545#section-3.1
-import {SPACE} from "./Constants";
+import {SPACE, HTAB} from "./Constants";
 
 /**
  * @internal This will most likely change once we move to reading calendars in a stream
@@ -7,7 +7,7 @@ import {SPACE} from "./Constants";
  */
 export function unfold (lines: string[]) : string[] {
     return lines.reduce((buffer: string[], line) => {
-        if (line.startsWith(SPACE)) {
+        if (line.startsWith(SPACE) || line.startsWith(HTAB)) {
             buffer[buffer.length - 1] += line.substring(1);
         } else {
             buffer.push(line);

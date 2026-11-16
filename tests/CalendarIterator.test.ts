@@ -49,6 +49,25 @@ describe('Calendar Buffer Tests', () => {
         ]);
     });
 
+    it('Should unfold tab-prefixed lines according to RFC 5545 section 3.1', () => {
+        // Unfolding removes CRLF and exactly one following space or tab.
+        const buffer = CalendarIterator.fromString([
+            'BEGIN:VCALENDAR',
+            'PRODID:This is a long ',
+            '\tprodid with ',
+            '\t\ta tab and ',
+            ' a space fold',
+            'END:VCALENDAR',
+        ].join('\r\n'));
+        const lines = [...buffer.iterate()];
+
+        expect(lines).toEqual([
+            {name: 'BEGIN', value: 'VCALENDAR'},
+            {name: 'PRODID', value: 'This is a long prodid with \ta tab and a space fold'},
+            {name: 'END', value: 'VCALENDAR'},
+        ]);
+    });
+
     it ('Should not split name/value between quoted COLON characters', async () => {
         const buffer = CalendarIterator.fromString(`DESCRIPTION;ALTREP="cid:part1.0001@example.org":The Fall'98 Wild Wizards Conference`);
         const lines = [...buffer.iterate()];
