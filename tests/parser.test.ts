@@ -36,6 +36,7 @@ describe('Parse ICS to JSON', () => {
         'rfc7986_single_conference.ics',
         'rfc7986_source_property.ics',
         'rfc6638.ics',
+        'value_encoding.ics',
     ];
 
     it.each(samples)('Parses ICS and matches JSON snapshot `%s`', async sample => {
