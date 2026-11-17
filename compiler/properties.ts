@@ -13,18 +13,18 @@ const valueParserFns = Object.entries(await import('../src/Parser/parseValues'))
 
 const valueTypeParserMap: {[k:string]: ValueParserFn} = {
     __number: valueParserFns.parseNumber,
-    CalAddress: valueParserFns.parsePropertyValueRaw,
+    CalAddress: valueParserFns.parseText,
     DateTime: valueParserFns.parseDateTime,
     UTCDateTime: valueParserFns.parseUTCDateTime,
     DurationValue: valueParserFns.parseDuration, // TODO: The Duration property renames the import, we currently don't understand that correctly so we have to define this twice
     Duration: valueParserFns.parseDuration,
     Offset: valueParserFns.parseOffset,
     Period: valueParserFns.parsePeriod,
-    Raw: valueParserFns.parsePropertyValueRaw,
+    Raw: valueParserFns.parseText,
     Recur: valueParserFns.parseRecurrence,
-    ReqStatus: valueParserFns.parsePropertyValueRaw,
-    Uri: valueParserFns.parsePropertyValueRaw,
-    ParticipationStatusTodo: valueParserFns.parsePropertyValueRaw,
+    ReqStatus: valueParserFns.parseText,
+    Uri: valueParserFns.parseText,
+    ParticipationStatusTodo: valueParserFns.parseText,
 }
 
 const properties: {key: string, valueType: Type, customValueParserFn?: ValueParserFn}[] = [];
@@ -72,7 +72,7 @@ for await (const propertySource of iterateSourceFiles('src/Parser/Properties')) 
 
     // Let's look for a custom value type definition
     const customValueParserFn = findCustomValueParserFnIfAvailable(propertyClass, propertyName);
-    const typeCompiler = new TypeCompiler(valueParserFns.parsePropertyValueRaw, valueTypeParserMap);
+    const typeCompiler = new TypeCompiler(valueParserFns.parseText, valueTypeParserMap);
     const propertyTypeNodes = inherits.typeArguments
     if (propertyTypeNodes === undefined) {
         throw new Error(`Missing types definition for property '${propertyName}'`)

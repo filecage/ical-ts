@@ -49,7 +49,13 @@ export function parseParameterValueRaw (value: string) : string {
     return unescape(value.slice(start, end), CIRCUMFLEX, character => PARAMETER_VALUE_ESCAPE_CHARACTER_MAP[character] || `${CIRCUMFLEX}${character}`, true);
 }
 
-export function parsePropertyValueRaw (value: string) : string {
+/**
+ * Relates to TEXT defined in RFC 5545, which is used as a fallback
+ * value type for other unsupported value types
+ *
+ * @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.11
+ */
+export function parseText (value: string) : string {
     return unescape(value, BACKSLASH, character => PROPERTY_VALUE_ESCAPE_CHARACTER_MAP[character] || `${BACKSLASH}${character}`, true);
 }
 

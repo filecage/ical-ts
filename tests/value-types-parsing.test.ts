@@ -1,5 +1,5 @@
 import {parseProperty} from "../src/Parser/parseProperties";
-import {parseDateTime, parseDuration, parseList, parseOffset, parseParameterValueRaw, parsePeriod, parsePropertyValueRaw, parseRecurrence} from "../src/Parser/parseValues";
+import {parseDateTime, parseDuration, parseList, parseOffset, parseParameterValueRaw, parsePeriod, parseText, parseRecurrence} from "../src/Parser/parseValues";
 import RecurrenceDateTimes from "../src/Parser/Properties/RecurrenceDateTimes";
 import {Duration} from "../src/Parser/ValueTypes/Duration";
 import {deleteUndefined} from "./util/deleteUndefined";
@@ -83,13 +83,13 @@ describe('Value Type Parsers', () => {
     });
 
     describe('Property Value Encoding', () => {
-        it('Should parse a simple string value', () => expect(parsePropertyValueRaw('foobar')).toEqual('foobar'));
-        it('Should parse a simple string value with a quote', () => expect(parsePropertyValueRaw('foo"bar')).toEqual('foo"bar'));
-        it('Should preserve surrounding quotes', () => expect(parsePropertyValueRaw('"foo"')).toEqual('"foo"'));
+        it('Should parse a simple string value', () => expect(parseText('foobar')).toEqual('foobar'));
+        it('Should parse a simple string value with a quote', () => expect(parseText('foo"bar')).toEqual('foo"bar'));
+        it('Should preserve surrounding quotes', () => expect(parseText('"foo"')).toEqual('"foo"'));
         it('Should decode TEXT escapes without removing literal quotes', () => {
-            expect(parsePropertyValueRaw('"foo\\;bar"')).toEqual('"foo;bar"');
+            expect(parseText('"foo\\;bar"')).toEqual('"foo;bar"');
         });
-        it('Treats comma separated, enquoted list values as as-is value', () => expect(parsePropertyValueRaw('"foo","bar"')).toEqual('"foo","bar"'));
+        it('Treats comma separated, enquoted list values as as-is value', () => expect(parseText('"foo","bar"')).toEqual('"foo","bar"'));
 
         it.each([
             ['a\\nb', 'a\nb'],
@@ -105,17 +105,17 @@ describe('Value Type Parsers', () => {
             ['\\', '\\'],
             ['a\\xb', 'a\\xb'],
         ])('Should decode TEXT property value %j as %j', (encoded, decoded) => {
-            expect(parsePropertyValueRaw(encoded)).toEqual(decoded);
+            expect(parseText(encoded)).toEqual(decoded);
         });
 
         it.each(['^n', '^^', "^'", '^x', '^^n'])(
             'Should preserve literal caret sequence %j in property values', value => {
-                expect(parsePropertyValueRaw(value)).toEqual(value);
+                expect(parseText(value)).toEqual(value);
             }
         );
 
         it('Should not decode an escaped backslash followed by n twice', () => {
-            expect(parsePropertyValueRaw('a\\\\nb')).toEqual('a\\nb');
+            expect(parseText('a\\\\nb')).toEqual('a\\nb');
         });
     });
 
