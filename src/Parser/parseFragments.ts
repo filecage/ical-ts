@@ -1,4 +1,5 @@
-import {BACKSLASH, QUOTES, SEMICOLON} from "./Constants";
+import indexOfUnquoted from "../Util/indexOfUnquoted";
+import {SEMICOLON} from "./Constants";
 
 /**
  * @internal
@@ -6,37 +7,19 @@ import {BACKSLASH, QUOTES, SEMICOLON} from "./Constants";
 export function parseFragments (input: string) : string[] {
     const fragments = [];
 
-    let buffer = '';
-    let escaped = false;
-    let quoted = false;
+    let start = 0;
+    while (start < input.length) {
+        const end = indexOfUnquoted(input, SEMICOLON, start);
 
-    for (let i= 0; i < input.length; i++) {
-        const character = input[i];
-
-        switch (character) {
-            case SEMICOLON:
-                if (!quoted && !escaped) {
-                    fragments.push(buffer);
-                    buffer = '';
-                    continue;
-                }
-                break;
-
-            case QUOTES:
-                if (!escaped) {
-                    quoted = !quoted;
-                }
-                break;
+        if (end === -1) {
+            // no more additional fragments, just add everything until the end
+            fragments.push(input.substring(start));
+            break;
         }
 
-        escaped = character === BACKSLASH && !escaped;
-        if (!escaped) {
-            buffer += character;
-        }
+        fragments.push(input.substring(start, end));
+        start = end + 1;
     }
-
-    // Add remainder
-    fragments.push(buffer);
 
     return fragments;
 }

@@ -1,6 +1,6 @@
 /**${TEMPLATE_ONLY_BEGIN}**/
 import {EQUAL} from "../../src/Parser/Constants";
-import {parseValueRaw} from "../../src/Parser/parseValues";
+import {parseParameterValueRaw} from "../../src/Parser/parseValues";
 /**${TEMPLATE_ONLY_END}**/
 /**${COMPILED_ONLY_BEGIN}**
 // THIS FILE IS BEING AUTO GENERATED, DO NOT EDIT!
@@ -19,7 +19,7 @@ export function parseParameters (fragments: string[]) /**${PARAMETERS_INTERSECTI
 
             default:
                 if (parameterKey.startsWith('X-') || parameterKey.startsWith('IANA-')) {
-                    return {...parameters, [parameterKey]: parseValueRaw(parameterValue)};
+                    return {...parameters, [parameterKey]: parseParameterValueRaw(parameterValue)};
                 }
 
                 throw new Error(`Invalid parameter '${parameterKey}'`);

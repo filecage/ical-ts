@@ -3,7 +3,7 @@ import {exportSourceFileRaw, readSourceFile, readSourceFileRaw} from "./lib/read
 import TypeCompiler from "./lib/TypeCompiler";
 import {Type} from "./lib/Type";
 import {format} from "./lib/format";
-import {parseValueRaw, ValueParserFn} from "../src/Parser/parseValues";
+import {parseParameterValueRaw, ValueParserFn} from "../src/Parser/parseValues";
 import {flattenTypeParserFns, mapFnList} from "./lib/flattenTypeEnums";
 import {compileValueParserImports} from "./lib/compile";
 
@@ -18,15 +18,15 @@ if (declarationStatement === undefined) {
 }
 
 const valueParserMap = {
-    Uri: parseValueRaw,
-    LanguageTag: parseValueRaw,
-    CalAddress: parseValueRaw,
-    EmailAddress: parseValueRaw,
-    ReqStatus: parseValueRaw,
+    Uri: parseParameterValueRaw,
+    LanguageTag: parseParameterValueRaw,
+    CalAddress: parseParameterValueRaw,
+    EmailAddress: parseParameterValueRaw,
+    ReqStatus: parseParameterValueRaw,
 };
 
 const exports: {[key: string]: Type} = {};
-const typeCompiler = new TypeCompiler(parseValueRaw, valueParserMap);
+const typeCompiler = new TypeCompiler(parseParameterValueRaw, valueParserMap);
 
 declarationStatement.body?.forEachChild(child => {
     if (child.kind !== ts.SyntaxKind.TypeAliasDeclaration) {
@@ -97,7 +97,7 @@ Object.entries(exports).map(([parameterKey, parameterType]) => {
     switchBlocks.push(compileKeyMatcherBlock(parameterKey));
 });
 
-const valueParserFns = mapFnList(...Object.values(valueParserMap), parseValueRaw); // `parseValueRaw` is used in the template, ensure that its imported
+const valueParserFns = mapFnList(...Object.values(valueParserMap), parseParameterValueRaw); // `parseParameterValueRaw` is used in the template, ensure that its imported
 const valueParserFnsInUse = Object.entries(exports).reduce((valueParserFnsInUse: ValueParserFn[], [,valueType]) => [...valueParserFnsInUse, ...flattenTypeParserFns(valueType, valueParserFns)], []);
 imports.push(compileValueParserImports([...valueParserFnsInUse]));
 

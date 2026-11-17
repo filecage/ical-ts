@@ -1,0 +1,13 @@
+BEGIN:VCALENDAR
+PRODID:Test
+VERSION:2.0
+BEGIN:VEVENT
+UID:encoding
+DTSTAMP:20260101T000000Z
+DTSTART:20260101T000000Z
+SUMMARY:"Hello"
+DESCRIPTION;ALTREP="cid:part1@example.org":"a\nb\,c\;d\\n ^n ^^ ^'"
+ORGANIZER;CN="a: b; ^'c^'^n^^^x":mailto:a@example.org
+ATTENDEE;CN="a\nb\\c\,d\;e":mailto:b@example.org
+END:VEVENT
+END:VCALENDAR

@@ -1,4 +1,5 @@
 export const NEW_LINE = /\r\n|\n|\r/
+export const HTAB = `\t`;
 export const QUOTES = '"';
 export const SPACE = ' '
 export const COLON = ':'
@@ -14,6 +15,7 @@ export const SOLIDUS = '/';
 export const HYPHEN_MINUS = '-';
 export const PLUS = '+';
 export const BACKSLASH = '\\';
+export const CIRCUMFLEX = `^`;
 
 export enum Component {
     VCALENDAR = 'VCALENDAR',
